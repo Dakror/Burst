@@ -1,16 +1,14 @@
 package de.dakror.burst.layer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
-import de.dakror.burst.util.InternalAssetManager;
-import de.dakror.burst.util.InternalAssetManager.FileNameExtensionFilter;
 
 /**
  * @author Dakror
@@ -27,7 +25,7 @@ public class LoadingLayer extends Layer
 		font = new BitmapFont();
 		stage = new Stage(new ScreenViewport());
 		
-		InternalAssetManager.scheduleDirectory(Burst.assets, "img", Texture.class, new FileNameExtensionFilter(".png"), true);
+		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
 	}
 	
 	@Override
@@ -35,6 +33,7 @@ public class LoadingLayer extends Layer
 	{
 		if (Burst.assets.update())
 		{
+			Burst.img = Burst.assets.get("img/pack.atlas", TextureAtlas.class);
 			Burst.instance.removeLayer(this);
 			Burst.instance.addLayer(new Game());
 		}
