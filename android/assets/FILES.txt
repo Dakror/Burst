@@ -1,0 +1,12 @@
+f FILES.txt
+d img
+d img/char
+d img/char/monster
+d img/char/monster/00
+f img/char/monster/00/monster00.png
+f img/char/monster/00/monster00_bg.png
+f img/char/monster/00/monster00_fg.png
+d img/char/player
+f img/char/player/player.png
+f img/char/player/player_bg.png
+f img/char/player/player_fg.png
