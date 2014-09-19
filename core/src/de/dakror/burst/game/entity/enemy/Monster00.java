@@ -1,0 +1,22 @@
+package de.dakror.burst.game.entity.enemy;
+
+import de.dakror.burst.Burst;
+
+/**
+ * @author Dakror
+ */
+// FIXME: find name
+public class Monster00 extends Enemy
+{
+	public Monster00(float x, float y, float z)
+	{
+		super(x, y, z);
+		maxHp = hp = 10;
+		name = "Monster 00";
+		spriteFg = Burst.img.createSprite("monster00_fg");
+		spriteBg = Burst.img.createSprite("monster00_bg");
+		speed = 2.5f;
+		
+		pulseTime = 0.75f;
+	}
+}

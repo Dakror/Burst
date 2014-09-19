@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.Player;
+import de.dakror.burst.game.entity.enemy.Monster00;
 import de.dakror.burst.layer.Layer;
 
 /**
@@ -34,6 +35,8 @@ public class Game extends Layer
 		
 		player = new Player((Gdx.graphics.getWidth() - 48) / 2, 0, Gdx.graphics.getHeight());
 		entities.add(player);
+		
+		entities.add(new Monster00((Gdx.graphics.getWidth() - 48) / 3, 0, Gdx.graphics.getHeight() / 2));
 	}
 	
 	@Override
