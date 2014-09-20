@@ -57,6 +57,9 @@ public class Game extends Layer
 			entity.render(stage.getBatch(), delta);
 		
 		stage.getBatch().end();
+		
+		for (Entity entity : entities)
+			entity.debug(stage.getBatch(), delta);
 	}
 	
 	public void spawnEntity(Entity e)

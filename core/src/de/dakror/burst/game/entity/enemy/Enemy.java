@@ -23,6 +23,10 @@ public class Enemy extends Entity
 		tmp.set(Game.player.getPos()).sub(pos);
 		if (len(tmp) > speed) limit(tmp, speed);
 		
-		pos.add(tmp);
+		if (Game.player.intersects(this, tmp)) onPlayerTouch(tick);
+		else pos.add(tmp);
 	}
+	
+	public void onPlayerTouch(int tick)
+	{}
 }

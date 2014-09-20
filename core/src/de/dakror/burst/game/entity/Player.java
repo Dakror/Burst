@@ -17,7 +17,9 @@ public class Player extends Entity
 		name = "Player";
 		spriteFg = Burst.img.createSprite("player_fg");
 		spriteBg = Burst.img.createSprite("player_bg");
-		speed = 5;
+		speed = 3;
+		
+		bump.set(51, 35, 48, 80);
 	}
 	
 	@Override
