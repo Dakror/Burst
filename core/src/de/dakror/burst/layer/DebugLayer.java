@@ -58,9 +58,9 @@ public class DebugLayer extends Layer
 		drawString("Burst infdev 0.1", 0, Gdx.graphics.getHeight());
 		drawString("FPS: " + Gdx.graphics.getFramesPerSecond() + ", UPS: " + Updater.instance.ticksPerSecond, 0, Gdx.graphics.getHeight() - 14);
 		drawString("E: " + Game.instance.entities.size(), 0, Gdx.graphics.getHeight() - 14 * 3);
-		// drawString("X: " + Game.player.getPos().x, 0, Gdx.graphics.getHeight() - 14 * 4);
-		// drawString("Y: " + Game.player.getPos().y, 0, Gdx.graphics.getHeight() - 14 * 5);
-		// drawString("Z: " + Game.player.getPos().z, 0, Gdx.graphics.getHeight() - 14 * 6);
+		drawString("X: " + Game.player.getPos().x, 0, Gdx.graphics.getHeight() - 14 * 4);
+		drawString("Y: " + Game.player.getPos().y, 0, Gdx.graphics.getHeight() - 14 * 5);
+		drawString("Z: " + Game.player.getPos().z, 0, Gdx.graphics.getHeight() - 14 * 6);
 		
 		int full = 500;
 		int fac = 25;

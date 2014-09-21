@@ -12,6 +12,8 @@ public class Enemy extends Entity
 {
 	final Vector3 tmp = new Vector3();
 	
+	protected int touchStartTick;
+	
 	public Enemy(float x, float y, float z)
 	{
 		super(x, y, z);
@@ -23,8 +25,16 @@ public class Enemy extends Entity
 		tmp.set(Game.player.getPos()).sub(pos);
 		if (len(tmp) > speed) limit(tmp, speed);
 		
-		if (Game.player.intersects(this, tmp)) onPlayerTouch(tick);
-		else pos.add(tmp);
+		if (Game.player.intersects(this, tmp))
+		{
+			if (touchStartTick == 0) touchStartTick = tick;
+			onPlayerTouch(tick);
+		}
+		else
+		{
+			pos.add(tmp);
+			touchStartTick = 0;
+		}
 	}
 	
 	public void onPlayerTouch(int tick)
