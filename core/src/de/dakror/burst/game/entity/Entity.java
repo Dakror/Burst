@@ -3,6 +3,7 @@ package de.dakror.burst.game.entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -33,6 +34,7 @@ public abstract class Entity implements Drawable, Tickable
 	protected float pulseTime = 0.5f; // a second
 	protected float delta;
 	protected int glowSize = 20;
+	protected boolean showHpBar;
 	
 	public Entity(float x, float y, float z)
 	{
@@ -40,13 +42,23 @@ public abstract class Entity implements Drawable, Tickable
 		
 		level = 0;
 		maxHp = hp = 10;
-		
+		showHpBar = true;
 		bump = new Rectangle();
 	}
 	
 	public boolean isDead()
 	{
 		return hp <= 0;
+	}
+	
+	public float getHpPercentage()
+	{
+		return hp / (float) maxHp;
+	}
+	
+	public void dealDamage(int dmg)
+	{
+		hp = Math.max(0, hp - dmg);
 	}
 	
 	public Sprite getSpriteFg()
@@ -102,8 +114,13 @@ public abstract class Entity implements Drawable, Tickable
 		spriteFg.setY(pos.y + zFac * pos.z);
 		spriteFg.draw(batch);
 		
-		if (maxHp > 0)
-		{}
+		if (maxHp > 0 && showHpBar)
+		{
+			float x = pos.x + bump.x + (bump.width - lifeBarWidth) / 2;
+			float y = pos.y + zFac * pos.z + bump.y + bump.height + 10;
+			
+			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
+		}
 	}
 	
 	public void debug(Batch batch, float delta2)
@@ -143,6 +160,29 @@ public abstract class Entity implements Drawable, Tickable
 		obmp.x += tr.x;
 		obmp.y += tr.y + zFac * tr.z;
 		return getAbsoluteBump().overlaps(obmp);
+	}
+	
+	static final String[] regs = { "BarBase", "Bar-ff3232" };
+	
+	public static void renderHpBar(Batch batch, float x, float y, float width, float percentage)
+	{
+		if (percentage == 0) return;
+		for (int i = 0; i < regs.length; i++)
+		{
+			float percent = i == 0 ? 1 : percentage;
+			AtlasRegion ar = Burst.img.findRegion(regs[i]);
+			ar.setRegionWidth(6);
+			batch.draw(ar, x, y);
+			int rx = ar.getRegionX();
+			ar.setRegionX(rx + 6);
+			ar.setRegionWidth(1);
+			batch.draw(ar, x + 6, y, (width - 12) * percent, 23);
+			ar.setRegionX(rx + 7);
+			ar.setRegionWidth(6);
+			batch.draw(ar, x + (width - 12) * percent + 6, y);
+			ar.setRegionX(rx);
+			ar.setRegionWidth(13);
+		}
 	}
 	
 	public static float len(Vector3 v)

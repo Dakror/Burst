@@ -36,6 +36,7 @@ public class LoadingLayer extends Layer
 			Burst.img = Burst.assets.get("img/pack.atlas", TextureAtlas.class);
 			Burst.instance.removeLayer(this);
 			Burst.instance.addLayer(new Game());
+			Burst.instance.addLayer(new HudLayer());
 			return;
 		}
 		

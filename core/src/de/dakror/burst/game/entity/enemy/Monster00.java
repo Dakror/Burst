@@ -1,6 +1,7 @@
 package de.dakror.burst.game.entity.enemy;
 
 import de.dakror.burst.Burst;
+import de.dakror.burst.game.Game;
 
 /**
  * @author Dakror
@@ -19,5 +20,11 @@ public class Monster00 extends Enemy
 		
 		pulseTime = 0.75f;
 		bump.set(51, 35, 48, 80);
+	}
+	
+	@Override
+	public void onPlayerTouch(int tick)
+	{
+		if (tick % 60 == 0) Game.player.dealDamage(1);
 	}
 }

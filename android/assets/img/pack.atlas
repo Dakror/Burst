@@ -1,9 +1,23 @@
 
 pack.png
-size: 914,154
+size: 929,154
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Bar-ff3232
+  rotate: false
+  xy: 914, 129
+  size: 13, 23
+  orig: 13, 23
+  offset: 0, 0
+  index: -1
+BarBase
+  rotate: false
+  xy: 914, 104
+  size: 13, 23
+  orig: 13, 23
+  offset: 0, 0
+  index: -1
 monster00
   rotate: false
   xy: 2, 2
