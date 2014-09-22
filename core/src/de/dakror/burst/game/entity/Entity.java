@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 import de.dakror.burst.Burst;
+import de.dakror.burst.game.Game;
 import de.dakror.burst.util.interf.Drawable;
 import de.dakror.burst.util.interf.Tickable;
 
@@ -17,7 +18,6 @@ import de.dakror.burst.util.interf.Tickable;
  */
 public abstract class Entity implements Drawable, Tickable
 {
-	public static final float zFac = 0.8f;
 	public static final float lifeBarWidth = 100;
 	
 	protected Sprite spriteFg, spriteBg;
@@ -102,7 +102,7 @@ public abstract class Entity implements Drawable, Tickable
 			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
 			
 			spriteBg.setX(pos.x - glowAdd / 2);
-			spriteBg.setY(pos.y + zFac * pos.z - glowAdd / 2);
+			spriteBg.setY(pos.y + Game.zFac * pos.z - glowAdd / 2);
 			spriteBg.setSize(w + glowAdd, h + glowAdd);
 			spriteBg.draw(batch, (fac2 + 1) / 2f);
 			spriteBg.setSize(w, h);
@@ -111,13 +111,13 @@ public abstract class Entity implements Drawable, Tickable
 		}
 		
 		spriteFg.setX(pos.x);
-		spriteFg.setY(pos.y + zFac * pos.z);
+		spriteFg.setY(pos.y + Game.zFac * pos.z);
 		spriteFg.draw(batch);
 		
 		if (maxHp > 0 && showHpBar)
 		{
 			float x = pos.x + bump.x + (bump.width - lifeBarWidth) / 2;
-			float y = pos.y + zFac * pos.z + bump.y + bump.height + 10;
+			float y = pos.y + Game.zFac * pos.z + bump.y + bump.height + 10;
 			
 			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
 		}
@@ -130,7 +130,7 @@ public abstract class Entity implements Drawable, Tickable
 			Burst.shapeRenderer.identity();
 			Burst.shapeRenderer.begin(ShapeType.Line);
 			Burst.shapeRenderer.setColor(Color.WHITE);
-			Burst.shapeRenderer.rect(pos.x + bump.x, pos.y + zFac * pos.z + bump.y, bump.width, bump.height);
+			Burst.shapeRenderer.rect(pos.x + bump.x, pos.y + Game.zFac * pos.z + bump.y, bump.width, bump.height);
 			Burst.shapeRenderer.end();
 		}
 	}
@@ -144,7 +144,7 @@ public abstract class Entity implements Drawable, Tickable
 	{
 		bmp.set(bump);
 		bmp.x += pos.x;
-		bmp.y += pos.y + zFac * pos.z;
+		bmp.y += pos.y + Game.zFac * pos.z;
 		
 		return bmp;
 	}
@@ -158,7 +158,7 @@ public abstract class Entity implements Drawable, Tickable
 	{
 		Rectangle obmp = o.getAbsoluteBump();
 		obmp.x += tr.x;
-		obmp.y += tr.y + zFac * tr.z;
+		obmp.y += tr.y + Game.zFac * tr.z;
 		return getAbsoluteBump().overlaps(obmp);
 	}
 	

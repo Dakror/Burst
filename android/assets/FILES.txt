@@ -1,10 +1,13 @@
 f FILES.txt
 d img
+f img/floor.xcf
 f img/pack.atlas
 f img/pack.png
 d img/raw
 f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
+f img/raw/floor.png
+f img/raw/floorPersp.png
 f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png

@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.game.entity.Entity;
@@ -23,7 +24,8 @@ public class Game extends Layer
 	
 	public final CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
 	
-	String floorTile = "castleMid";
+	TiledDrawable floor, floorPersp;
+	public static final float zFac = 0.8f;
 	
 	@Override
 	public void show()
@@ -32,6 +34,9 @@ public class Game extends Layer
 		
 		camera = new OrthographicCamera();
 		stage = new Stage(new ScreenViewport(camera));
+		
+		// floor = new TiledDrawable(Burst.img.findRegion("floor"));
+		// floorPersp = new TiledDrawable(Burst.img.findRegion("floorPersp"));
 		
 		player = new Player((Gdx.graphics.getWidth() - 48) / 2, 0, Gdx.graphics.getHeight());
 		entities.add(player);
@@ -52,6 +57,9 @@ public class Game extends Layer
 		stage.act();
 		stage.draw();
 		stage.getBatch().begin();
+		
+		// floor.draw(stage.getBatch(), 0, zFac * Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), (1 - zFac) * Gdx.graphics.getHeight());
+		// floorPersp.draw(stage.getBatch(), 0, 0, Gdx.graphics.getWidth(), zFac * Gdx.graphics.getHeight());
 		
 		for (Entity entity : entities)
 			entity.render(stage.getBatch(), delta);

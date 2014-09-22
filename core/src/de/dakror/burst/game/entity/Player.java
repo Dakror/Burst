@@ -31,9 +31,9 @@ public class Player extends Entity
 	public void tick(int tick)
 	{
 		float deltaX = 0, deltaY = 0, deltaZ = 0;
-		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed) * zFac) deltaZ += speed * zFac;
+		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed) * Game.zFac) deltaZ += speed * Game.zFac;
 		if (Gdx.input.isKeyPressed(Keys.A) && pos.x >= speed) deltaX -= speed;
-		if (Gdx.input.isKeyPressed(Keys.S) && pos.z >= speed * zFac) deltaZ -= speed * zFac;
+		if (Gdx.input.isKeyPressed(Keys.S) && pos.z >= speed * Game.zFac) deltaZ -= speed * Game.zFac;
 		if (Gdx.input.isKeyPressed(Keys.D) && pos.x + spriteFg.getWidth() <= Gdx.graphics.getWidth() - speed) deltaX += speed;
 		
 		for (Entity e : Game.instance.entities)
