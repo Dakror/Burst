@@ -38,7 +38,7 @@ public class Game extends Layer
 		// floor = new TiledDrawable(Burst.img.findRegion("floor"));
 		// floorPersp = new TiledDrawable(Burst.img.findRegion("floorPersp"));
 		
-		player = new Player((Gdx.graphics.getWidth() - 48) / 2, 0, Gdx.graphics.getHeight());
+		player = new Player((Gdx.graphics.getWidth() - 150) / 2, 0, Gdx.graphics.getHeight() / 2);
 		entities.add(player);
 		
 		entities.add(new Monster00((Gdx.graphics.getWidth() - 48) / 3, 0, Gdx.graphics.getHeight() / 2));

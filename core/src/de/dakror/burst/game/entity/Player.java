@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.layer.HudLayer;
 
 /**
  * @author Dakror
@@ -49,5 +50,12 @@ public class Player extends Entity
 		}
 		
 		pos.add(deltaX, deltaY, deltaZ);
+	}
+	
+	@Override
+	public void dealDamage(int dmg)
+	{
+		super.dealDamage(dmg);
+		if (dmg > 0) HudLayer.instance.showBloodFlash();
 	}
 }

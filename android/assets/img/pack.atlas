@@ -1,6 +1,6 @@
 
 pack.png
-size: 929,154
+size: 1924,1236
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -16,6 +16,13 @@ BarBase
   xy: 914, 104
   size: 13, 23
   orig: 13, 23
+  offset: 0, 0
+  index: -1
+blood
+  rotate: false
+  xy: 2, 154
+  size: 1920, 1080
+  orig: 1920, 1080
   offset: 0, 0
   index: -1
 monster00
