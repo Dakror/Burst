@@ -23,7 +23,7 @@ public abstract class Entity implements Drawable, Tickable
 	protected Sprite spriteFg, spriteBg;
 	protected String name;
 	
-	protected int hp, maxHp, level;
+	protected int hp, maxHp, level, attackDamage, attackSpeed;
 	protected float speed;
 	protected final Vector3 pos;
 	
@@ -44,6 +44,9 @@ public abstract class Entity implements Drawable, Tickable
 		maxHp = hp = 10;
 		showHpBar = true;
 		bump = new Rectangle();
+		
+		attackDamage = 1;
+		attackSpeed = 30;
 	}
 	
 	public boolean isDead()
@@ -161,6 +164,8 @@ public abstract class Entity implements Drawable, Tickable
 		obmp.y += tr.y + Game.zFac * tr.z;
 		return getAbsoluteBump().overlaps(obmp);
 	}
+	
+	// -- statics -- //
 	
 	static final String[] regs = { "BarBase", "Bar-ff3232" };
 	

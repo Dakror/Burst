@@ -25,6 +25,6 @@ public class Monster00 extends Enemy
 	@Override
 	public void onPlayerTouch(int tick)
 	{
-		if ((tick - touchStartTick) % 30 == 0) Game.player.dealDamage(1);
+		if ((tick - touchStartTick) % attackSpeed == 0) Game.player.dealDamage(attackDamage);
 	}
 }
