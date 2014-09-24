@@ -89,7 +89,6 @@ public class DebugLayer extends Layer
 		}
 		
 		Burst.shapeRenderer.end();
-		
 	}
 	
 	public void drawString(String s, int x, int y)
