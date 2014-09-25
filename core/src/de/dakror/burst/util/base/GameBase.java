@@ -1,12 +1,11 @@
 package de.dakror.burst.util.base;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import de.dakror.burst.layer.Layer;
 
@@ -15,7 +14,7 @@ import de.dakror.burst.layer.Layer;
  */
 public abstract class GameBase extends ApplicationAdapter implements InputProcessor, GestureListener
 {
-	public CopyOnWriteArrayList<Layer> layers = new CopyOnWriteArrayList<Layer>();
+	public Array<Layer> layers = new Array<Layer>();
 	private InputMultiplexer multiplexer = new InputMultiplexer();
 	
 	public void addLayer(Layer layer)
@@ -39,7 +38,7 @@ public abstract class GameBase extends ApplicationAdapter implements InputProces
 		getMultiplexer().removeProcessor(layer.gestureDetector);
 		if (layer.getStage() != null) getMultiplexer().removeProcessor(layer.getStage());
 		layer.dispose();
-		return layers.remove(layer);
+		return layers.removeValue(layer, true);
 	}
 	
 	public boolean removeLayer(Class<?> layerClass)
@@ -60,7 +59,7 @@ public abstract class GameBase extends ApplicationAdapter implements InputProces
 	
 	public Layer getActiveLayer()
 	{
-		return layers.get(layers.size() - 1);
+		return layers.get(layers.size - 1);
 	}
 	
 	public void clearLayers()

@@ -27,6 +27,8 @@ public class HudLayer extends Layer
 	{
 		instance = this;
 		stage = new Stage(new ScreenViewport());
+		
+		initDone = true;
 	}
 	
 	@Override
@@ -45,6 +47,4 @@ public class HudLayer extends Layer
 		}
 		stage.getBatch().end();
 	}
-	
-	
 }

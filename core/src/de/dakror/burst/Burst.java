@@ -23,6 +23,12 @@ public class Burst extends GameBase
 	public static ShapeRenderer shapeRenderer;
 	public static boolean debug;
 	
+	float last;
+	int tick;
+	int ticks;
+	long lastSecond;
+	public int ticksPerSecond;
+	
 	@Override
 	public void create()
 	{
@@ -38,19 +44,35 @@ public class Burst extends GameBase
 		getMultiplexer().addProcessor(0, this);
 		Gdx.input.setInputProcessor(getMultiplexer());
 		
-		new Updater();
-		
 		setLayer(new LoadingLayer());
 	}
 	
 	@Override
 	public void render()
 	{
+		float delta = Gdx.graphics.getDeltaTime();
+		if (last + delta >= 1 / 60f)
+		{
+			ticks++;
+			tick++;
+			for (Layer l : layers)
+				if (l.initDone) l.tick(tick);
+			last = 0;
+		}
+		else last += delta;
+		
+		if (System.currentTimeMillis() - lastSecond >= 1000)
+		{
+			ticksPerSecond = ticks;
+			ticks = 0;
+			lastSecond = System.currentTimeMillis();
+		}
+		
 		Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		for (Layer l : layers)
-			l.render(Gdx.graphics.getDeltaTime());
+			if (l.initDone) l.render(delta);
 	}
 	
 	@Override

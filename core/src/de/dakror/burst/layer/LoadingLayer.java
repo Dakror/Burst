@@ -26,6 +26,8 @@ public class LoadingLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
+		
+		initDone = true;
 	}
 	
 	@Override

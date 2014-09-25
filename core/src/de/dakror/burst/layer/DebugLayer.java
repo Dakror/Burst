@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.FloatArray;
 
 import de.dakror.burst.Burst;
-import de.dakror.burst.Updater;
 import de.dakror.burst.game.Game;
 
 /**
@@ -30,6 +29,8 @@ public class DebugLayer extends Layer
 	{
 		spriteBatch = new SpriteBatch();
 		font = new BitmapFont();
+		
+		initDone = true;
 	}
 	
 	@Override
@@ -56,8 +57,8 @@ public class DebugLayer extends Layer
 		spriteBatch.begin();
 		
 		drawString("Burst infdev 0.1", 0, Gdx.graphics.getHeight());
-		drawString("FPS: " + Gdx.graphics.getFramesPerSecond() + ", UPS: " + Updater.instance.ticksPerSecond, 0, Gdx.graphics.getHeight() - 14);
-		drawString("E: " + Game.instance.entities.size(), 0, Gdx.graphics.getHeight() - 14 * 3);
+		drawString("FPS: " + Gdx.graphics.getFramesPerSecond() + ", UPS: " + Burst.instance.ticksPerSecond, 0, Gdx.graphics.getHeight() - 14);
+		// drawString("E: " + Game.instance.entities.size, 0, Gdx.graphics.getHeight() - 14 * 3);
 		drawString("X: " + Game.player.getPos().x, 0, Gdx.graphics.getHeight() - 14 * 4);
 		drawString("Y: " + Game.player.getPos().y, 0, Gdx.graphics.getHeight() - 14 * 5);
 		drawString("Z: " + Game.player.getPos().z, 0, Gdx.graphics.getHeight() - 14 * 6);

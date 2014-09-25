@@ -18,6 +18,8 @@ public abstract class Layer implements Screen, InputProcessor, GestureListener, 
 	protected Stage stage;
 	protected boolean modal;
 	
+	public boolean initDone;
+	
 	public Layer()
 	{
 		gestureDetector = new GestureDetector(this);
@@ -35,7 +37,9 @@ public abstract class Layer implements Screen, InputProcessor, GestureListener, 
 	
 	@Override
 	public void show()
-	{}
+	{
+		initDone = true;
+	}
 	
 	@Override
 	public void resize(int width, int height)

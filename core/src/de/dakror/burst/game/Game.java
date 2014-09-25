@@ -1,11 +1,10 @@
 package de.dakror.burst.game;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.game.entity.Entity;
@@ -22,7 +21,7 @@ public class Game extends Layer
 	public static Player player;
 	public static OrthographicCamera camera;
 	
-	public final CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
+	public final Array<Entity> entities = new Array<Entity>();
 	
 	TiledDrawable floor, floorPersp;
 	public static final float zFac = 0.8f;
@@ -42,13 +41,16 @@ public class Game extends Layer
 		entities.add(player);
 		
 		entities.add(new Monster00((Gdx.graphics.getWidth() - 48) / 3, 0, Gdx.graphics.getHeight() / 2));
+		initDone = true;
 	}
 	
 	@Override
 	public void tick(int tick)
 	{
 		for (Entity entity : entities)
-			entity.tick(tick);
+			if (!(entity instanceof Player)) entity.tick(tick);
+		
+		player.tick(tick);
 	}
 	
 	@Override
@@ -60,7 +62,6 @@ public class Game extends Layer
 		
 		// floor.draw(stage.getBatch(), 0, zFac * Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), (1 - zFac) * Gdx.graphics.getHeight());
 		// floorPersp.draw(stage.getBatch(), 0, 0, Gdx.graphics.getWidth(), zFac * Gdx.graphics.getHeight());
-		
 		for (Entity entity : entities)
 			entity.render(stage.getBatch(), delta);
 		

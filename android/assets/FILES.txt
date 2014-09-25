@@ -1,4 +1,6 @@
 f FILES.txt
+d fx
+f fx/shadow.p
 d img
 f img/pack.atlas
 f img/pack.png
