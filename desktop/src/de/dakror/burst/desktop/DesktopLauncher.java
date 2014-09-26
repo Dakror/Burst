@@ -19,6 +19,6 @@ public class DesktopLauncher
 		config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
 		config.fullscreen = false;
 		
-		new LwjglApplication(new Burst(), config);
+		new LwjglApplication(new Burst(new DesktopInternalAssetManager()), config);
 	}
 }

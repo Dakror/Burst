@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
@@ -36,14 +37,14 @@ public class DebugLayer extends Layer
 	@Override
 	public void tick(int tick)
 	{
-		if (lastTick == 0) lastTick = System.nanoTime();
-		long delta = System.nanoTime() - lastTick;
+		if (lastTick == 0) lastTick = TimeUtils.nanoTime();
+		long delta = TimeUtils.nanoTime() - lastTick;
 		if (delta > 0)
 		{
 			tickTimes.add(delta / 1000000000f);
 			while (tickTimes.size > max)
 				tickTimes.removeIndex(0);
-			lastTick = System.nanoTime();
+			lastTick = TimeUtils.nanoTime();
 		}
 	}
 	

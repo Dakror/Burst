@@ -56,6 +56,6 @@ public class Player extends Entity
 	public void dealDamage(int dmg)
 	{
 		super.dealDamage(dmg);
-		if (dmg > 0) HudLayer.instance.showBloodFlash();
+		if (dmg > 0 && hp >= 0) HudLayer.instance.showBloodFlash();
 	}
 }

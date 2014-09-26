@@ -12,7 +12,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import de.dakror.burst.layer.DebugLayer;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.layer.LoadingLayer;
-import de.dakror.burst.util.InternalAssetManager;
+import de.dakror.burst.util.asset.InternalAssetManager;
 import de.dakror.burst.util.base.GameBase;
 
 public class Burst extends GameBase
@@ -29,15 +29,21 @@ public class Burst extends GameBase
 	long lastSecond;
 	public int ticksPerSecond;
 	
-	@Override
-	public void create()
+	public Burst(InternalAssetManager assets)
 	{
 		instance = this;
 		
+		Burst.assets = new AssetManager();
+		
+		InternalAssetManager.instance = assets;
+	}
+	
+	@Override
+	public void create()
+	{
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
-		assets = new AssetManager();
-		InternalAssetManager.init();
+		InternalAssetManager.instance.init();
 		
 		shapeRenderer = new ShapeRenderer();
 		getMultiplexer().addProcessor(0, new GestureDetector(this));
