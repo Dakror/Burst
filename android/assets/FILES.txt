@@ -15,3 +15,4 @@ f img/raw/pack.json
 f img/raw/player.png
 f img/raw/player_bg.png
 f img/raw/player_fg.png
+f img/raw/square.png

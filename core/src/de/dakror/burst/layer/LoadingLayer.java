@@ -1,14 +1,17 @@
 package de.dakror.burst.layer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader.ParticleEffectParameter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.util.InternalAssetManager;
 
 /**
  * @author Dakror
@@ -27,6 +30,10 @@ public class LoadingLayer extends Layer
 		
 		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
 		
+		ParticleEffectParameter pep = new ParticleEffectParameter();
+		pep.atlasFile = "img/pack.atlas";
+		InternalAssetManager.scheduleDirectory(Burst.assets, "fx/", ParticleEffect.class, false, pep);
+		
 		initDone = true;
 	}
 	
@@ -38,7 +45,6 @@ public class LoadingLayer extends Layer
 			Burst.img = Burst.assets.get("img/pack.atlas", TextureAtlas.class);
 			Burst.instance.removeLayer(this);
 			Burst.instance.addLayer(new Game());
-			Burst.instance.addLayer(new HudLayer());
 			return;
 		}
 		

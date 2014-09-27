@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
-import de.dakror.burst.layer.HudLayer;
 
 /**
  * @author Dakror
@@ -22,7 +21,7 @@ public class Player extends Entity
 		name = "Player";
 		spriteFg = Burst.img.createSprite("player_fg");
 		spriteBg = Burst.img.createSprite("player_bg");
-		speed = 3;
+		speed = 180;
 		showHpBar = false;
 		
 		bump.set(51, 35, 48, 80);
@@ -32,10 +31,10 @@ public class Player extends Entity
 	public void update(float delta)
 	{
 		float deltaX = 0, deltaY = 0, deltaZ = 0;
-		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed) * Game.zFac) deltaZ += speed * Game.zFac;
-		if (Gdx.input.isKeyPressed(Keys.A) && pos.x >= speed) deltaX -= speed;
-		if (Gdx.input.isKeyPressed(Keys.S) && pos.z >= speed * Game.zFac) deltaZ -= speed * Game.zFac;
-		if (Gdx.input.isKeyPressed(Keys.D) && pos.x + spriteFg.getWidth() <= Gdx.graphics.getWidth() - speed) deltaX += speed;
+		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed * delta) * Game.zFac) deltaZ += speed * delta * Game.zFac;
+		if (Gdx.input.isKeyPressed(Keys.A) && pos.x >= speed * delta) deltaX -= speed * delta;
+		if (Gdx.input.isKeyPressed(Keys.S) && pos.z >= speed * delta * Game.zFac) deltaZ -= speed * delta * Game.zFac;
+		if (Gdx.input.isKeyPressed(Keys.D) && pos.x + spriteFg.getWidth() <= Gdx.graphics.getWidth() - speed * delta) deltaX += speed * delta;
 		
 		for (Entity e : Game.instance.entities)
 		{
@@ -56,6 +55,10 @@ public class Player extends Entity
 	public void dealDamage(int dmg)
 	{
 		super.dealDamage(dmg);
-		if (dmg > 0 && hp >= 0) HudLayer.instance.showBloodFlash();
+		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
 	}
+	
+	@Override
+	public void onRemoval()
+	{}
 }

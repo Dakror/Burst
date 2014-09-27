@@ -25,6 +25,8 @@ public class Enemy extends Entity
 		tmp.set(Game.player.getPos()).sub(pos);
 		if (len(tmp) > speed) limit(tmp, speed);
 		
+		tmp.scl(delta);
+		
 		if (Game.player.intersects(this, tmp))
 		{
 			if (touchStart == 0) touchStart = System.currentTimeMillis();

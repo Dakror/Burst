@@ -173,6 +173,9 @@ public abstract class Entity implements Drawable, Updatable
 		return getAbsoluteBump().overlaps(obmp);
 	}
 	
+	public void onRemoval()
+	{}
+	
 	// -- statics -- //
 	
 	static final String[] regs = { "BarBase", "Bar-ff3232" };

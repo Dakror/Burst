@@ -1,4 +1,4 @@
-Untitled
+shadow
 - Delay -
 active: false
 - Duration - 
@@ -188,4 +188,4 @@ additive: false
 behind: true
 premultipliedAlpha: false
 - Image Path -
-C:\Users\Dakror\Desktop\square.png
+square.png

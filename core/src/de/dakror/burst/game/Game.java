@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import de.dakror.burst.Burst;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.Player;
 import de.dakror.burst.game.entity.enemy.Monster00;
@@ -28,15 +30,19 @@ public class Game extends Layer
 	TiledDrawable floor, floorPersp;
 	public static final float zFac = 0.8f;
 	
+	
+	float bloodFlashAlpha = 0;
+	
 	@Override
 	public void show()
 	{
 		instance = this;
 		
 		camera = new OrthographicCamera();
-		stage = new Stage();
+		stage = new Stage(new ScreenViewport(camera));
 		
 		particles = new MultiParticleEffectPool();
+		particles.addPrototype("fx/shadow.p", Burst.assets);
 		
 		// floor = new TiledDrawable(Burst.img.findRegion("floor"));
 		// floorPersp = new TiledDrawable(Burst.img.findRegion("floorPersp"));
@@ -54,7 +60,11 @@ public class Game extends Layer
 		for (Entity entity : entities)
 		{
 			if (!(entity instanceof Player)) entity.update(delta);
-			if (entity.isDead()) entities.removeValue(entity, true);
+			if (entity.isDead())
+			{
+				entity.onRemoval();
+				entities.removeValue(entity, true);
+			}
 		}
 		
 		player.update(delta);
@@ -74,7 +84,21 @@ public class Game extends Layer
 		
 		particles.draw((SpriteBatch) stage.getBatch(), delta);
 		
+		// -- hud / ui -- //
+		
+		int width = 400;
+		Entity.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 20, width, Game.player.getHpPercentage());
+		
+		if (bloodFlashAlpha > 0)
+		{
+			stage.getBatch().setColor(1, 1, 1, bloodFlashAlpha);
+			stage.getBatch().draw(Burst.img.findRegion("blood"), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			stage.getBatch().setColor(1, 1, 1, 1);
+			bloodFlashAlpha -= delta;
+		}
 		stage.getBatch().end();
+		
+		// -- hud / ui END -- //
 		
 		for (Entity entity : entities)
 			entity.debug(stage.getBatch(), delta);
@@ -83,5 +107,10 @@ public class Game extends Layer
 	public void spawnEntity(Entity e)
 	{
 		entities.add(e);
+	}
+	
+	public void showBloodFlash()
+	{
+		bloodFlashAlpha = 1f;
 	}
 }
