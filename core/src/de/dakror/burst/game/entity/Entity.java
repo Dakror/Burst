@@ -3,6 +3,7 @@ package de.dakror.burst.game.entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.util.MultiParticleEffectPool;
 import de.dakror.burst.util.interf.Drawable;
 import de.dakror.burst.util.interf.Tickable;
 
@@ -22,6 +24,8 @@ public abstract class Entity implements Drawable, Tickable
 	
 	protected Sprite spriteFg, spriteBg;
 	protected String name;
+	
+	protected MultiParticleEffectPool particles;
 	
 	protected int hp, maxHp, level, attackDamage, attackSpeed;
 	protected float speed;
@@ -47,6 +51,8 @@ public abstract class Entity implements Drawable, Tickable
 		
 		attackDamage = 1;
 		attackSpeed = 30;
+		
+		particles = new MultiParticleEffectPool();
 	}
 	
 	public boolean isDead()
@@ -85,9 +91,9 @@ public abstract class Entity implements Drawable, Tickable
 	}
 	
 	@Override
-	public void render(Batch batch, float delta)
+	public void render(SpriteBatch batch, float delta)
 	{
-		if (isDead() || spriteFg == null) return;
+		if (spriteFg == null) return;
 		
 		if (bump.width == 0)
 		{
@@ -124,6 +130,8 @@ public abstract class Entity implements Drawable, Tickable
 			
 			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
 		}
+		
+		particles.draw(batch, delta);
 	}
 	
 	public void debug(Batch batch, float delta2)
