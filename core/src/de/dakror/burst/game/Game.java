@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.Player;
@@ -35,7 +34,7 @@ public class Game extends Layer
 		instance = this;
 		
 		camera = new OrthographicCamera();
-		stage = new Stage(new ScreenViewport(camera));
+		stage = new Stage();
 		
 		particles = new MultiParticleEffectPool();
 		
@@ -50,15 +49,15 @@ public class Game extends Layer
 	}
 	
 	@Override
-	public void tick(int tick)
+	public void update(float delta)
 	{
 		for (Entity entity : entities)
 		{
-			if (!(entity instanceof Player)) entity.tick(tick);
+			if (!(entity instanceof Player)) entity.update(delta);
 			if (entity.isDead()) entities.removeValue(entity, true);
 		}
 		
-		player.tick(tick);
+		player.update(delta);
 	}
 	
 	@Override

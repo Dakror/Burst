@@ -29,7 +29,7 @@ public class Player extends Entity
 	}
 	
 	@Override
-	public void tick(int tick)
+	public void update(float delta)
 	{
 		float deltaX = 0, deltaY = 0, deltaZ = 0;
 		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed) * Game.zFac) deltaZ += speed * Game.zFac;

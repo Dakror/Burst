@@ -13,12 +13,12 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.util.MultiParticleEffectPool;
 import de.dakror.burst.util.interf.Drawable;
-import de.dakror.burst.util.interf.Tickable;
+import de.dakror.burst.util.interf.Updatable;
 
 /**
  * @author Dakror
  */
-public abstract class Entity implements Drawable, Tickable
+public abstract class Entity implements Drawable, Updatable
 {
 	public static final float lifeBarWidth = 100;
 	
@@ -27,8 +27,8 @@ public abstract class Entity implements Drawable, Tickable
 	
 	protected MultiParticleEffectPool particles;
 	
-	protected int hp, maxHp, level, attackDamage, attackSpeed;
-	protected float speed;
+	protected int hp, maxHp, level, attackDamage;
+	protected float speed, attackTime;
 	protected final Vector3 pos;
 	
 	protected Rectangle bump;
@@ -50,7 +50,7 @@ public abstract class Entity implements Drawable, Tickable
 		bump = new Rectangle();
 		
 		attackDamage = 1;
-		attackSpeed = 30;
+		attackTime = 0.75f;
 		
 		particles = new MultiParticleEffectPool();
 	}

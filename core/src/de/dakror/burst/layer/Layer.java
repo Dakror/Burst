@@ -7,12 +7,12 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import de.dakror.burst.util.interf.Tickable;
+import de.dakror.burst.util.interf.Updatable;
 
 /**
  * @author Dakror
  */
-public abstract class Layer implements Screen, InputProcessor, GestureListener, Tickable
+public abstract class Layer implements Screen, InputProcessor, GestureListener, Updatable
 {
 	public GestureDetector gestureDetector;
 	protected Stage stage;
@@ -52,7 +52,7 @@ public abstract class Layer implements Screen, InputProcessor, GestureListener, 
 	{}
 	
 	@Override
-	public void tick(int tick)
+	public void update(float delta)
 	{}
 	
 	@Override

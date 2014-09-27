@@ -2,7 +2,6 @@ package de.dakror.burst.layer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
@@ -26,7 +25,7 @@ public class HudLayer extends Layer
 	public void show()
 	{
 		instance = this;
-		stage = new Stage(new ScreenViewport());
+		stage = new Stage();
 		
 		initDone = true;
 	}
