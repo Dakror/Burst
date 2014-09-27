@@ -1,0 +1,8 @@
+language: android
+before_install: chmod +x ./gradlew
+script: 
+    - ./gradlew desktop:dist
+after_script: ant -file upload.xml
+branches:
+  only:
+    - master
