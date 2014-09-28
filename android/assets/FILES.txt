@@ -17,3 +17,11 @@ f img/raw/player.png
 f img/raw/player_bg.png
 f img/raw/player_fg.png
 f img/raw/square.png
+f img/raw/target_0.png
+f img/raw/target_1.png
+f img/raw/target_2.png
+f img/raw/target_3.png
+f img/raw/target_4.png
+f img/raw/target_5.png
+f img/raw/target_6.png
+f img/raw/target_7.png

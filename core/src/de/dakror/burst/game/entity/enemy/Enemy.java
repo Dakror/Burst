@@ -28,9 +28,8 @@ public class Enemy extends Entity
 		{
 			tmp.set(Game.player.getPos()).sub(getPos());
 			
-			if (tmp.len() > speed) tmp.limit(speed);
-			
-			tmp.scl(delta);
+			if (tmp.len() > speed * delta) tmp.limit(speed * delta);
+			else tmp.scl(delta);
 			
 			if (Game.player.isInAttackRange(this, tmp) && !Game.player.isDead())
 			{

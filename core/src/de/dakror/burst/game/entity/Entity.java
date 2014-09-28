@@ -48,7 +48,6 @@ public abstract class Entity extends Actor
 	public Entity(float x, float y)
 	{
 		setPosition(x, y);
-		
 		level = 0;
 		maxHp = hp = 10;
 		showHpBar = true;
@@ -136,6 +135,7 @@ public abstract class Entity extends Actor
 	public void draw(Batch batch, float parentAlpha)
 	{
 		if (spriteFg == null || !isVisible()) return;
+		setSize(spriteFg.getWidth(), spriteFg.getHeight());
 		
 		if (bump.width == 0)
 		{
@@ -160,7 +160,7 @@ public abstract class Entity extends Actor
 			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
 			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
-			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
+			float w = getWidth(), h = getHeight();
 			
 			spriteBg.setX(x - glowAdd / 2);
 			spriteBg.setY(y - glowAdd / 2);
