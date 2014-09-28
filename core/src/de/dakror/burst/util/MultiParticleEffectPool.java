@@ -17,33 +17,49 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class MultiParticleEffectPool
 {
 	public static final int MAX_POOL_SIZE = 2;
+	public static String assetDir;
 	
 	ObjectMap<String, ParticleEffectPool> pools;
 	ObjectMap<String, Array<PooledEffect>> effects;
 	
 	public MultiParticleEffectPool()
 	{
+		this("fx");
+	}
+	
+	public MultiParticleEffectPool(String assetDir)
+	{
+		MultiParticleEffectPool.assetDir = assetDir;
 		pools = new ObjectMap<>();
 		effects = new ObjectMap<>();
 	}
 	
-	public void addPrototype(String path, AssetManager assets)
+	public void addPrototype(String name, AssetManager assets)
 	{
-		if (pools.containsKey(path)) throw new InvalidParameterException("This effect is already loaded in: " + path);
+		if (pools.containsKey(name)) throw new InvalidParameterException("This effect is already loaded in: " + assetDir + "/" + name);
 		
-		pools.put(path, new ParticleEffectPool(assets.get(path, ParticleEffect.class), 1, MAX_POOL_SIZE));
+		pools.put(name, new ParticleEffectPool(assets.get(assetDir + "/" + name, ParticleEffect.class), 1, MAX_POOL_SIZE));
+		effects.put(name, new Array<PooledEffect>());
 	}
 	
-	public ParticleEffectPool pool(String path)
+	public PooledEffect add(String name, float x, float y)
 	{
-		if (!pools.containsKey(path)) throw new InvalidParameterException("This effect is not loaded in yet: " + path);
-		
-		return pools.get(path);
+		PooledEffect e = obtain(name);
+		e.setPosition(x, y);
+		effects.get(name).add(e);
+		return e;
 	}
 	
-	public PooledEffect obtain(String path)
+	public ParticleEffectPool pool(String name)
 	{
-		return pool(path).obtain();
+		if (!pools.containsKey(name)) throw new InvalidParameterException("This effect is not loaded in yet: " + assetDir + "/" + name);
+		
+		return pools.get(name);
+	}
+	
+	public PooledEffect obtain(String name)
+	{
+		return pool(name).obtain();
 	}
 	
 	public void draw(SpriteBatch batch, float delta)
@@ -55,8 +71,8 @@ public class MultiParticleEffectPool
 				e.draw(batch, delta);
 				if (e.isComplete())
 				{
-					arr.removeValue(e, true);
 					e.free();
+					arr.removeValue(e, true);
 				}
 			}
 		}

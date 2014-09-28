@@ -1,24 +1,21 @@
 package de.dakror.burst.game.entity;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.util.MultiParticleEffectPool;
-import de.dakror.burst.util.interf.Drawable;
-import de.dakror.burst.util.interf.Updatable;
 
 /**
  * @author Dakror
  */
-public abstract class Entity implements Drawable, Updatable
+public abstract class Entity extends Actor
 {
 	public static final float lifeBarWidth = 100;
 	
@@ -29,20 +26,22 @@ public abstract class Entity implements Drawable, Updatable
 	
 	protected int hp, maxHp, level, attackDamage;
 	protected float speed, attackTime;
-	protected final Vector3 pos;
+	float z;
 	
 	protected Rectangle bump;
 	
 	final Rectangle bmp = new Rectangle();
+	final Vector3 tmp = new Vector3();
 	
-	protected float pulseTime = 0.5f; // a second
+	protected float pulseTime = 0.5f; // * 1 second
 	protected float delta;
 	protected int glowSize = 20;
 	protected boolean showHpBar;
 	
 	public Entity(float x, float y, float z)
 	{
-		pos = new Vector3(x, y, z);
+		setPosition(x, y);
+		this.z = z;
 		
 		level = 0;
 		maxHp = hp = 10;
@@ -53,6 +52,18 @@ public abstract class Entity implements Drawable, Updatable
 		attackTime = 0.75f;
 		
 		particles = new MultiParticleEffectPool();
+	}
+	
+	@Override
+	public void act(float delta)
+	{
+		super.act(delta);
+		
+		if (isDead())
+		{
+			onRemoval();
+			remove();
+		}
 	}
 	
 	public boolean isDead()
@@ -80,18 +91,30 @@ public abstract class Entity implements Drawable, Updatable
 		return spriteBg;
 	}
 	
+	@Override
 	public String getName()
 	{
 		return name;
 	}
 	
+	public float getZ()
+	{
+		return z;
+	}
+	
 	public Vector3 getPos()
 	{
-		return pos;
+		return tmp.set(getX(), getY(), getZ());
+	}
+	
+	public void moveBy(float x, float y, float z)
+	{
+		super.moveBy(x, y);
+		this.z += z;
 	}
 	
 	@Override
-	public void render(SpriteBatch batch, float delta)
+	public void draw(Batch batch, float parentAlpha)
 	{
 		if (spriteFg == null) return;
 		
@@ -103,47 +126,35 @@ public abstract class Entity implements Drawable, Updatable
 		
 		if (spriteBg != null)
 		{
-			this.delta += delta;
+			delta += delta;
 			
-			float fac = (float) Math.sin(this.delta * Math.PI / pulseTime);
-			float fac2 = (float) Math.cos(this.delta * Math.PI / pulseTime);
+			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
+			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
 			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
 			
-			spriteBg.setX(pos.x - glowAdd / 2);
-			spriteBg.setY(pos.y + Game.zFac * pos.z - glowAdd / 2);
+			spriteBg.setX(getX() - glowAdd / 2);
+			spriteBg.setY(getY() + Game.zFac * z - glowAdd / 2);
 			spriteBg.setSize(w + glowAdd, h + glowAdd);
 			spriteBg.draw(batch, (fac2 + 1) / 2f);
 			spriteBg.setSize(w, h);
 			
-			if (this.delta > pulseTime) this.delta = -pulseTime;
+			if (delta > pulseTime) delta = -pulseTime;
 		}
 		
-		spriteFg.setX(pos.x);
-		spriteFg.setY(pos.y + Game.zFac * pos.z);
+		spriteFg.setX(getX());
+		spriteFg.setY(getY() + Game.zFac * z);
 		spriteFg.draw(batch);
 		
 		if (maxHp > 0 && showHpBar)
 		{
-			float x = pos.x + bump.x + (bump.width - lifeBarWidth) / 2;
-			float y = pos.y + Game.zFac * pos.z + bump.y + bump.height + 10;
+			float x = getX() + bump.x + (bump.width - lifeBarWidth) / 2;
+			float y = getY() + Game.zFac * getZ() + bump.y + bump.height + 10;
 			
 			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
 		}
 		
-		particles.draw(batch, delta);
-	}
-	
-	public void debug(Batch batch, float delta2)
-	{
-		if (Burst.debug)
-		{
-			Burst.shapeRenderer.identity();
-			Burst.shapeRenderer.begin(ShapeType.Line);
-			Burst.shapeRenderer.setColor(Color.WHITE);
-			Burst.shapeRenderer.rect(pos.x + bump.x, pos.y + Game.zFac * pos.z + bump.y, bump.width, bump.height);
-			Burst.shapeRenderer.end();
-		}
+		particles.draw((SpriteBatch) batch, delta);
 	}
 	
 	/**
@@ -154,8 +165,8 @@ public abstract class Entity implements Drawable, Updatable
 	public Rectangle getAbsoluteBump()
 	{
 		bmp.set(bump);
-		bmp.x += pos.x;
-		bmp.y += pos.y + Game.zFac * pos.z;
+		bmp.x += getX();
+		bmp.y += getY() + Game.zFac * getZ();
 		
 		return bmp;
 	}

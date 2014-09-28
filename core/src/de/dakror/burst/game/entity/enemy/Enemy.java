@@ -20,21 +20,23 @@ public class Enemy extends Entity
 	}
 	
 	@Override
-	public void update(float delta)
+	public void act(float delta)
 	{
-		tmp.set(Game.player.getPos()).sub(pos);
+		super.act(delta);
+		
+		tmp.set(Game.player.getPos()).sub(getPos());
 		if (len(tmp) > speed) limit(tmp, speed);
 		
 		tmp.scl(delta);
 		
-		if (Game.player.intersects(this, tmp))
+		if (Game.player.intersects(this, tmp) && !Game.player.isDead())
 		{
 			if (touchStart == 0) touchStart = System.currentTimeMillis();
 			onPlayerTouch(delta);
 		}
 		else
 		{
-			pos.add(tmp);
+			moveBy(tmp.x, tmp.y, tmp.z);
 			touchStart = 0;
 		}
 	}

@@ -3,6 +3,7 @@ package de.dakror.burst.game.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
@@ -28,27 +29,29 @@ public class Player extends Entity
 	}
 	
 	@Override
-	public void update(float delta)
+	public void act(float delta)
 	{
-		float deltaX = 0, deltaY = 0, deltaZ = 0;
-		if (Gdx.input.isKeyPressed(Keys.W) && pos.z <= (Gdx.graphics.getHeight() - speed * delta) * Game.zFac) deltaZ += speed * delta * Game.zFac;
-		if (Gdx.input.isKeyPressed(Keys.A) && pos.x >= speed * delta) deltaX -= speed * delta;
-		if (Gdx.input.isKeyPressed(Keys.S) && pos.z >= speed * delta * Game.zFac) deltaZ -= speed * delta * Game.zFac;
-		if (Gdx.input.isKeyPressed(Keys.D) && pos.x + spriteFg.getWidth() <= Gdx.graphics.getWidth() - speed * delta) deltaX += speed * delta;
+		super.act(delta);
 		
-		for (Entity e : Game.instance.entities)
+		float deltaX = 0, deltaY = 0, deltaZ = 0;
+		if (Gdx.input.isKeyPressed(Keys.W) && getZ() <= (Gdx.graphics.getHeight() - speed * delta) * Game.zFac) deltaZ += speed * delta * Game.zFac;
+		if (Gdx.input.isKeyPressed(Keys.A) && getX() >= speed * delta) deltaX -= speed * delta;
+		if (Gdx.input.isKeyPressed(Keys.S) && getZ() >= speed * delta * Game.zFac) deltaZ -= speed * delta * Game.zFac;
+		if (Gdx.input.isKeyPressed(Keys.D) && getX() + spriteFg.getWidth() <= Gdx.graphics.getWidth() - speed * delta) deltaX += speed * delta;
+		
+		for (Actor e : Game.instance.getStage().getActors())
 		{
-			if (!e.isDead() && e != this)
+			if (e instanceof Entity && !((Entity) e).isDead() && e != this)
 			{
-				if (intersects(e, tmp.set(-deltaX, 0, 0))) deltaX = 0;
-				if (intersects(e, tmp.set(0, -deltaY, 0))) deltaY = 0;
-				if (intersects(e, tmp.set(0, 0, -deltaZ))) deltaZ = 0;
+				if (intersects((Entity) e, tmp.set(-deltaX, 0, 0))) deltaX = 0;
+				if (intersects((Entity) e, tmp.set(0, -deltaY, 0))) deltaY = 0;
+				if (intersects((Entity) e, tmp.set(0, 0, -deltaZ))) deltaZ = 0;
 				
 				if (deltaX == 0 && deltaY == 0 && deltaZ == 0) break;
 			}
 		}
 		
-		pos.add(deltaX, deltaY, deltaZ);
+		moveBy(deltaX, deltaY, deltaZ);
 	}
 	
 	@Override
@@ -57,8 +60,4 @@ public class Player extends Entity
 		super.dealDamage(dmg);
 		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
 	}
-	
-	@Override
-	public void onRemoval()
-	{}
 }

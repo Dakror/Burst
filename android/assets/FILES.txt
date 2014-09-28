@@ -1,6 +1,7 @@
 f FILES.txt
 d fx
-f fx/shadow.p
+f fx/enter_shadow.p
+f fx/leave_shadow.p
 d img
 f img/pack.atlas
 f img/pack.png
@@ -12,6 +13,7 @@ f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png
 f img/raw/pack.json
+f img/raw/particle.png
 f img/raw/player.png
 f img/raw/player_bg.png
 f img/raw/player_fg.png

@@ -18,6 +18,8 @@ public class Monster00 extends Enemy
 		spriteBg = Burst.img.createSprite("monster00_bg");
 		speed = 90;
 		
+		attackDamage = 10;
+		
 		pulseTime = 0.75f;
 		bump.set(51, 35, 48, 80);
 	}

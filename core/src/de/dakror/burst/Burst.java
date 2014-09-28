@@ -47,7 +47,7 @@ public class Burst extends GameBase
 		for (Layer l : layers)
 			if (l.initDone) l.update(delta);
 		
-		Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
+		Gdx.gl.glClearColor(0.05f, 0.05f, 0.05f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		for (Layer l : layers)
