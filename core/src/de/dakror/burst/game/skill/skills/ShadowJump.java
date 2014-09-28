@@ -25,6 +25,6 @@ public class ShadowJump extends TargetedSkill
 		
 		Vector2 backSide = target.getPos().sub(sub);
 		
-		sequence = sequence(visible(false), particle("enter_shadow.p", 75, 75), moveTo(backSide.x, backSide.y), particle("leave_shadow.p", 75, 75, 800), delay(1.5f), visible(true));
+		sequence = sequence(visible(false), particle("shadow.p", 75, 75), moveTo(backSide.x, backSide.y), delay(0.3f), particle("shadow.p", 75, 75, 800), delay(0.2f), visible(true));
 	}
 }

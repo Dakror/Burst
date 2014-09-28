@@ -1,4 +1,4 @@
-leave_shadow
+shadow
 - Delay -
 active: false
 - Duration - 
@@ -14,12 +14,12 @@ highMin: 1000.0
 highMax: 1000.0
 relative: false
 scalingCount: 3
-scaling0: 0.0
-scaling1: 1.0
+scaling0: 1.0
+scaling1: 0.0
 scaling2: 0.0
 timelineCount: 3
 timeline0: 0.0
-timeline1: 0.8835617
+timeline1: 0.21917808
 timeline2: 1.0
 - Life - 
 lowMin: 0.0
@@ -32,7 +32,16 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Life Offset - 
-active: false
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 250.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
 - X Offset - 
 active: false
 - Y Offset - 
@@ -70,14 +79,6 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Velocity - 
-active: false
-- Angle - 
-active: false
-- Rotation - 
-active: false
-- Wind - 
-active: false
-- Gravity - 
 active: true
 lowMin: 0.0
 lowMax: 0.0
@@ -88,6 +89,49 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
+- Angle - 
+active: false
+- Rotation - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
+- Wind - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 50.0
+relative: false
+scalingCount: 3
+scaling0: 0.0
+scaling1: 0.0
+scaling2: 0.7647059
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.3003699
+timeline2: 0.30136988
+- Gravity - 
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 100.0
+highMax: 200.0
+relative: false
+scalingCount: 3
+scaling0: 0.0
+scaling1: 0.0
+scaling2: 0.7647059
+timelineCount: 3
+timeline0: 0.0
+timeline1: 0.3003699
+timeline2: 0.30136988
 - Tint - 
 colorsCount: 3
 colors0: 0.13333334
@@ -101,14 +145,12 @@ lowMax: 0.0
 highMin: 1.0
 highMax: 1.0
 relative: false
-scalingCount: 3
-scaling0: 0.0
-scaling1: 0.7719298
-scaling2: 0.0
-timelineCount: 3
+scalingCount: 2
+scaling0: 1.0
+scaling1: 0.0
+timelineCount: 2
 timeline0: 0.0
-timeline1: 0.74657536
-timeline2: 1.0
+timeline1: 1.0
 - Options - 
 attached: false
 continuous: false

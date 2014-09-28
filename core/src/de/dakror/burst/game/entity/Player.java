@@ -56,7 +56,7 @@ public class Player extends Entity implements InputProcessor
 			}
 		}
 		
-		moveBy(deltaX, deltaY);
+		if (isVisible()) moveBy(deltaX, deltaY);
 	}
 	
 	@Override

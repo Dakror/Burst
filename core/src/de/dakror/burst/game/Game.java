@@ -34,8 +34,7 @@ public class Game extends Layer
 		stage = new Stage(new ScreenViewport(camera));
 		
 		particles = new MultiParticleEffectPool();
-		particles.addPrototype("enter_shadow.p", Burst.assets);
-		particles.addPrototype("leave_shadow.p", Burst.assets);
+		particles.addPrototype("shadow.p", Burst.assets);
 		
 		player = new Player((Gdx.graphics.getWidth() - 150) / 2, (Gdx.graphics.getHeight() - 150) / 2);
 		Burst.instance.getMultiplexer().addProcessor(0, player);

@@ -24,7 +24,7 @@ public class Enemy extends Entity
 	{
 		super.act(delta);
 		
-		if (Game.player.isVisible() && false)
+		if (Game.player.isVisible())
 		{
 			tmp.set(Game.player.getPos()).sub(getPos());
 			
@@ -49,8 +49,8 @@ public class Enemy extends Entity
 	{
 		if (Math.round((System.currentTimeMillis() - touchStart) / 1000f) >= attackTime)
 		{
-			Game.player.dealDamage(attackDamage);
-			touchStart = System.currentTimeMillis();
+			attack(Game.player);
+			touchStart = System.currentTimeMillis() + Math.round(attackTime * 1000);
 		}
 	}
 }

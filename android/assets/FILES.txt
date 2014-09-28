@@ -1,7 +1,6 @@
 f FILES.txt
 d fx
-f fx/enter_shadow.p
-f fx/leave_shadow.p
+f fx/shadow.p
 d img
 f img/pack.atlas
 f img/pack.png

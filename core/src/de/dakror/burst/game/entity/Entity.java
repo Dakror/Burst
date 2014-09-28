@@ -33,6 +33,11 @@ public abstract class Entity extends Actor
 	final Rectangle bmp = new Rectangle();
 	final Vector2 tmp = new Vector2();
 	
+	final Vector2 attack = new Vector2();
+	float attackProgress;
+	boolean attacked;
+	Entity target;
+	
 	protected Skill activeSkill;
 	protected float pulseTime = 0.5f; // * 1 second
 	protected float delta;
@@ -60,10 +65,29 @@ public abstract class Entity extends Actor
 	public void act(float delta)
 	{
 		super.act(delta);
+		this.delta += delta;
 		
 		if (getActions().size == 0) activeSkill = null;
 		
 		hovered = getAbsoluteBump().contains(Gdx.input.getX(), Gdx.input.getY());
+		
+		if (attack.len() > 0)
+		{
+			attackProgress += delta;
+			
+			if (attackProgress / attackTime >= 0.3f && !attacked)
+			{
+				target.dealDamage(attackDamage);
+				attacked = true;
+			}
+			
+			if (attackProgress / attackTime > 1)
+			{
+				attack.setZero();
+				attackProgress = 0;
+				attacked = false;
+			}
+		}
 		
 		if (isDead())
 		{
@@ -119,34 +143,42 @@ public abstract class Entity extends Actor
 			bump.height = spriteFg.getHeight();
 		}
 		
+		float x = getX();
+		float y = getY();
+		
+		if (attack.len() != 0)
+		{
+			float percentage = attackProgress / attackTime;
+			float limit = percentage < 0.5f ? percentage * -5 : (float) Math.sin(attackProgress * -Math.PI / attackTime);
+			tmp.set(attack).limit(Math.max(-attack.len() + 0.00001f, limit * attackRange));
+			x += tmp.x;
+			y += tmp.y;
+		}
+		
 		if (spriteBg != null)
 		{
-			delta += delta;
-			
 			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
 			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
 			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
 			
-			spriteBg.setX(getX() - glowAdd / 2);
-			spriteBg.setY(getY() - glowAdd / 2);
+			spriteBg.setX(x - glowAdd / 2);
+			spriteBg.setY(y - glowAdd / 2);
 			spriteBg.setSize(w + glowAdd, h + glowAdd);
 			spriteBg.draw(batch, (fac2 + 1) / 2f);
 			spriteBg.setSize(w, h);
-			
-			if (delta > pulseTime) delta = -pulseTime;
 		}
 		
-		spriteFg.setX(getX());
-		spriteFg.setY(getY());
+		spriteFg.setX(x);
+		spriteFg.setY(y);
 		spriteFg.draw(batch);
 		
 		if (maxHp > 0 && showHpBar)
 		{
-			float x = getX() + bump.x + (bump.width - lifeBarWidth) / 2;
-			float y = getY() + bump.y + bump.height + 10;
+			float x1 = x + bump.x + (bump.width - lifeBarWidth) / 2;
+			float y1 = y + bump.y + bump.height + 10;
 			
-			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
+			renderHpBar(batch, x1, y1, lifeBarWidth, hp / (float) maxHp);
 		}
 		
 		particles.draw((SpriteBatch) batch, delta);
@@ -231,6 +263,14 @@ public abstract class Entity extends Actor
 	public float getAttackRange()
 	{
 		return attackRange;
+	}
+	
+	public void attack(Entity e)
+	{
+		target = e;
+		attack.set(getPos().sub(e.getPos()).limit(attackRange));
+		attackProgress = 0;
+		attacked = false;
 	}
 	
 	// -- statics -- //
