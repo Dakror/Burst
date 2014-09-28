@@ -44,8 +44,15 @@ public class MultiParticleEffectPool
 	
 	public PooledEffect add(String name, float x, float y)
 	{
+		return add(name, x, y, 0);
+	}
+	
+	
+	public PooledEffect add(String name, float x, float y, int duration)
+	{
 		PooledEffect e = obtain(name);
 		e.setPosition(x, y);
+		if (duration != 0) e.setDuration(duration);
 		effects.get(name).add(e);
 		return e;
 	}

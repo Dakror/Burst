@@ -1,15 +1,16 @@
 package de.dakror.burst.game.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
-import de.dakror.burst.game.Game;
+import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
@@ -25,23 +26,23 @@ public abstract class Entity extends Actor
 	protected MultiParticleEffectPool particles;
 	
 	protected int hp, maxHp, level, attackDamage;
-	protected float speed, attackTime;
-	float z;
+	protected float speed, attackTime, attackRange;
 	
 	protected Rectangle bump;
 	
 	final Rectangle bmp = new Rectangle();
-	final Vector3 tmp = new Vector3();
+	final Vector2 tmp = new Vector2();
 	
+	protected Skill activeSkill;
 	protected float pulseTime = 0.5f; // * 1 second
 	protected float delta;
 	protected int glowSize = 20;
 	protected boolean showHpBar;
+	protected boolean hovered;
 	
-	public Entity(float x, float y, float z)
+	public Entity(float x, float y)
 	{
 		setPosition(x, y);
-		this.z = z;
 		
 		level = 0;
 		maxHp = hp = 10;
@@ -50,6 +51,7 @@ public abstract class Entity extends Actor
 		
 		attackDamage = 1;
 		attackTime = 0.75f;
+		attackRange = 20;
 		
 		particles = new MultiParticleEffectPool();
 	}
@@ -58,6 +60,10 @@ public abstract class Entity extends Actor
 	public void act(float delta)
 	{
 		super.act(delta);
+		
+		if (getActions().size == 0) activeSkill = null;
+		
+		hovered = getAbsoluteBump().contains(Gdx.input.getX(), Gdx.input.getY());
 		
 		if (isDead())
 		{
@@ -97,26 +103,15 @@ public abstract class Entity extends Actor
 		return name;
 	}
 	
-	public float getZ()
+	public Vector2 getPos()
 	{
-		return z;
-	}
-	
-	public Vector3 getPos()
-	{
-		return tmp.set(getX(), getY(), getZ());
-	}
-	
-	public void moveBy(float x, float y, float z)
-	{
-		super.moveBy(x, y);
-		this.z += z;
+		return tmp.set(getX(), getY());
 	}
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha)
 	{
-		if (spriteFg == null) return;
+		if (spriteFg == null || !isVisible()) return;
 		
 		if (bump.width == 0)
 		{
@@ -134,7 +129,7 @@ public abstract class Entity extends Actor
 			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
 			
 			spriteBg.setX(getX() - glowAdd / 2);
-			spriteBg.setY(getY() + Game.zFac * z - glowAdd / 2);
+			spriteBg.setY(getY() - glowAdd / 2);
 			spriteBg.setSize(w + glowAdd, h + glowAdd);
 			spriteBg.draw(batch, (fac2 + 1) / 2f);
 			spriteBg.setSize(w, h);
@@ -143,13 +138,13 @@ public abstract class Entity extends Actor
 		}
 		
 		spriteFg.setX(getX());
-		spriteFg.setY(getY() + Game.zFac * z);
+		spriteFg.setY(getY());
 		spriteFg.draw(batch);
 		
 		if (maxHp > 0 && showHpBar)
 		{
 			float x = getX() + bump.x + (bump.width - lifeBarWidth) / 2;
-			float y = getY() + Game.zFac * getZ() + bump.y + bump.height + 10;
+			float y = getY() + bump.y + bump.height + 10;
 			
 			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
 		}
@@ -166,7 +161,28 @@ public abstract class Entity extends Actor
 	{
 		bmp.set(bump);
 		bmp.x += getX();
-		bmp.y += getY() + Game.zFac * getZ();
+		bmp.y += getY();
+		
+		return bmp;
+	}
+	
+	public Rectangle getBump()
+	{
+		return bump;
+	}
+	
+	/**
+	 * Changing return value has no effect
+	 * 
+	 * @return
+	 */
+	public Rectangle getAbsoluteAttackSpace()
+	{
+		bmp.set(bump);
+		bmp.x += getX() - attackRange;
+		bmp.y += getY() - attackRange;
+		bmp.width += 2 * attackRange;
+		bmp.height += 2 * attackRange;
 		
 		return bmp;
 	}
@@ -176,16 +192,46 @@ public abstract class Entity extends Actor
 		return getAbsoluteBump().overlaps(o.getAbsoluteBump());
 	}
 	
-	public boolean intersects(Entity o, Vector3 tr)
+	public boolean intersects(Entity o, Vector2 tr)
 	{
 		Rectangle obmp = o.getAbsoluteBump();
 		obmp.x += tr.x;
-		obmp.y += tr.y + Game.zFac * tr.z;
+		obmp.y += tr.y;
 		return getAbsoluteBump().overlaps(obmp);
+	}
+	
+	public MultiParticleEffectPool getParticles()
+	{
+		return particles;
+	}
+	
+	/**
+	 * @param o
+	 * @param tr
+	 * @return true if o is in this entity's attack range
+	 */
+	public boolean isInAttackRange(Entity o, Vector2 tr)
+	{
+		Rectangle obmp = o.getAbsoluteBump();
+		obmp.x += tr.x;
+		obmp.y += tr.y;
+		return getAbsoluteAttackSpace().overlaps(obmp);
 	}
 	
 	public void onRemoval()
 	{}
+	
+	protected void setSkill(Skill skill)
+	{
+		activeSkill = skill;
+		
+		addAction(activeSkill.getSequence());
+	}
+	
+	public float getAttackRange()
+	{
+		return attackRange;
+	}
 	
 	// -- statics -- //
 	
@@ -210,15 +256,5 @@ public abstract class Entity extends Actor
 			ar.setRegionX(rx);
 			ar.setRegionWidth(13);
 		}
-	}
-	
-	public static float len(Vector3 v)
-	{
-		return (float) Math.sqrt(v.x * v.x + v.y * v.y + 0.25f * v.z * v.z);
-	}
-	
-	public static Vector3 limit(Vector3 v, float len)
-	{
-		return v.nor().scl(len, len, len * 0.5f);
 	}
 }

@@ -44,7 +44,6 @@ public class DebugLayer extends Layer
 		drawString("FPS: " + Gdx.graphics.getFramesPerSecond(), 0, Gdx.graphics.getHeight() - 14);
 		drawString("X: " + Game.player.getPos().x, 0, Gdx.graphics.getHeight() - 14 * 2);
 		drawString("Y: " + Game.player.getPos().y, 0, Gdx.graphics.getHeight() - 14 * 3);
-		drawString("Z: " + Game.player.getPos().z, 0, Gdx.graphics.getHeight() - 14 * 4);
 		
 		int full = 500;
 		int fac = 25;

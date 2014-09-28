@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
@@ -24,9 +23,6 @@ public class Game extends Layer
 	public static OrthographicCamera camera;
 	public static MultiParticleEffectPool particles;
 	
-	TiledDrawable floor, floorPersp;
-	public static final float zFac = 0.8f;
-	
 	float bloodFlashAlpha = 0;
 	
 	@Override
@@ -41,13 +37,11 @@ public class Game extends Layer
 		particles.addPrototype("enter_shadow.p", Burst.assets);
 		particles.addPrototype("leave_shadow.p", Burst.assets);
 		
-		// floor = new TiledDrawable(Burst.img.findRegion("floor"));
-		// floorPersp = new TiledDrawable(Burst.img.findRegion("floorPersp"));
-		
-		player = new Player((Gdx.graphics.getWidth() - 150) / 2, 0, Gdx.graphics.getHeight() / 2);
+		player = new Player((Gdx.graphics.getWidth() - 150) / 2, (Gdx.graphics.getHeight() - 150) / 2);
+		Burst.instance.getMultiplexer().addProcessor(0, player);
 		spawnEntity(player);
 		
-		spawnEntity(new Monster00((Gdx.graphics.getWidth() - 48) / 3, 0, Gdx.graphics.getHeight() / 2));
+		spawnEntity(new Monster00((Gdx.graphics.getWidth() - 48) / 3, (Gdx.graphics.getHeight() - 150) / 2));
 		initDone = true;
 	}
 	
@@ -62,9 +56,6 @@ public class Game extends Layer
 	{
 		stage.draw();
 		stage.getBatch().begin();
-		
-		// floor.draw(stage.getBatch(), 0, zFac * Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), (1 - zFac) * Gdx.graphics.getHeight());
-		// floorPersp.draw(stage.getBatch(), 0, 0, Gdx.graphics.getWidth(), zFac * Gdx.graphics.getHeight());
 		
 		particles.draw((SpriteBatch) stage.getBatch(), delta);
 		
