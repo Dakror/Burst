@@ -91,7 +91,11 @@ public abstract class Entity extends Actor
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 			{
-				if (bump.contains(x, y)) activateSelectedSkill();
+				if (bump.contains(x, y))
+				{
+					if (Game.player.getSelectedSkill() != null) activateSelectedSkill();
+					else if (Game.player != Entity.this) Game.player.requestAutoAttack(Entity.this);
+				}
 				return false;
 			}
 		});
@@ -290,7 +294,9 @@ public abstract class Entity extends Actor
 	}
 	
 	public void onRemoval()
-	{}
+	{
+		Game.particles.add("death.p", getX() + 75, getY() + 75);
+	}
 	
 	protected void setSkill(Skill skill)
 	{

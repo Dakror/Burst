@@ -27,6 +27,9 @@ public class Player extends Entity implements InputProcessor
 	
 	public Skill selectedSkill;
 	
+	boolean autoAttackRequested;
+	Entity autoAttackRequestedTarget;
+	
 	public Player(float x, float y)
 	{
 		super(x, y);
@@ -46,6 +49,17 @@ public class Player extends Entity implements InputProcessor
 	public void act(float delta)
 	{
 		super.act(delta);
+		
+		if (autoAttackRequested)
+		{
+			if (isInAttackRange(autoAttackRequestedTarget, Vector2.Zero))
+			{
+				attack(autoAttackRequestedTarget);
+				autoAttackRequested = false;
+			}
+		}
+		
+		if (attackDone && autoAttackRequestedTarget != null && !autoAttackRequested) autoAttackRequestedTarget = null;
 		
 		if (dest.len() > 0)
 		{
@@ -70,6 +84,15 @@ public class Player extends Entity implements InputProcessor
 			
 			if (isVisible() && getActions().size == 0) moveBy(deltaX, deltaY);
 		}
+	}
+	
+	public boolean requestAutoAttack(Entity target)
+	{
+		if (autoAttackRequested || autoAttackRequestedTarget != null) return false;
+		
+		autoAttackRequested = true;
+		autoAttackRequestedTarget = target;
+		return true;
 	}
 	
 	@Override

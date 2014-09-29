@@ -1,5 +1,6 @@
 f FILES.txt
 d fx
+f fx/death.p
 f fx/shadow.p
 d img
 f img/pack.atlas

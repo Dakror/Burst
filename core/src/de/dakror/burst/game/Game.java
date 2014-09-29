@@ -35,6 +35,7 @@ public class Game extends Layer
 		
 		particles = new MultiParticleEffectPool();
 		particles.addPrototype("shadow.p", Burst.assets);
+		particles.addPrototype("death.p", Burst.assets);
 		
 		player = new Player((Gdx.graphics.getWidth() - 150) / 2, (Gdx.graphics.getHeight() - 150) / 2);
 		Burst.instance.getMultiplexer().addProcessor(0, player);
