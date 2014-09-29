@@ -1,4 +1,4 @@
-package de.dakror.burst.game.skill;
+package de.dakror.burst.game.skill.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 

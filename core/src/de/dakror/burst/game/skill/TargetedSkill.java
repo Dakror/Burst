@@ -5,18 +5,23 @@ import de.dakror.burst.game.entity.Entity;
 /**
  * @author Dakror
  */
-public class TargetedSkill extends Skill
+public abstract class TargetedSkill extends Skill
 {
 	protected Entity target;
 	
 	public TargetedSkill(Entity source, Entity target)
 	{
 		super(source);
-		this.target = target;
+		if (target != null) setTarget(target);
 	}
 	
 	public Entity getTarget()
 	{
 		return target;
+	}
+	
+	public void setTarget(Entity e)
+	{
+		target = e;
 	}
 }

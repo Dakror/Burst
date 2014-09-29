@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.skills.ShadowJump;
 
 /**
@@ -24,7 +25,7 @@ public class Player extends Entity implements InputProcessor
 	
 	final Vector2 dest = new Vector2();
 	
-	Entity target = null;
+	public Skill selectedSkill;
 	
 	public Player(float x, float y)
 	{
@@ -35,6 +36,8 @@ public class Player extends Entity implements InputProcessor
 		spriteBg = Burst.img.createSprite("player_bg");
 		speed = 180;
 		showHpBar = false;
+		
+		attackDamage = 2;
 		
 		bump.set(51, 35, 48, 80);
 	}
@@ -58,8 +61,6 @@ public class Player extends Entity implements InputProcessor
 			{
 				if (e instanceof Entity && !((Entity) e).isDead() && e != this)
 				{
-					if (((Entity) e).hovered) target = (Entity) e;
-					
 					if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
 					if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
 					
@@ -67,7 +68,7 @@ public class Player extends Entity implements InputProcessor
 				}
 			}
 			
-			if (isVisible()) moveBy(deltaX, deltaY);
+			if (isVisible() && getActions().size == 0) moveBy(deltaX, deltaY);
 		}
 	}
 	
@@ -90,14 +91,24 @@ public class Player extends Entity implements InputProcessor
 		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
 	}
 	
+	public Skill getSelectedSkill()
+	{
+		return selectedSkill;
+	}
+	
+	public void setSelectedSkill(Skill skill)
+	{
+		selectedSkill = skill;
+	}
+	
 	@Override
 	public boolean keyDown(int keycode)
 	{
 		if (activeSkill == null)
 		{
-			if (keycode == Keys.T && target != null)
+			if (keycode == Keys.Q)
 			{
-				setSkill(new ShadowJump(this, target));
+				selectedSkill = new ShadowJump(Player.this, null);
 				return true;
 			}
 		}

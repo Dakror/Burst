@@ -1,6 +1,5 @@
 package de.dakror.burst.game.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import de.dakror.burst.Burst;
+import de.dakror.burst.game.Game;
 import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.game.skill.TargetedSkill;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
@@ -35,7 +38,10 @@ public abstract class Entity extends Actor
 	
 	final Vector2 attack = new Vector2();
 	float attackProgress;
+	int nextAttackDamage;
+	float nextAttackAmpl;
 	boolean attacked;
+	public boolean attackDone;
 	Entity target;
 	
 	protected Skill activeSkill;
@@ -43,7 +49,6 @@ public abstract class Entity extends Actor
 	protected float delta;
 	protected int glowSize = 20;
 	protected boolean showHpBar;
-	protected boolean hovered;
 	
 	public Entity(float x, float y)
 	{
@@ -58,6 +63,38 @@ public abstract class Entity extends Actor
 		attackRange = 20;
 		
 		particles = new MultiParticleEffectPool();
+		
+		addListener(new InputListener()
+		{
+			@Override
+			public boolean mouseMoved(InputEvent event, float x, float y)
+			{
+				if (Burst.smartCast && bump.contains(x, getHeight() - y)) activateSelectedSkill();
+				return false;
+			}
+			
+			void activateSelectedSkill()
+			{
+				Skill selectedSkill = Game.player.getSelectedSkill();
+				if (selectedSkill != null)
+				{
+					if (selectedSkill.canBeCastOn(Entity.this))
+					{
+						if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(Entity.this);
+						
+						Game.player.setSkill(selectedSkill);
+						Game.player.setSelectedSkill(null);
+					}
+				}
+			}
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
+			{
+				if (bump.contains(x, y)) activateSelectedSkill();
+				return false;
+			}
+		});
 	}
 	
 	@Override
@@ -66,9 +103,9 @@ public abstract class Entity extends Actor
 		super.act(delta);
 		this.delta += delta;
 		
-		if (getActions().size == 0) activeSkill = null;
+		if (spriteFg != null) setSize(spriteFg.getWidth(), spriteFg.getHeight());
 		
-		hovered = getAbsoluteBump().contains(Gdx.input.getX(), Gdx.input.getY());
+		if (getActions().size == 0) activeSkill = null;
 		
 		if (attack.len() > 0)
 		{
@@ -76,7 +113,7 @@ public abstract class Entity extends Actor
 			
 			if (attackProgress / attackTime >= 0.3f && !attacked)
 			{
-				target.dealDamage(attackDamage);
+				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage));
 				attacked = true;
 			}
 			
@@ -85,6 +122,9 @@ public abstract class Entity extends Actor
 				attack.setZero();
 				attackProgress = 0;
 				attacked = false;
+				nextAttackDamage = 0;
+				nextAttackAmpl = 0;
+				attackDone = true;
 			}
 		}
 		
@@ -135,7 +175,6 @@ public abstract class Entity extends Actor
 	public void draw(Batch batch, float parentAlpha)
 	{
 		if (spriteFg == null || !isVisible()) return;
-		setSize(spriteFg.getWidth(), spriteFg.getHeight());
 		
 		if (bump.width == 0)
 		{
@@ -267,10 +306,29 @@ public abstract class Entity extends Actor
 	
 	public void attack(Entity e)
 	{
+		attack(e, attackDamage);
+	}
+	
+	public void attack(Entity e, int damage)
+	{
+		attackDone = false;
 		target = e;
 		attack.set(getPos().sub(e.getPos()).limit(attackRange));
 		attackProgress = 0;
 		attacked = false;
+		
+		nextAttackDamage = damage;
+	}
+	
+	public void attack(Entity e, float ampl)
+	{
+		attackDone = false;
+		target = e;
+		attack.set(getPos().sub(e.getPos()).limit(attackRange));
+		attackProgress = 0;
+		attacked = false;
+		
+		nextAttackAmpl = ampl;
 	}
 	
 	// -- statics -- //

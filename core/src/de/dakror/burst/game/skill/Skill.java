@@ -7,7 +7,7 @@ import de.dakror.burst.game.entity.Entity;
 /**
  * @author Dakror
  */
-public class Skill
+public abstract class Skill
 {
 	protected SequenceAction sequence;
 	protected Entity source;
@@ -21,4 +21,6 @@ public class Skill
 	{
 		return sequence;
 	}
+	
+	public abstract boolean canBeCastOn(Entity e);
 }

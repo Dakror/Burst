@@ -23,6 +23,8 @@ public class Burst extends GameBase
 	public static ShapeRenderer shapeRenderer;
 	public static boolean debug;
 	
+	public static boolean smartCast = true;
+	
 	@Override
 	public void create()
 	{
