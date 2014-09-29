@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -344,7 +345,7 @@ public class InternalAssetManager
 	 * @param type the AssetManager Type e.g {@link Texture}
 	 * @param recursive wether all files in all subfolders should be loaded too
 	 */
-	public static void scheduleDirectory(AssetManager assets, String path, Class<?> type, boolean recursive)
+	public static <T> void scheduleDirectory(AssetManager assets, String path, Class<T> type, boolean recursive)
 	{
 		scheduleDirectory(assets, path, type, new FileFilter()
 		{
@@ -365,6 +366,30 @@ public class InternalAssetManager
 	 * @param assets the AssetManager to load the found assets
 	 * @param path the directory to be loaded
 	 * @param type the AssetManager Type e.g {@link Texture}
+	 * @param recursive wether all files in all subfolders should be loaded too
+	 * @param params the AssetLoaderParameters to apply to the loader
+	 */
+	public static <T> void scheduleDirectory(AssetManager assets, String path, Class<T> type, boolean recursive, AssetLoaderParameters<T> params)
+	{
+		scheduleDirectory(assets, path, type, new FileFilter()
+		{
+			@Override
+			public boolean accept(File pathname)
+			{
+				return true;
+			}
+		}, recursive, params);
+	}
+	
+	/**
+	 * Calls {@link AssetManager#load(String, Class)} for all files found in the
+	 * directory.<br>
+	 * If <code>recursive</code> is defined all files in all subfolders will
+	 * get scheduled for loading as well.
+	 * 
+	 * @param assets the AssetManager to load the found assets
+	 * @param path the directory to be loaded
+	 * @param type the AssetManager Type e.g {@link Texture}
 	 * @param fileFilter the {@link FileFilter} to apply. Use e.g a {@link FileNameExtensionFilter}
 	 * @param recursive wether all files in all subfolders should be loaded too
 	 */
@@ -373,6 +398,27 @@ public class InternalAssetManager
 		for (FileNode fn : listFiles(path, recursive))
 		{
 			if (fileFilter.accept(fn.file.file())) assets.load(fn.file.path(), type);
+		}
+	}
+	
+	/**
+	 * Calls {@link AssetManager#load(String, Class)} for all files found in the
+	 * directory.<br>
+	 * If <code>recursive</code> is defined all files in all subfolders will
+	 * get scheduled for loading as well.
+	 * 
+	 * @param assets the AssetManager to load the found assets
+	 * @param path the directory to be loaded
+	 * @param type the AssetManager Type e.g {@link Texture}
+	 * @param fileFilter the {@link FileFilter} to apply. Use e.g a {@link FileNameExtensionFilter}
+	 * @param recursive wether all files in all subfolders should be loaded too
+	 * @param params the AssetLoaderParameters to apply to the loader
+	 */
+	public static <T> void scheduleDirectory(AssetManager assets, String path, Class<T> type, FileFilter fileFilter, boolean recursive, AssetLoaderParameters<T> params)
+	{
+		for (FileNode fn : listFiles(path, recursive))
+		{
+			if (fileFilter.accept(fn.file.file())) assets.load(fn.file.path(), type, params);
 		}
 	}
 	

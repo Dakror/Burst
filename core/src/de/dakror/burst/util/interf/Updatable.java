@@ -3,7 +3,7 @@ package de.dakror.burst.util.interf;
 /**
  * @author Dakror
  */
-public interface Tickable
+public interface Updatable
 {
-	public void tick(int tick);
+	public void update(float delta);
 }

@@ -23,11 +23,12 @@ public class Burst extends GameBase
 	public static ShapeRenderer shapeRenderer;
 	public static boolean debug;
 	
+	public static boolean smartCast = true;
+	
 	@Override
 	public void create()
 	{
 		instance = this;
-		
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
 		assets = new AssetManager();
@@ -38,19 +39,21 @@ public class Burst extends GameBase
 		getMultiplexer().addProcessor(0, this);
 		Gdx.input.setInputProcessor(getMultiplexer());
 		
-		new Updater();
-		
 		setLayer(new LoadingLayer());
 	}
 	
 	@Override
 	public void render()
 	{
-		Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
+		float delta = Gdx.graphics.getDeltaTime();
+		for (Layer l : layers)
+			if (l.initDone) l.update(delta);
+		
+		Gdx.gl.glClearColor(0.05f, 0.05f, 0.05f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		for (Layer l : layers)
-			l.render(Gdx.graphics.getDeltaTime());
+			if (l.initDone) l.render(delta);
 	}
 	
 	@Override
@@ -62,6 +65,18 @@ public class Burst extends GameBase
 			toggleLayer(new DebugLayer());
 			return true;
 		}
+		if (keycode == Keys.F11)
+		{
+			setFullscreen(!Gdx.graphics.isFullscreen());
+			
+			return true;
+		}
 		return false;
+	}
+	
+	public void setFullscreen(boolean fullscreen)
+	{
+		if (!fullscreen) Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, false);
+		else Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
 	}
 }

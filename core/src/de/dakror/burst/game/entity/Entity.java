@@ -1,52 +1,142 @@
 package de.dakror.burst.game.entity;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
-import de.dakror.burst.util.interf.Drawable;
-import de.dakror.burst.util.interf.Tickable;
+import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.game.skill.TargetedSkill;
+import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
  * @author Dakror
  */
-public abstract class Entity implements Drawable, Tickable
+public abstract class Entity extends Actor
 {
 	public static final float lifeBarWidth = 100;
 	
 	protected Sprite spriteFg, spriteBg;
 	protected String name;
 	
-	protected int hp, maxHp, level, attackDamage, attackSpeed;
-	protected float speed;
-	protected final Vector3 pos;
+	protected MultiParticleEffectPool particles;
+	
+	protected int hp, maxHp, level, attackDamage;
+	protected float speed, attackTime, attackRange;
 	
 	protected Rectangle bump;
 	
 	final Rectangle bmp = new Rectangle();
+	final Vector2 tmp = new Vector2();
 	
-	protected float pulseTime = 0.5f; // a second
+	final Vector2 attack = new Vector2();
+	float attackProgress;
+	int nextAttackDamage;
+	float nextAttackAmpl;
+	boolean attacked;
+	public boolean attackDone;
+	Entity target;
+	
+	protected Skill activeSkill;
+	protected float pulseTime = 0.5f; // * 1 second
 	protected float delta;
 	protected int glowSize = 20;
 	protected boolean showHpBar;
 	
-	public Entity(float x, float y, float z)
+	public Entity(float x, float y)
 	{
-		pos = new Vector3(x, y, z);
-		
+		setPosition(x, y);
 		level = 0;
 		maxHp = hp = 10;
 		showHpBar = true;
 		bump = new Rectangle();
 		
 		attackDamage = 1;
-		attackSpeed = 30;
+		attackTime = 0.75f;
+		attackRange = 20;
+		
+		particles = new MultiParticleEffectPool();
+		
+		addListener(new InputListener()
+		{
+			@Override
+			public boolean mouseMoved(InputEvent event, float x, float y)
+			{
+				if (Burst.smartCast && bump.contains(x, getHeight() - y)) activateSelectedSkill();
+				return false;
+			}
+			
+			void activateSelectedSkill()
+			{
+				Skill selectedSkill = Game.player.getSelectedSkill();
+				if (selectedSkill != null)
+				{
+					if (selectedSkill.canBeCastOn(Entity.this))
+					{
+						if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(Entity.this);
+						
+						Game.player.setSkill(selectedSkill);
+						Game.player.setSelectedSkill(null);
+					}
+				}
+			}
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
+			{
+				if (bump.contains(x, y))
+				{
+					if (Game.player.getSelectedSkill() != null) activateSelectedSkill();
+					else if (Game.player != Entity.this) Game.player.requestAutoAttack(Entity.this);
+				}
+				return false;
+			}
+		});
+	}
+	
+	@Override
+	public void act(float delta)
+	{
+		super.act(delta);
+		this.delta += delta;
+		
+		if (spriteFg != null) setSize(spriteFg.getWidth(), spriteFg.getHeight());
+		
+		if (getActions().size == 0) activeSkill = null;
+		
+		if (attack.len() > 0)
+		{
+			attackProgress += delta;
+			
+			if (attackProgress / attackTime >= 0.3f && !attacked)
+			{
+				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage));
+				attacked = true;
+			}
+			
+			if (attackProgress / attackTime > 1)
+			{
+				attack.setZero();
+				attackProgress = 0;
+				attacked = false;
+				nextAttackDamage = 0;
+				nextAttackAmpl = 0;
+				attackDone = true;
+			}
+		}
+		
+		if (isDead())
+		{
+			onRemoval();
+			remove();
+		}
 	}
 	
 	public boolean isDead()
@@ -74,20 +164,21 @@ public abstract class Entity implements Drawable, Tickable
 		return spriteBg;
 	}
 	
+	@Override
 	public String getName()
 	{
 		return name;
 	}
 	
-	public Vector3 getPos()
+	public Vector2 getPos()
 	{
-		return pos;
+		return tmp.set(getX(), getY());
 	}
 	
 	@Override
-	public void render(Batch batch, float delta)
+	public void draw(Batch batch, float parentAlpha)
 	{
-		if (isDead() || spriteFg == null) return;
+		if (spriteFg == null || !isVisible()) return;
 		
 		if (bump.width == 0)
 		{
@@ -95,47 +186,45 @@ public abstract class Entity implements Drawable, Tickable
 			bump.height = spriteFg.getHeight();
 		}
 		
+		float x = getX();
+		float y = getY();
+		
+		if (attack.len() != 0)
+		{
+			float percentage = attackProgress / attackTime;
+			float limit = percentage < 0.5f ? percentage * -5 : (float) Math.sin(attackProgress * -Math.PI / attackTime);
+			tmp.set(attack).limit(Math.max(-attack.len() + 0.00001f, limit * attackRange));
+			x += tmp.x;
+			y += tmp.y;
+		}
+		
 		if (spriteBg != null)
 		{
-			this.delta += delta;
-			
-			float fac = (float) Math.sin(this.delta * Math.PI / pulseTime);
-			float fac2 = (float) Math.cos(this.delta * Math.PI / pulseTime);
+			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
+			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
-			float w = spriteBg.getWidth(), h = spriteBg.getHeight();
+			float w = getWidth(), h = getHeight();
 			
-			spriteBg.setX(pos.x - glowAdd / 2);
-			spriteBg.setY(pos.y + Game.zFac * pos.z - glowAdd / 2);
+			spriteBg.setX(x - glowAdd / 2);
+			spriteBg.setY(y - glowAdd / 2);
 			spriteBg.setSize(w + glowAdd, h + glowAdd);
 			spriteBg.draw(batch, (fac2 + 1) / 2f);
 			spriteBg.setSize(w, h);
-			
-			if (this.delta > pulseTime) this.delta = -pulseTime;
 		}
 		
-		spriteFg.setX(pos.x);
-		spriteFg.setY(pos.y + Game.zFac * pos.z);
+		spriteFg.setX(x);
+		spriteFg.setY(y);
 		spriteFg.draw(batch);
 		
 		if (maxHp > 0 && showHpBar)
 		{
-			float x = pos.x + bump.x + (bump.width - lifeBarWidth) / 2;
-			float y = pos.y + Game.zFac * pos.z + bump.y + bump.height + 10;
+			float x1 = x + bump.x + (bump.width - lifeBarWidth) / 2;
+			float y1 = y + bump.y + bump.height + 10;
 			
-			renderHpBar(batch, x, y, lifeBarWidth, hp / (float) maxHp);
+			renderHpBar(batch, x1, y1, lifeBarWidth, hp / (float) maxHp);
 		}
-	}
-	
-	public void debug(Batch batch, float delta2)
-	{
-		if (Burst.debug)
-		{
-			Burst.shapeRenderer.identity();
-			Burst.shapeRenderer.begin(ShapeType.Line);
-			Burst.shapeRenderer.setColor(Color.WHITE);
-			Burst.shapeRenderer.rect(pos.x + bump.x, pos.y + Game.zFac * pos.z + bump.y, bump.width, bump.height);
-			Burst.shapeRenderer.end();
-		}
+		
+		particles.draw((SpriteBatch) batch, delta);
 	}
 	
 	/**
@@ -146,8 +235,29 @@ public abstract class Entity implements Drawable, Tickable
 	public Rectangle getAbsoluteBump()
 	{
 		bmp.set(bump);
-		bmp.x += pos.x;
-		bmp.y += pos.y + Game.zFac * pos.z;
+		bmp.x += getX();
+		bmp.y += getY();
+		
+		return bmp;
+	}
+	
+	public Rectangle getBump()
+	{
+		return bump;
+	}
+	
+	/**
+	 * Changing return value has no effect
+	 * 
+	 * @return
+	 */
+	public Rectangle getAbsoluteAttackSpace()
+	{
+		bmp.set(bump);
+		bmp.x += getX() - attackRange;
+		bmp.y += getY() - attackRange;
+		bmp.width += 2 * attackRange;
+		bmp.height += 2 * attackRange;
 		
 		return bmp;
 	}
@@ -157,12 +267,74 @@ public abstract class Entity implements Drawable, Tickable
 		return getAbsoluteBump().overlaps(o.getAbsoluteBump());
 	}
 	
-	public boolean intersects(Entity o, Vector3 tr)
+	public boolean intersects(Entity o, Vector2 tr)
 	{
 		Rectangle obmp = o.getAbsoluteBump();
 		obmp.x += tr.x;
-		obmp.y += tr.y + Game.zFac * tr.z;
+		obmp.y += tr.y;
 		return getAbsoluteBump().overlaps(obmp);
+	}
+	
+	public MultiParticleEffectPool getParticles()
+	{
+		return particles;
+	}
+	
+	/**
+	 * @param o
+	 * @param tr
+	 * @return true if o is in this entity's attack range
+	 */
+	public boolean isInAttackRange(Entity o, Vector2 tr)
+	{
+		Rectangle obmp = o.getAbsoluteBump();
+		obmp.x += tr.x;
+		obmp.y += tr.y;
+		return getAbsoluteAttackSpace().overlaps(obmp);
+	}
+	
+	public void onRemoval()
+	{
+		Game.particles.add("death.p", getX() + 75, getY() + 75);
+	}
+	
+	protected void setSkill(Skill skill)
+	{
+		activeSkill = skill;
+		
+		addAction(activeSkill.getSequence());
+	}
+	
+	public float getAttackRange()
+	{
+		return attackRange;
+	}
+	
+	public void attack(Entity e)
+	{
+		attack(e, attackDamage);
+	}
+	
+	public void attack(Entity e, int damage)
+	{
+		attackDone = false;
+		target = e;
+		attack.set(getPos().sub(e.getPos()).limit(attackRange));
+		attackProgress = 0;
+		attacked = false;
+		
+		nextAttackDamage = damage;
+	}
+	
+	public void attack(Entity e, float ampl)
+	{
+		attackDone = false;
+		target = e;
+		attack.set(getPos().sub(e.getPos()).limit(attackRange));
+		attackProgress = 0;
+		attacked = false;
+		
+		nextAttackAmpl = ampl;
 	}
 	
 	// -- statics -- //
@@ -188,15 +360,5 @@ public abstract class Entity implements Drawable, Tickable
 			ar.setRegionX(rx);
 			ar.setRegionWidth(13);
 		}
-	}
-	
-	public static float len(Vector3 v)
-	{
-		return (float) Math.sqrt(v.x * v.x + v.y * v.y + 0.25f * v.z * v.z);
-	}
-	
-	public static Vector3 limit(Vector3 v, float len)
-	{
-		return v.nor().scl(len, len, len * 0.5f);
 	}
 }

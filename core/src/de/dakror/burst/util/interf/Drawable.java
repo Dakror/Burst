@@ -1,6 +1,6 @@
 package de.dakror.burst.util.interf;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
@@ -8,5 +8,5 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 public interface Drawable
 {
-	public void render(Batch batch, float delta);
+	public void render(SpriteBatch batch, float delta);
 }
