@@ -12,6 +12,7 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.skills.ShadowJump;
+import de.dakror.burst.util.D;
 
 /**
  * @author Dakror
@@ -153,7 +154,7 @@ public class Player extends Entity implements InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if (button == Buttons.RIGHT)
+		if (button == Buttons.RIGHT || D.android())
 		{
 			destProgress = 0;
 			dest.set(screenX, Gdx.graphics.getHeight() - screenY);
