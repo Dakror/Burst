@@ -30,8 +30,8 @@ public class MultiParticleEffectPool
 	public MultiParticleEffectPool(String assetDir)
 	{
 		MultiParticleEffectPool.assetDir = assetDir;
-		pools = new ObjectMap<>();
-		effects = new ObjectMap<>();
+		pools = new ObjectMap<String, ParticleEffectPool>();
+		effects = new ObjectMap<String, Array<PooledEffect>>();
 	}
 	
 	public void addPrototype(String name, AssetManager assets)
@@ -46,7 +46,6 @@ public class MultiParticleEffectPool
 	{
 		return add(name, x, y, 0);
 	}
-	
 	
 	public PooledEffect add(String name, float x, float y, int duration)
 	{
