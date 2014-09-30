@@ -3,6 +3,11 @@ d fx
 f fx/death.p
 f fx/shadow.p
 d img
+f img/logo.png
+f img/logo.xcf
+f img/logo_16.png
+f img/logo_32.png
+f img/logo_64.png
 f img/pack.atlas
 f img/pack.png
 d img/raw

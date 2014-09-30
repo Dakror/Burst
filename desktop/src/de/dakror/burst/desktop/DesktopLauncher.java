@@ -1,5 +1,6 @@
 package de.dakror.burst.desktop;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -18,6 +19,11 @@ public class DesktopLauncher
 		config.title = "Burst";
 		// config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
 		config.fullscreen = false;
+		
+		config.addIcon("img/logo.png", FileType.Internal);
+		config.addIcon("img/logo_64.png", FileType.Internal);
+		config.addIcon("img/logo_32.png", FileType.Internal);
+		config.addIcon("img/logo_16.png", FileType.Internal);
 		
 		new LwjglApplication(new Burst(), config);
 	}
