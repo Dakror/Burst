@@ -8,8 +8,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.entity.Entity;
-import de.dakror.burst.game.entity.Player;
-import de.dakror.burst.game.entity.enemy.Monster00;
+import de.dakror.burst.game.entity.creature.Creature;
+import de.dakror.burst.game.entity.creature.Player;
+import de.dakror.burst.game.entity.creature.enemy.Monster00;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
@@ -62,7 +63,7 @@ public class Game extends Layer
 		// -- hud / ui -- //
 		
 		int width = 400;
-		Entity.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 20, width, Game.player.getHpPercentage());
+		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 20, width, Game.player.getHpPercentage());
 		
 		if (bloodFlashAlpha > 0)
 		{

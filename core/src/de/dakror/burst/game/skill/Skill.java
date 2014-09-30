@@ -3,6 +3,7 @@ package de.dakror.burst.game.skill;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import de.dakror.burst.game.entity.Entity;
+import de.dakror.burst.game.entity.creature.Creature;
 
 /**
  * @author Dakror
@@ -10,9 +11,9 @@ import de.dakror.burst.game.entity.Entity;
 public abstract class Skill
 {
 	protected SequenceAction sequence;
-	protected Entity source;
+	protected Creature source;
 	
-	public Skill(Entity source)
+	public Skill(Creature source)
 	{
 		this.source = source;
 	}

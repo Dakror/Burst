@@ -1,4 +1,4 @@
-package de.dakror.burst.game.entity;
+package de.dakror.burst.game.entity.creature;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.skills.ShadowJump;
 import de.dakror.burst.util.D;
@@ -17,7 +18,7 @@ import de.dakror.burst.util.D;
 /**
  * @author Dakror
  */
-public class Player extends Entity implements InputProcessor
+public class Player extends Creature implements InputProcessor
 {
 	final Vector2 tmp = new Vector2();
 	
@@ -29,13 +30,13 @@ public class Player extends Entity implements InputProcessor
 	public Skill selectedSkill;
 	
 	boolean autoAttackRequested;
-	Entity autoAttackRequestedTarget;
+	Creature autoAttackRequestedTarget;
 	
 	public Player(float x, float y)
 	{
 		super(x, y);
 		maxHp = hp = 20;
-		name = "Player";
+		setName("Player");
 		spriteFg = Burst.img.createSprite("player_fg");
 		spriteBg = Burst.img.createSprite("player_bg");
 		speed = 180;
@@ -87,7 +88,7 @@ public class Player extends Entity implements InputProcessor
 		}
 	}
 	
-	public boolean requestAutoAttack(Entity target)
+	public boolean requestAutoAttack(Creature target)
 	{
 		if (autoAttackRequested || autoAttackRequestedTarget != null) return false;
 		

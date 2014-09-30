@@ -1,14 +1,14 @@
-package de.dakror.burst.game.entity.enemy;
+package de.dakror.burst.game.entity.creature.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 
 import de.dakror.burst.game.Game;
-import de.dakror.burst.game.entity.Entity;
+import de.dakror.burst.game.entity.creature.Creature;
 
 /**
  * @author Dakror
  */
-public class Enemy extends Entity
+public class Enemy extends Creature
 {
 	final Vector2 tmp = new Vector2();
 	
