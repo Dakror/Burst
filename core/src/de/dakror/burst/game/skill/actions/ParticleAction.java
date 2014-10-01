@@ -33,14 +33,4 @@ public class ParticleAction extends Action
 		else ((Creature) actor).getParticles().add(name, x + actor.getX(), y + actor.getY(), duration);
 		return true;
 	}
-	
-	public static ParticleAction particle(String name, float x, float y)
-	{
-		return particle(name, x, y, 0);
-	}
-	
-	public static ParticleAction particle(String name, float x, float y, int duration)
-	{
-		return new ParticleAction(name, x, y);
-	}
 }

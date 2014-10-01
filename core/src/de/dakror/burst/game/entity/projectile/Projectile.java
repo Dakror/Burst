@@ -14,13 +14,18 @@ public class Projectile extends Entity
 	protected final Vector2 velocity = new Vector2();
 	protected boolean frozen;
 	
-	public Projectile(Creature source)
+	public Projectile(Creature source, float velocityX, float velocityY)
 	{
 		super(source.getX() + source.getWidth() / 2, source.getY() + source.getHeight() / 2);
-		
 		this.source = source;
 		
 		frozen = false;
+		velocity.set(velocityX, velocityY);
+	}
+	
+	public Projectile(Creature source)
+	{
+		this(source, 0, 0);
 	}
 	
 	@Override
@@ -29,6 +34,11 @@ public class Projectile extends Entity
 		super.act(delta);
 		
 		if (!frozen) moveBy(velocity.x * delta, velocity.y * delta);
+	}
+	
+	public void setVelocity(float vx, float vy)
+	{
+		velocity.set(vx, vy);
 	}
 	
 	public Vector2 getVelocity()

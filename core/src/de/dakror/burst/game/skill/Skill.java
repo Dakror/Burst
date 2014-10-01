@@ -23,5 +23,8 @@ public abstract class Skill
 		return sequence;
 	}
 	
+	/**
+	 * @param e could be null
+	 */
 	public abstract boolean canBeCastOn(Entity e);
 }

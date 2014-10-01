@@ -12,7 +12,9 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.game.skill.TargetedSkill;
 import de.dakror.burst.game.skill.skills.ShadowJump;
+import de.dakror.burst.game.skill.skills.ShurikenThrow;
 import de.dakror.burst.util.D;
 
 /**
@@ -136,6 +138,11 @@ public class Player extends Creature implements InputProcessor
 				selectedSkill = new ShadowJump(Player.this, null);
 				return true;
 			}
+			if (keycode == Keys.W)
+			{
+				selectedSkill = new ShurikenThrow(Player.this);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -179,12 +186,27 @@ public class Player extends Creature implements InputProcessor
 	@Override
 	public boolean mouseMoved(int screenX, int screenY)
 	{
-		return false;
+		activateSelectedSkill(null);
+		return true;
 	}
 	
 	@Override
 	public boolean scrolled(int amount)
 	{
 		return false;
+	}
+	
+	public void activateSelectedSkill(Creature target)
+	{
+		if (selectedSkill != null)
+		{
+			if (target == null || selectedSkill.canBeCastOn(target))
+			{
+				if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(target);
+				
+				setSkill(selectedSkill);
+				selectedSkill = null;
+			}
+		}
 	}
 }

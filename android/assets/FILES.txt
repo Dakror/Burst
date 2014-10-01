@@ -14,6 +14,8 @@ d img/raw
 f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
 f img/raw/blood.png
+f img/raw/circle.png
+f img/raw/circle_dark.png
 f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png

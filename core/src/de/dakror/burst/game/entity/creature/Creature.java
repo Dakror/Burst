@@ -12,7 +12,6 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
-import de.dakror.burst.game.skill.TargetedSkill;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
@@ -56,23 +55,8 @@ public abstract class Creature extends Entity
 			@Override
 			public boolean mouseMoved(InputEvent event, float x, float y)
 			{
-				if (Burst.smartCast && bump.contains(x, getHeight() - y)) activateSelectedSkill();
+				if (Burst.smartCast && bump.contains(x, getHeight() - y)) Game.player.activateSelectedSkill(Creature.this);
 				return false;
-			}
-			
-			void activateSelectedSkill()
-			{
-				Skill selectedSkill = Game.player.getSelectedSkill();
-				if (selectedSkill != null)
-				{
-					if (selectedSkill.canBeCastOn(Creature.this))
-					{
-						if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(Creature.this);
-						
-						Game.player.setSkill(selectedSkill);
-						Game.player.setSelectedSkill(null);
-					}
-				}
 			}
 			
 			@Override
@@ -80,7 +64,7 @@ public abstract class Creature extends Entity
 			{
 				if (bump.contains(x, y))
 				{
-					if (Game.player.getSelectedSkill() != null) activateSelectedSkill();
+					if (Game.player.getSelectedSkill() != null) Game.player.activateSelectedSkill(Creature.this);
 					else if (Game.player != Creature.this) Game.player.requestAutoAttack(Creature.this);
 				}
 				return false;

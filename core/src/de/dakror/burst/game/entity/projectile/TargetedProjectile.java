@@ -1,9 +1,8 @@
-package de.dakror.burst.game.entity.projectile.projectiles;
+package de.dakror.burst.game.entity.projectile;
 
 import com.badlogic.gdx.math.Vector2;
 
 import de.dakror.burst.game.entity.creature.Creature;
-import de.dakror.burst.game.entity.projectile.Projectile;
 
 /**
  * @author Dakror
@@ -14,9 +13,9 @@ public class TargetedProjectile extends Projectile
 	
 	final Vector2 tmp = new Vector2();
 	
-	public TargetedProjectile(Creature source, Creature target)
+	public TargetedProjectile(Creature source, Creature target, float velocityX, float velocityY)
 	{
-		super(source);
+		super(source, velocityX, velocityY);
 		
 		this.target = target;
 	}

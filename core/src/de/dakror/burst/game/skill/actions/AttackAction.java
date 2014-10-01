@@ -47,19 +47,4 @@ public class AttackAction extends Action
 		}
 		return ((Creature) actor).attackDone;
 	}
-	
-	public static AttackAction attack(Creature target)
-	{
-		return new AttackAction(target);
-	}
-	
-	public static AttackAction attack(int damage, Creature target)
-	{
-		return new AttackAction(damage, target);
-	}
-	
-	public static AttackAction attack(float ampl, Creature target)
-	{
-		return new AttackAction(ampl, target);
-	}
 }

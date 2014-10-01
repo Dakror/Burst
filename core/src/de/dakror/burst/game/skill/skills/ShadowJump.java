@@ -1,8 +1,7 @@
 package de.dakror.burst.game.skill.skills;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-import static de.dakror.burst.game.skill.actions.AttackAction.*;
-import static de.dakror.burst.game.skill.actions.ParticleAction.*;
+import static de.dakror.burst.game.skill.actions.Actions.*;
 
 import com.badlogic.gdx.math.Vector2;
 
