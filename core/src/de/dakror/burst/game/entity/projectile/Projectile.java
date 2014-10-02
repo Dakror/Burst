@@ -49,7 +49,7 @@ public class Projectile extends Entity
 				{
 					if (intersects((Creature) e) && (hitable == null || hitable.isAssignableFrom(e.getClass())))
 					{
-						((Creature) e).dealDamage(damage);
+						((Creature) e).dealDamage(damage, direction.angle(), source);
 						appliedTargets.add((Creature) e);
 						if (dieOnHit)
 						{

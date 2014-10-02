@@ -112,9 +112,9 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public void dealDamage(int dmg)
+	public void dealDamage(int dmg, float angleDegrees, Entity source)
 	{
-		super.dealDamage(dmg);
+		super.dealDamage(dmg, angleDegrees, source);
 		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
 	}
 	

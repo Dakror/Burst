@@ -14,9 +14,10 @@ public class Shuriken extends RangedProjectile
 	{
 		super(source, directionX, directionY);
 		
-		spriteFg = Burst.img.createSprite("circle_dark");
+		spriteFg = Burst.img.createSprite("shuriken");
 		spriteFg.setSize(32, 32);
-		velocity = 1200f;
+		spriteFg.setOrigin(16, 16);
+		velocity = 1000f;
 		range = 250f;
 		
 		damage = 8;
@@ -24,5 +25,13 @@ public class Shuriken extends RangedProjectile
 		dieOnHit = false;
 		
 		bump.set(0, 0, 32, 32);
+	}
+	
+	@Override
+	public void act(float delta)
+	{
+		super.act(delta);
+		
+		if (!frozen) spriteFg.rotate(360 * delta);
 	}
 }

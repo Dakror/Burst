@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="shuriken.svg"
+   inkscape:version="0.48.4 r9939"
+   version="1.1"
+   id="svg2"
+   height="1052.3622047"
+   width="744.09448819">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="211.07003"
+     inkscape:cy="619.96599"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="1272"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs4">
+    <filter
+       id="filter3149"
+       inkscape:label="Apparition"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Edges are partly feathered out"
+       color-interpolation-filters="sRGB">
+      <feMorphology
+         id="feMorphology3151"
+         radius="4"
+         in="SourceGraphic"
+         result="result0" />
+      <feGaussianBlur
+         id="feGaussianBlur3153"
+         in="result0"
+         stdDeviation="8"
+         result="result91" />
+      <feComposite
+         id="feComposite3155"
+         in2="result91"
+         operator="in"
+         in="SourceGraphic" />
+    </filter>
+    <filter
+       id="filter3931"
+       inkscape:label="Apparition"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Edges are partly feathered out"
+       color-interpolation-filters="sRGB">
+      <feMorphology
+         id="feMorphology3933"
+         radius="4"
+         in="SourceGraphic"
+         result="result0" />
+      <feGaussianBlur
+         id="feGaussianBlur3935"
+         in="result0"
+         stdDeviation="8"
+         result="result91" />
+      <feComposite
+         id="feComposite3937"
+         in2="result91"
+         operator="in"
+         in="SourceGraphic" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       style="fill:#808080"
+       d="m 479.0194,257.21979 -16.75,67.6875 -143.3439,-67.3125 36.0314,59.6875 -148.9375,53.75 67.6875,16.71875 -67.3125,143.34375 59.6875,-36.03125 53.75,148.9375 16.7186,-67.65625 143.3439,67.3125 -36.0313,-59.6875 148.9374,-53.75 -67.6874,-16.75 67.3438,-143.3125 -59.7188,36 -53.7187,-148.9375 z m -79.5939,102.6875 c 50.1002,0 90.6876,40.61863 90.6876,90.71875 0,50.10012 -40.5874,90.71875 -90.6876,90.71875 -50.1001,0 -90.7186,-40.61863 -90.7186,-90.71875 0,-50.10012 40.6185,-90.71875 90.7186,-90.71875 z"
+       id="path2985"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Programmieren\Eclipse\Java\Burst\android\assets\img\raw\shuriken.png"
+       inkscape:export-xdpi="14.892138"
+       inkscape:export-ydpi="14.892138" />
+    <path
+       style="opacity:0.72566373;fill:#000000;filter:url(#filter3931)"
+       d="m 478.9881,257.21979 -16.7188,67.6875 -143.3437,-67.34375 36.0313,59.71875 -148.9376,53.75 67.6563,16.71875 -67.3125,143.34375 59.6875,-36.03125 53.75,148.9375 16.75,-67.6875 143.3125,67.34375 -36,-59.71875 148.9375,-53.75 -67.6875,-16.71875 67.3125,-143.34375 -59.6875,36.03125 -53.75,-148.9375 z m -79.5938,102.6875 c 50.1002,0 90.7188,40.58738 90.7188,90.6875 0,50.10012 -40.6186,90.71875 -90.7188,90.71875 -50.1001,0 -90.7187,-40.61863 -90.7187,-90.71875 0,-50.10012 40.6186,-90.6875 90.7187,-90.6875 z"
+       id="path3929"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="E:\Programmieren\Eclipse\Java\Burst\android\assets\img\raw\shuriken.png"
+       inkscape:export-xdpi="14.892138"
+       inkscape:export-ydpi="14.892138" />
+  </g>
+</svg>

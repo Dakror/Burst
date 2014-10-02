@@ -29,6 +29,7 @@ public class LoadingLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
+		Burst.assets.load("font/tele.fnt", BitmapFont.class);
 		
 		ParticleEffectParameter pep = new ParticleEffectParameter();
 		pep.atlasFile = "img/pack.atlas";

@@ -3,7 +3,6 @@ package de.dakror.burst.game.skill.actions;
 import com.badlogic.gdx.scenes.scene2d.Action;
 
 import de.dakror.burst.game.Game;
-import de.dakror.burst.game.entity.creature.Creature;
 
 /**
  * @author Dakror
@@ -29,8 +28,7 @@ public class ParticleAction extends Action
 	@Override
 	public boolean act(float delta)
 	{
-		if (!actor.isVisible()) Game.particles.add(name, x + actor.getX(), y + actor.getY(), duration);
-		else ((Creature) actor).getParticles().add(name, x + actor.getX(), y + actor.getY(), duration);
+		Game.particles.add(name, x + actor.getX(), y + actor.getY(), duration);
 		return true;
 	}
 }

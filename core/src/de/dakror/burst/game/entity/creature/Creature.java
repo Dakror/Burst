@@ -1,7 +1,6 @@
 package de.dakror.burst.game.entity.creature;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +11,6 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
-import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
  * @author Dakror
@@ -20,8 +18,6 @@ import de.dakror.burst.util.MultiParticleEffectPool;
 public abstract class Creature extends Entity
 {
 	public static final float lifeBarWidth = 100;
-	
-	protected MultiParticleEffectPool particles;
 	
 	protected int hp, maxHp, level, attackDamage;
 	protected float speed, attackTime, attackRange;
@@ -47,8 +43,6 @@ public abstract class Creature extends Entity
 		attackDamage = 1;
 		attackTime = 0.75f;
 		attackRange = 20;
-		
-		particles = new MultiParticleEffectPool();
 		
 		addListener(new InputListener()
 		{
@@ -87,7 +81,7 @@ public abstract class Creature extends Entity
 			
 			if (attackProgress / attackTime >= 0.3f && !attacked)
 			{
-				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage));
+				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage), attack.angle() + 180, this);
 				attacked = true;
 			}
 			
@@ -108,9 +102,11 @@ public abstract class Creature extends Entity
 		return hp / (float) maxHp;
 	}
 	
-	public void dealDamage(int dmg)
+	public void dealDamage(int dmg, float angleDegrees, Entity source)
 	{
 		hp = Math.max(0, hp - dmg);
+		
+		if (hp <= 0 && source instanceof Player) Game.instance.addKill();
 	}
 	
 	@Override
@@ -161,8 +157,6 @@ public abstract class Creature extends Entity
 			
 			renderHpBar(batch, x1, y1, lifeBarWidth, hp / (float) maxHp);
 		}
-		
-		particles.draw((SpriteBatch) batch, delta);
 	}
 	
 	/**
@@ -179,11 +173,6 @@ public abstract class Creature extends Entity
 		bmp.height += 2 * attackRange;
 		
 		return bmp;
-	}
-	
-	public MultiParticleEffectPool getParticles()
-	{
-		return particles;
 	}
 	
 	/**
