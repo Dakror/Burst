@@ -1,7 +1,10 @@
 package de.dakror.burst.game.entity.projectile;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
+import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.creature.Creature;
 
@@ -11,21 +14,24 @@ import de.dakror.burst.game.entity.creature.Creature;
 public class Projectile extends Entity
 {
 	protected Creature source;
-	protected final Vector2 velocity = new Vector2();
+	protected final Vector2 direction = new Vector2();
+	protected float velocity;
+	protected int damage;
 	protected boolean frozen;
+	protected boolean dieOnHit;
+	protected Class<?> hitable;
 	
-	public Projectile(Creature source, float velocityX, float velocityY)
+	protected Array<Creature> appliedTargets;
+	
+	public Projectile(Creature source, float directionX, float directionY)
 	{
 		super(source.getX() + source.getWidth() / 2, source.getY() + source.getHeight() / 2);
 		this.source = source;
 		
 		frozen = false;
-		velocity.set(velocityX, velocityY);
-	}
-	
-	public Projectile(Creature source)
-	{
-		this(source, 0, 0);
+		direction.set(directionX, directionY).nor();
+		
+		appliedTargets = new Array<>();
 	}
 	
 	@Override
@@ -33,17 +39,47 @@ public class Projectile extends Entity
 	{
 		super.act(delta);
 		
-		if (!frozen) moveBy(velocity.x * delta, velocity.y * delta);
+		if (!frozen)
+		{
+			moveBy(direction.x * velocity * delta, direction.y * velocity * delta);
+			
+			for (Actor e : Game.instance.getStage().getActors())
+			{
+				if (e instanceof Creature && !((Creature) e).isDead() && e != this && !appliedTargets.contains((Creature) e, true))
+				{
+					if (intersects((Creature) e) && (hitable == null || hitable.isAssignableFrom(e.getClass())))
+					{
+						((Creature) e).dealDamage(damage);
+						appliedTargets.add((Creature) e);
+						if (dieOnHit)
+						{
+							dead = true;
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 	
-	public void setVelocity(float vx, float vy)
+	public void setDirection(float vx, float vy)
 	{
-		velocity.set(vx, vy);
+		direction.set(vx, vy);
 	}
 	
-	public Vector2 getVelocity()
+	public Vector2 getDirection()
+	{
+		return direction;
+	}
+	
+	public float getVelocity()
 	{
 		return velocity;
+	}
+	
+	public void setVelocity(float velocity)
+	{
+		this.velocity = velocity;
 	}
 	
 	public boolean isFrozen()

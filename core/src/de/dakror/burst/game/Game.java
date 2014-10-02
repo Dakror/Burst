@@ -11,6 +11,7 @@ import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.creature.Creature;
 import de.dakror.burst.game.entity.creature.Player;
 import de.dakror.burst.game.entity.creature.enemy.Monster00;
+import de.dakror.burst.game.entity.projectile.Projectile;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
@@ -77,6 +78,7 @@ public class Game extends Layer
 	
 	public void spawnEntity(Entity e)
 	{
+		if (e instanceof Projectile) e.moveBy(-e.getSpriteFg().getWidth() / 2, -e.getSpriteFg().getHeight() / 2);
 		getStage().addActor(e);
 	}
 	

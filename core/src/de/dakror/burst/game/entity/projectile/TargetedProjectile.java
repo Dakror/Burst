@@ -29,7 +29,7 @@ public class TargetedProjectile extends Projectile
 		
 		boolean reachedEnd = false;
 		
-		float speed = velocity.len();
+		float speed = direction.len();
 		if (tmp.len() > speed * delta) tmp.limit(speed * delta);
 		else
 		{

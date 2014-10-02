@@ -77,7 +77,7 @@ public class Player extends Creature implements InputProcessor
 			
 			for (Actor e : Game.instance.getStage().getActors())
 			{
-				if (e instanceof Entity && !((Entity) e).isDead() && e != this)
+				if (e instanceof Creature && !((Entity) e).isDead() && e != this)
 				{
 					if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
 					if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
@@ -136,11 +136,15 @@ public class Player extends Creature implements InputProcessor
 			if (keycode == Keys.Q)
 			{
 				selectedSkill = new ShadowJump(Player.this, null);
-				return true;
 			}
 			if (keycode == Keys.W)
 			{
 				selectedSkill = new ShurikenThrow(Player.this);
+			}
+			
+			if (selectedSkill != null)
+			{
+				activateSelectedSkill(null);
 				return true;
 			}
 		}
@@ -200,7 +204,7 @@ public class Player extends Creature implements InputProcessor
 	{
 		if (selectedSkill != null)
 		{
-			if (target == null || selectedSkill.canBeCastOn(target))
+			if (selectedSkill.canBeCastOn(target))
 			{
 				if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(target);
 				

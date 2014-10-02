@@ -35,7 +35,7 @@ public abstract class Entity extends Actor
 	{
 		super.act(delta);
 		
-		if (spriteFg != null) setSize(spriteFg.getWidth(), spriteFg.getHeight());
+		if (spriteFg != null) setSize(spriteFg.getWidth() * spriteFg.getScaleX(), spriteFg.getHeight() * spriteFg.getScaleY());
 		
 		if (dead)
 		{
