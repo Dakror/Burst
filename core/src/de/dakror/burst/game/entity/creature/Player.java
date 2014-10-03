@@ -115,7 +115,7 @@ public class Player extends Creature implements InputProcessor
 	public void dealDamage(int dmg, float angleDegrees, Entity source)
 	{
 		super.dealDamage(dmg, angleDegrees, source);
-		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
+		if (dmg > 0 && hp >= 0) Game.hud.showBloodFlash();
 	}
 	
 	public Skill getSelectedSkill()
@@ -208,6 +208,7 @@ public class Player extends Creature implements InputProcessor
 			{
 				if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(target);
 				
+				dest.setZero();
 				setSkill(selectedSkill);
 				selectedSkill = null;
 			}

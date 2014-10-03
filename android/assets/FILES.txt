@@ -9,6 +9,7 @@ f fx/blood.p
 f fx/death.p
 f fx/shadow.p
 d img
+f img/blood.png
 f img/logo.png
 f img/logo_16.png
 f img/logo_32.png
@@ -19,10 +20,10 @@ d img/gimp
 f img/gimp/logo.xcf
 d img/inkscape
 f img/inkscape/shuriken.svg
+f img/inkscape/slot.svg
 d img/raw
 f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
-f img/raw/blood.png
 f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png
@@ -31,7 +32,9 @@ f img/raw/particle.png
 f img/raw/player.png
 f img/raw/player_bg.png
 f img/raw/player_fg.png
+f img/raw/shadowjump.png
 f img/raw/shuriken.png
+f img/raw/slot.png
 f img/raw/square.png
 f img/raw/target_0.png
 f img/raw/target_1.png

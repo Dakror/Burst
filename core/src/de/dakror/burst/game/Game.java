@@ -2,8 +2,6 @@ package de.dakror.burst.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,10 +9,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.entity.Entity;
-import de.dakror.burst.game.entity.creature.Creature;
 import de.dakror.burst.game.entity.creature.Player;
 import de.dakror.burst.game.entity.creature.enemy.Monster00;
 import de.dakror.burst.game.entity.projectile.Projectile;
+import de.dakror.burst.layer.HudLayer;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
@@ -28,13 +26,11 @@ public class Game extends Layer
 	public static OrthographicCamera camera;
 	public static MultiParticleEffectPool particles;
 	
-	float bloodFlashAlpha = 0;
+	public static HudLayer hud;
 	
 	int kills;
 	boolean noWave;
 	long time;
-	
-	BitmapFont killDisplay;
 	
 	@Override
 	public void show()
@@ -43,8 +39,6 @@ public class Game extends Layer
 		
 		camera = new OrthographicCamera();
 		stage = new Stage(new ScreenViewport(camera));
-		
-		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
 		
 		particles = new MultiParticleEffectPool();
 		particles.addPrototype("shadow.p", Burst.assets);
@@ -79,21 +73,6 @@ public class Game extends Layer
 		
 		particles.draw((SpriteBatch) stage.getBatch(), delta);
 		
-		// -- hud / ui -- //
-		
-		int width = 400;
-		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 20, width, Game.player.getHpPercentage());
-		
-		TextBounds tb = killDisplay.getBounds(kills + "");
-		killDisplay.draw(stage.getBatch(), kills + "", (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
-		
-		if (bloodFlashAlpha > 0)
-		{
-			stage.getBatch().setColor(1, 1, 1, bloodFlashAlpha);
-			stage.getBatch().draw(Burst.img.findRegion("blood"), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			stage.getBatch().setColor(1, 1, 1, 1);
-			bloodFlashAlpha -= delta;
-		}
 		stage.getBatch().end();
 	}
 	
@@ -145,8 +124,8 @@ public class Game extends Layer
 			spawnEnemy();
 	}
 	
-	public void showBloodFlash()
+	public int getKills()
 	{
-		bloodFlashAlpha = 1f;
+		return kills;
 	}
 }

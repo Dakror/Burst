@@ -18,7 +18,7 @@ public class Shuriken extends RangedProjectile
 		spriteFg.setSize(32, 32);
 		spriteFg.setOrigin(16, 16);
 		velocity = 1000f;
-		range = 250f;
+		range = 300f;
 		
 		damage = 8;
 		hitable = Enemy.class;
