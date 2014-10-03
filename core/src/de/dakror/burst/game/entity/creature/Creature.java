@@ -206,6 +206,31 @@ public abstract class Creature extends Entity
 		return attackRange;
 	}
 	
+	public int getAttackDamage()
+	{
+		return attackDamage;
+	}
+	
+	public float getAttackTime()
+	{
+		return attackTime;
+	}
+	
+	public float getSpeed()
+	{
+		return speed;
+	}
+	
+	public int getHp()
+	{
+		return hp;
+	}
+	
+	public int getMaxHp()
+	{
+		return maxHp;
+	}
+	
 	public void attack(Creature e)
 	{
 		attack(e, attackDamage);
