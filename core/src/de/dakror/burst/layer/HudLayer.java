@@ -29,6 +29,7 @@ public class HudLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
+		skillGroup = new HorizontalGroup();
 		
 		initDone = true;
 	}
