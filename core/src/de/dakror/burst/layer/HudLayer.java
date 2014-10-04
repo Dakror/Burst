@@ -12,6 +12,7 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.creature.Creature;
 import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.ui.SkillSlot;
 
 /**
@@ -56,6 +57,20 @@ public class HudLayer extends Layer
 	{
 		stage.draw();
 		stage.getBatch().begin();
+		
+		if (Game.player.selectedSkill != null)
+		{
+			stage.getBatch().setColor(1, 1, 1, 0.5f);
+			if (Game.player.selectedSkill.getType() == SkillType.Targeted || Game.player.selectedSkill.getType() == SkillType.Aura)
+			{
+				float x = Game.player.getX() + Game.player.getWidth() / 2 - Game.player.selectedSkill.getRange();
+				float y = Game.player.getY() + Game.player.getHeight() / 2 - Game.player.selectedSkill.getRange();
+				float size = Game.player.selectedSkill.getRange() * 2;
+				
+				stage.getBatch().draw(Burst.img.findRegion("area"), x, y, size, size);
+			}
+			stage.getBatch().setColor(1, 1, 1, 1);
+		}
 		
 		int width = 400;
 		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 5, width, Game.player.getHpPercentage());

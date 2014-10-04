@@ -17,6 +17,7 @@ f img/logo_64.png
 f img/pack.atlas
 f img/pack.png
 d img/gimp
+f img/gimp/area.xcf
 f img/gimp/logo.xcf
 d img/inkscape
 f img/inkscape/arrow.svg
@@ -25,6 +26,7 @@ f img/inkscape/slot.svg
 d img/raw
 f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
+f img/raw/area.png
 f img/raw/arrow.png
 f img/raw/arrowShaft.png
 f img/raw/monster00.png

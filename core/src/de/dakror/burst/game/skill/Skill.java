@@ -21,7 +21,7 @@ import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
  */
 public enum Skill implements Provider
 {
-	Shadow_Jump("You turn into fading shadows to jump behind your selected target only to reappear and deal [#6bef74]%3*ad%[] damage.", "shadowjump", true, true, 11.0f)
+	Shadow_Jump("You turn into fading shadows to jump behind your selected target only to reappear and deal [#6bef74]%3*ad%[] damage.", "shadowjump", SkillType.Targeted, true, true, 11.0f, 325.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -43,7 +43,7 @@ public enum Skill implements Provider
 			return target instanceof Enemy;
 		}
 	},
-	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location. The projectile passes through every Enemy on the way to deal [#6bef74]8[] damage.", "shuriken", false, false, 3.2f)
+	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location. The projectile passes through every Enemy on the way to deal [#6bef74]8[] damage.", "shuriken", SkillType.Skillshot, false, false, 3.2f, 300.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -66,20 +66,29 @@ public enum Skill implements Provider
 	
 	boolean stopMotion, targeted;
 	
-	float cooldown;
+	float cooldown, range;
 	
-	private Skill(String description, String icon, boolean stopMotion, boolean targeted, float cooldown)
+	SkillType type;
+	
+	private Skill(String description, String icon, SkillType type, boolean stopMotion, boolean targeted, float cooldown, float range)
 	{
 		this.description = description;
 		this.icon = icon;
+		this.type = type;
 		this.stopMotion = stopMotion;
 		this.targeted = targeted;
 		this.cooldown = cooldown;
+		this.range = range;
 	}
 	
 	public float getCooldown()
 	{
 		return cooldown;
+	}
+	
+	public float getRange()
+	{
+		return range;
 	}
 	
 	public String getDescription()
@@ -120,6 +129,11 @@ public enum Skill implements Provider
 	public String getIcon()
 	{
 		return icon;
+	}
+	
+	public SkillType getType()
+	{
+		return type;
 	}
 	
 	public boolean isStopMotion()

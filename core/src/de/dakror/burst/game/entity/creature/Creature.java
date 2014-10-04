@@ -49,7 +49,7 @@ public abstract class Creature extends Entity
 			@Override
 			public boolean mouseMoved(InputEvent event, float x, float y)
 			{
-				if (Burst.smartCast && bump.contains(x, getHeight() - y)) Game.player.activateSelectedSkill(Creature.this);
+				if (Burst.smartCast && bump.contains(x, getHeight() - y)) Game.player.selectedTarget = Creature.this;
 				return false;
 			}
 			

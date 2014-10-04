@@ -31,6 +31,8 @@ public class Player extends Creature implements InputProcessor
 	boolean autoAttackRequested;
 	Creature autoAttackRequestedTarget;
 	
+	public Creature selectedTarget;
+	
 	public Player(float x, float y)
 	{
 		super(x, y);
@@ -145,15 +147,10 @@ public class Player extends Creature implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
-		if (activeSkill != null)
+		if (selectedSkill != null)
 		{
-			if (keycode == Keys.Q)
-			{}
-			if (keycode == Keys.W)
-			{
-				activateSelectedSkill(null);
-				return true;
-			}
+			activateSelectedSkill(selectedTarget);
+			return true;
 		}
 		return false;
 	}
@@ -209,8 +206,8 @@ public class Player extends Creature implements InputProcessor
 				if (selectedSkill.isStopMotion()) dest.setZero();
 				
 				setSkill(selectedSkill, target);
-				selectedSkill = null;
 			}
+			selectedSkill = null;
 		}
 	}
 }
