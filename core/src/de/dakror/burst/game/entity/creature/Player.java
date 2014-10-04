@@ -12,9 +12,6 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
-import de.dakror.burst.game.skill.TargetedSkill;
-import de.dakror.burst.game.skill.skills.ShadowJump;
-import de.dakror.burst.game.skill.skills.ShurikenThrow;
 import de.dakror.burst.util.D;
 
 /**
@@ -135,17 +132,11 @@ public class Player extends Creature implements InputProcessor
 		{
 			if (keycode == Keys.Q)
 			{
-				selectedSkill = new ShadowJump(Player.this, null);
+				selectedSkill = Skill.Shadow_Jump;
 			}
 			if (keycode == Keys.W)
 			{
-				selectedSkill = new ShurikenThrow(Player.this);
-			}
-			
-			if (selectedSkill != null)
-			{
-				activateSelectedSkill(null);
-				return true;
+				selectedSkill = Skill.Shuriken_Throw;
 			}
 		}
 		return false;
@@ -154,6 +145,16 @@ public class Player extends Creature implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
+		if (activeSkill != null)
+		{
+			if (keycode == Keys.Q)
+			{}
+			if (keycode == Keys.W)
+			{
+				activateSelectedSkill(null);
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -190,7 +191,6 @@ public class Player extends Creature implements InputProcessor
 	@Override
 	public boolean mouseMoved(int screenX, int screenY)
 	{
-		activateSelectedSkill(null);
 		return true;
 	}
 	
@@ -204,12 +204,11 @@ public class Player extends Creature implements InputProcessor
 	{
 		if (selectedSkill != null)
 		{
-			if (selectedSkill.canBeCastOn(target))
+			if (selectedSkill.canCastOn(target))
 			{
-				if (selectedSkill instanceof TargetedSkill) ((TargetedSkill) selectedSkill).setTarget(target);
+				if (selectedSkill.isStopMotion()) dest.setZero();
 				
-				dest.setZero();
-				setSkill(selectedSkill);
+				setSkill(selectedSkill, target);
 				selectedSkill = null;
 			}
 		}

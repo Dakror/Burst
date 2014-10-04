@@ -56,7 +56,7 @@ public class Game extends Layer
 	@Override
 	public void update(float delta)
 	{
-		stage.act();
+		stage.act(delta);
 		if (System.currentTimeMillis() - time > 3000 && noWave)
 		{
 			for (int i = 0; i < MathUtils.random(1, 3); i++)

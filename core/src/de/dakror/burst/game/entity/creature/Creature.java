@@ -194,11 +194,11 @@ public abstract class Creature extends Entity
 		Game.particles.add("death.p", getX() + 75, getY() + 75);
 	}
 	
-	protected void setSkill(Skill skill)
+	protected void setSkill(Skill skill, Creature target)
 	{
 		activeSkill = skill;
 		
-		addAction(activeSkill.getSequence());
+		addAction(activeSkill.getSequence(this, target));
 	}
 	
 	public float getAttackRange()

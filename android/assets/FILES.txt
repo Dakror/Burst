@@ -19,11 +19,14 @@ f img/pack.png
 d img/gimp
 f img/gimp/logo.xcf
 d img/inkscape
+f img/inkscape/arrow.svg
 f img/inkscape/shuriken.svg
 f img/inkscape/slot.svg
 d img/raw
 f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
+f img/raw/arrow.png
+f img/raw/arrowShaft.png
 f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png

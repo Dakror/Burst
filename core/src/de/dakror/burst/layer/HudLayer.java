@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.creature.Creature;
+import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.ui.SkillSlot;
 
 /**
  * @author Dakror
@@ -21,7 +23,7 @@ public class HudLayer extends Layer
 	
 	BitmapFont killDisplay;
 	
-	HorizontalGroup skillGroup;
+	Table skillGroup;
 	
 	@Override
 	public void show()
@@ -29,18 +31,34 @@ public class HudLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
-		skillGroup = new HorizontalGroup();
+		skillGroup = new Table();
+		
+		skillGroup.row().center();
+		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
+		{
+			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64).spaceLeft(16);
+		}
+		
+		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);
+		stage.addActor(skillGroup);
 		
 		initDone = true;
 	}
 	
 	@Override
+	public void update(float delta)
+	{
+		stage.act(delta);
+	}
+	
+	@Override
 	public void render(float delta)
 	{
+		stage.draw();
 		stage.getBatch().begin();
 		
 		int width = 400;
-		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 20, width, Game.player.getHpPercentage());
+		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 5, width, Game.player.getHpPercentage());
 		
 		TextBounds tb = killDisplay.getBounds(Game.instance.getKills() + "");
 		killDisplay.draw(stage.getBatch(), Game.instance.getKills() + "", (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
@@ -54,6 +72,13 @@ public class HudLayer extends Layer
 		}
 		
 		stage.getBatch().end();
+	}
+	
+	@Override
+	public void resize(int width, int height)
+	{
+		super.resize(width, height);
+		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);
 	}
 	
 	public void showBloodFlash()
