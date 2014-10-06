@@ -21,7 +21,7 @@ import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
  */
 public enum Skill implements Provider
 {
-	Shadow_Jump("You turn into fading shadows to jump behind your selected target only to reappear and deal [#6bef74]%3*ad%[] damage.", "shadowjump", SkillType.Targeted, true, true, 11.0f, 325.0f)
+	Shadow_Jump("You turn into fading shadows to jump behind your selected target only to reappear and deal [#6bef74]%3*ad%[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -43,7 +43,7 @@ public enum Skill implements Provider
 			return target instanceof Enemy;
 		}
 	},
-	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location. The projectile passes through every Enemy on the way to deal [#6bef74]8[] damage.", "shuriken", SkillType.Skillshot, false, false, 3.2f, 300.0f)
+	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location. The projectile passes through every Enemy on the way to deal [#6bef74]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -64,19 +64,18 @@ public enum Skill implements Provider
 	
 	String description, icon;
 	
-	boolean stopMotion, targeted;
+	boolean stopMotion;
 	
 	float cooldown, range;
 	
 	SkillType type;
 	
-	private Skill(String description, String icon, SkillType type, boolean stopMotion, boolean targeted, float cooldown, float range)
+	private Skill(String description, String icon, SkillType type, boolean stopMotion, float cooldown, float range)
 	{
 		this.description = description;
 		this.icon = icon;
 		this.type = type;
 		this.stopMotion = stopMotion;
-		this.targeted = targeted;
 		this.cooldown = cooldown;
 		this.range = range;
 	}
@@ -101,18 +100,17 @@ public enum Skill implements Provider
 		Array<String> ps = new Array<String>(new String[] { "ad", "as", "ra", "sp", "hp", "hpm" });
 		Array<Float> ds = new Array<Float>(new Float[] { (float) source.getAttackDamage(), source.getAttackTime(), source.getAttackRange(), source.getSpeed(), (float) source.getHp(), (float) source.getMaxHp() });
 		
-		Pattern p = Pattern.compile("(%)(\\S{1,})(\\+|\\*)(ad|as|ra|sp|hp|hpm)(%)");
+		Pattern p = Pattern.compile("%([0-9\\.]+)(\\*|\\+)(\\S+)%");
 		Matcher m = p.matcher(description);
 		StringBuffer sb = new StringBuffer();
 		
 		while (m.find())
 		{
-			float number = (float) Double.parseDouble(m.group(2));
+			float number = (float) Double.parseDouble(m.group(1));
 			
-			String g = m.group(4);
-			float value = ds.get(ps.indexOf(g, false));
+			float value = ds.get(ps.indexOf(m.group(3), false));
 			
-			if (m.group(3).equals("*")) number *= value;
+			if (m.group(2).equals("*")) number *= value;
 			else number += value;
 			
 			DecimalFormat df = new DecimalFormat();
@@ -139,10 +137,5 @@ public enum Skill implements Provider
 	public boolean isStopMotion()
 	{
 		return stopMotion;
-	}
-	
-	public boolean isTargeted()
-	{
-		return targeted;
 	}
 }

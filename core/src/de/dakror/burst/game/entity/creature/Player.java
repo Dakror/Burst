@@ -12,6 +12,7 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.util.D;
 
 /**
@@ -201,7 +202,7 @@ public class Player extends Creature implements InputProcessor
 	{
 		if (selectedSkill != null)
 		{
-			if (selectedSkill.canCastOn(target))
+			if (selectedSkill.canCastOn(target) && isInCastRange(target))
 			{
 				if (selectedSkill.isStopMotion()) dest.setZero();
 				
@@ -209,5 +210,15 @@ public class Player extends Creature implements InputProcessor
 			}
 			selectedSkill = null;
 		}
+	}
+	
+	public boolean isInCastRange(Creature target)
+	{
+		if (selectedSkill.getType() != SkillType.Targeted) return true;
+		
+		if (target == null) return false;
+		
+		float range = tmp.set(target.getX() + target.getWidth() / 2, target.getY() + target.getHeight() / 2).sub(getX() + getWidth() / 2, getY() + getHeight() / 2).len();
+		return range <= selectedSkill.getRange();
 	}
 }
