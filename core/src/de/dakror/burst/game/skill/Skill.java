@@ -8,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
@@ -21,7 +23,7 @@ import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
  */
 public enum Skill implements Provider
 {
-	Shadow_Jump("You turn into fading shadows to jump behind your selected target only to reappear and deal [#6bef74]%3*ad%[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
+	Shadow_Jump("You turn into fading shadows to jump behind your selected [enemy]target[] only to reappear and deal [scale]%3*ad%[] [GRAY](3 * [][ad]%1*ad%[][GRAY])[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -43,7 +45,7 @@ public enum Skill implements Provider
 			return target instanceof Enemy;
 		}
 	},
-	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location. The projectile passes through every Enemy on the way to deal [#6bef74]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
+	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location.\nThe projectile passes through every [enemy]enemy[] on the way to deal [flat]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
 	{
 		@Override
 		public SequenceAction getSequence(Creature source, Creature target)
@@ -61,6 +63,19 @@ public enum Skill implements Provider
 	},
 	
 	;
+	
+	
+	static
+	{
+		Colors.put("add", Color.valueOf("f88b2a"));
+		Colors.put("scale", Color.valueOf("afdc15"));
+		Colors.put("flat", Color.valueOf("24de84"));
+		
+		Colors.put("ad", Color.valueOf("d06212"));
+		
+		Colors.put("enemy", Color.valueOf("c14949"));
+	}
+	
 	
 	String description, icon;
 	
