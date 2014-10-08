@@ -1,6 +1,7 @@
 package de.dakror.burst.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -25,7 +26,7 @@ public class Game extends Layer
 	public static Player player;
 	public static OrthographicCamera camera;
 	public static MultiParticleEffectPool particles;
-	
+	public static boolean paused = false;
 	public static HudLayer hud;
 	
 	int kills;
@@ -56,12 +57,15 @@ public class Game extends Layer
 	@Override
 	public void update(float delta)
 	{
-		stage.act(delta);
-		if (System.currentTimeMillis() - time > 3000 && noWave)
+		if (!paused)
 		{
-			for (int i = 0; i < MathUtils.random(1, 3); i++)
-				spawnEnemy();
-			noWave = false;
+			stage.act(delta);
+			if (System.currentTimeMillis() - time > 3000 && noWave)
+			{
+				for (int i = 0; i < MathUtils.random(1, 3); i++)
+					spawnEnemy();
+				noWave = false;
+			}
 		}
 	}
 	
@@ -127,5 +131,12 @@ public class Game extends Layer
 	public int getKills()
 	{
 		return kills;
+	}
+	
+	@Override
+	public boolean keyDown(int keycode)
+	{
+		if (keycode == Keys.SPACE) paused = !paused;
+		return false;
 	}
 }
