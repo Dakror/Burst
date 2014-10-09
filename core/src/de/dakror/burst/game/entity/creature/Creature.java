@@ -64,8 +64,19 @@ public abstract class Creature extends Entity
 			{
 				if (bump.contains(x, y))
 				{
-					if (Game.player.getSelectedSkill() != null) Game.player.activateSelectedSkill(Creature.this);
-					else if (Game.player != Creature.this) Game.player.requestAutoAttack(Creature.this);
+					if (Game.player.getSelectedSkill() != null)
+					{
+						Game.player.activateSelectedSkill(Creature.this);
+						
+						Game.instance.anyCreatureTargeted = true;
+						return true;
+					}
+					else if (Game.player != Creature.this)
+					{
+						Game.player.requestAutoAttack(Creature.this);
+						return true;
+					}
+					
 				}
 				return false;
 			}

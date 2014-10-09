@@ -14,6 +14,7 @@ import de.dakror.burst.game.entity.creature.Creature;
 import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.ui.SkillSlot;
+import de.dakror.burst.util.D;
 
 /**
  * @author Dakror
@@ -37,7 +38,7 @@ public class HudLayer extends Layer
 		skillGroup.row().center();
 		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
 		{
-			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64).spaceLeft(16);
+			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 2 : 1)).spaceLeft(16).spaceBottom(D.android() ? 160 : 0);
 		}
 		
 		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);

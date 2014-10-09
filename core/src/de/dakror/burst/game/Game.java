@@ -13,6 +13,7 @@ import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.entity.creature.Player;
 import de.dakror.burst.game.entity.creature.enemy.Monster00;
 import de.dakror.burst.game.entity.projectile.Projectile;
+import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.layer.HudLayer;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.util.MultiParticleEffectPool;
@@ -32,6 +33,8 @@ public class Game extends Layer
 	int kills;
 	boolean noWave;
 	long time;
+	
+	public boolean anyCreatureTargeted;
 	
 	@Override
 	public void show()
@@ -131,6 +134,16 @@ public class Game extends Layer
 	public int getKills()
 	{
 		return kills;
+	}
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button)
+	{
+		if (!anyCreatureTargeted && player.getSelectedSkill() != null && player.getSelectedSkill().getType() != SkillType.Targeted)
+		{
+			player.activateSelectedSkill(null);
+		}
+		return false;
 	}
 	
 	@Override

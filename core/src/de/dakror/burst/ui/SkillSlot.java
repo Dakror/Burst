@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -47,7 +49,7 @@ public class SkillSlot extends Button
 		
 		TextureRegion r = Burst.img.findRegion(skill.getIcon());
 		r.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		add(new Image(r)).size(48).expand();
+		add(new Image(r)).size(48 * (D.android() ? 2 : 1)).expand();
 		
 		font = new BitmapFont();
 		font.setMarkupEnabled(true);
@@ -58,6 +60,16 @@ public class SkillSlot extends Button
 			bg_fg = new NinePatch(Burst.img.findRegion("glowBg_fg"), s, s, s, s);
 			bg_bg = new NinePatch(Burst.img.findRegion("glowBg_bg"), s, s, s, s);
 		}
+		
+		addListener(new InputListener()
+		{
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
+			{
+				if (Game.player.getSelectedSkill() == null) Game.player.setSelectedSkill(SkillSlot.this.skill);
+				return false;
+			}
+		});
 	}
 	
 	@Override
