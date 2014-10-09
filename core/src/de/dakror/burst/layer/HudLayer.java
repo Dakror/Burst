@@ -58,7 +58,7 @@ public class HudLayer extends Layer
 		stage.draw();
 		stage.getBatch().begin();
 		
-		if (Game.player.selectedSkill != null)
+		if (Game.player.selectedSkill != null && Game.player.getCooldown(Game.player.selectedSkill.ordinal()) == 0)
 		{
 			stage.getBatch().setColor(1, 1, 1, 0.5f);
 			if (Game.player.selectedSkill.getType() == SkillType.Targeted || Game.player.selectedSkill.getType() == SkillType.Aura)

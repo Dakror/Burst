@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.IntFloatMap;
+import com.badlogic.gdx.utils.IntFloatMap.Keys;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
@@ -33,6 +35,8 @@ public abstract class Creature extends Entity
 	protected Skill activeSkill;
 	protected boolean showHpBar;
 	
+	IntFloatMap cooldowns;
+	
 	public Creature(float x, float y)
 	{
 		super(x, y);
@@ -43,6 +47,8 @@ public abstract class Creature extends Entity
 		attackDamage = 1;
 		attackTime = 0.75f;
 		attackRange = 20;
+		
+		cooldowns = new IntFloatMap();
 		
 		addListener(new InputListener()
 		{
@@ -74,6 +80,13 @@ public abstract class Creature extends Entity
 		super.act(delta);
 		
 		if (getActions().size == 0) activeSkill = null;
+		
+		for (Keys k = cooldowns.keys(); k.hasNext();)
+		{
+			int i = k.next();
+			cooldowns.getAndIncrement(i, 0, -delta);
+			if (cooldowns.get(i, 0) <= 0) k.remove();
+		}
 		
 		if (attack.len() > 0)
 		{
@@ -194,11 +207,16 @@ public abstract class Creature extends Entity
 		Game.particles.add("death.p", getX() + 75, getY() + 75);
 	}
 	
-	protected void setSkill(Skill skill, Creature target)
+	protected boolean setSkill(Skill skill, Creature target)
 	{
+		if (cooldowns.containsKey(skill.ordinal())) return false;
+		
 		activeSkill = skill;
 		
 		addAction(activeSkill.getSequence(this, target));
+		cooldowns.put(skill.ordinal(), skill.getCooldown());
+		
+		return true;
 	}
 	
 	public float getAttackRange()
@@ -256,6 +274,16 @@ public abstract class Creature extends Entity
 		attacked = false;
 		
 		nextAttackAmpl = ampl;
+	}
+	
+	public IntFloatMap getCooldowns()
+	{
+		return cooldowns;
+	}
+	
+	public float getCooldown(int key)
+	{
+		return cooldowns.get(key, 0);
 	}
 	
 	// -- statics -- //

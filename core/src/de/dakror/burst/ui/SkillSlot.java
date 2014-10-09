@@ -27,6 +27,9 @@ public class SkillSlot extends Button
 	final Color c = new Color(1, 1, 1, 1);
 	float delta;
 	
+	boolean wasntZeroBefore, showAnim;
+	float alpha;
+	
 	static NinePatch bg_fg, bg_bg;
 	
 	public SkillSlot(Skill skill)
@@ -61,6 +64,13 @@ public class SkillSlot extends Button
 	public void act(float delta)
 	{
 		super.act(delta);
+		
+		if (showAnim)
+		{
+			alpha += delta * 20;
+			if (alpha > 9) showAnim = false;
+		}
+		
 		if (isOver()) this.delta += delta;
 		else this.delta = 0;
 	}
@@ -82,6 +92,32 @@ public class SkillSlot extends Button
 			bg_bg.draw(batch, x - 40, y - tb.height - 40, width + 80, tb.height + 80);
 			bg_fg.draw(batch, x - 40, y - tb.height - 40, width + 80, tb.height + 80);
 			font.drawWrapped(batch, str, x, y, width);
+		}
+		
+		float cooldown = Game.player.getCooldown(skill.ordinal());
+		if (cooldown > 0)
+		{
+			TextureRegion r = Burst.img.findRegion("grey");
+			batch.draw(r, getX(), getY(), getWidth(), getHeight() * (cooldown / skill.getCooldown()));
+			
+			wasntZeroBefore = true;
+		}
+		else
+		{
+			if (wasntZeroBefore && !showAnim)
+			{
+				showAnim = true;
+				wasntZeroBefore = false;
+				alpha = 0;
+			}
+			
+			if (showAnim)
+			{
+				TextureRegion r = Burst.img.findRegion("square");
+				batch.setColor(1, 1, 1, (float) Math.cos(alpha) * 0.5f + 0.5f);
+				batch.draw(r, getX(), getY(), getWidth(), getHeight());
+				batch.setColor(1, 1, 1, 1);
+			}
 		}
 	}
 }
