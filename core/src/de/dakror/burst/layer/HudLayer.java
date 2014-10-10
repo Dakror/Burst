@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -27,6 +28,8 @@ public class HudLayer extends Layer
 	
 	Table skillGroup;
 	
+	final Vector2 tmp = new Vector2();
+	
 	@Override
 	public void show()
 	{
@@ -38,7 +41,7 @@ public class HudLayer extends Layer
 		skillGroup.row().center();
 		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
 		{
-			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 2 : 1)).spaceLeft(16).spaceBottom(D.android() ? 160 : 0);
+			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 2 : 1)).spaceLeft(16).padBottom(D.android() ? 32 : 0);
 		}
 		
 		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);
@@ -69,6 +72,20 @@ public class HudLayer extends Layer
 				float size = Game.player.selectedSkill.getRange() * 2;
 				
 				stage.getBatch().draw(Burst.img.findRegion("area"), x, y, size, size);
+			}
+			else if (Game.player.selectedSkill.getType() == SkillType.Skillshot)
+			{
+				float x = Game.player.getX() + Game.player.getWidth() / 2 - Game.player.selectedSkill.getRange();
+				float y = Game.player.getY() + Game.player.getHeight() / 2 - Game.player.selectedSkill.getRange();
+				
+				tmp.set(x, y);
+				
+				float angle = (float) Math.toDegrees(Math.atan2(y, x));
+				float range = Game.player.selectedSkill.getRange();
+				
+				
+				
+				// stage.getBatch().draw(Burst.img.findRegion("arrow"), x,y,);
 			}
 			stage.getBatch().setColor(1, 1, 1, 1);
 		}
