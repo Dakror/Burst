@@ -76,7 +76,7 @@ public class Burst extends GameBase
 	
 	public void setFullscreen(boolean fullscreen)
 	{
-		if (!fullscreen) Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, false);
+		if (!fullscreen) Gdx.graphics.setDisplayMode(1280, 720, false);
 		else Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
 	}
 }

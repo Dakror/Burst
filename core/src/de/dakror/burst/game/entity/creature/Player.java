@@ -1,4 +1,4 @@
-package de.dakror.burst.game.entity;
+package de.dakror.burst.game.entity.creature;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -10,13 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
+import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
-import de.dakror.burst.game.skill.skills.ShadowJump;
+import de.dakror.burst.game.skill.SkillType;
+import de.dakror.burst.util.D;
 
 /**
  * @author Dakror
  */
-public class Player extends Entity implements InputProcessor
+public class Player extends Creature implements InputProcessor
 {
 	final Vector2 tmp = new Vector2();
 	
@@ -28,13 +30,15 @@ public class Player extends Entity implements InputProcessor
 	public Skill selectedSkill;
 	
 	boolean autoAttackRequested;
-	Entity autoAttackRequestedTarget;
+	Creature autoAttackRequestedTarget;
+	
+	public Creature selectedTarget;
 	
 	public Player(float x, float y)
 	{
 		super(x, y);
 		maxHp = hp = 20;
-		name = "Player";
+		setName("Player");
 		spriteFg = Burst.img.createSprite("player_fg");
 		spriteBg = Burst.img.createSprite("player_bg");
 		speed = 180;
@@ -73,7 +77,7 @@ public class Player extends Entity implements InputProcessor
 			
 			for (Actor e : Game.instance.getStage().getActors())
 			{
-				if (e instanceof Entity && !((Entity) e).isDead() && e != this)
+				if (e instanceof Creature && !((Entity) e).isDead() && e != this)
 				{
 					if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
 					if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
@@ -86,7 +90,7 @@ public class Player extends Entity implements InputProcessor
 		}
 	}
 	
-	public boolean requestAutoAttack(Entity target)
+	public boolean requestAutoAttack(Creature target)
 	{
 		if (autoAttackRequested || autoAttackRequestedTarget != null) return false;
 		
@@ -108,10 +112,10 @@ public class Player extends Entity implements InputProcessor
 	}
 	
 	@Override
-	public void dealDamage(int dmg)
+	public void dealDamage(int dmg, float angleDegrees, Entity source)
 	{
-		super.dealDamage(dmg);
-		if (dmg > 0 && hp >= 0) Game.instance.showBloodFlash();
+		super.dealDamage(dmg, angleDegrees, source);
+		if (dmg > 0 && hp >= 0) Game.hud.showBloodFlash();
 	}
 	
 	public Skill getSelectedSkill()
@@ -131,8 +135,11 @@ public class Player extends Entity implements InputProcessor
 		{
 			if (keycode == Keys.Q)
 			{
-				selectedSkill = new ShadowJump(Player.this, null);
-				return true;
+				selectedSkill = Skill.Shadow_Jump;
+			}
+			if (keycode == Keys.W)
+			{
+				selectedSkill = Skill.Shuriken_Throw;
 			}
 		}
 		return false;
@@ -141,6 +148,11 @@ public class Player extends Entity implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
+		if (selectedSkill != null)
+		{
+			activateSelectedSkill(selectedTarget);
+			return true;
+		}
 		return false;
 	}
 	
@@ -153,7 +165,7 @@ public class Player extends Entity implements InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if (button == Buttons.RIGHT)
+		if (button == Buttons.RIGHT || D.android())
 		{
 			destProgress = 0;
 			dest.set(screenX, Gdx.graphics.getHeight() - screenY);
@@ -177,12 +189,36 @@ public class Player extends Entity implements InputProcessor
 	@Override
 	public boolean mouseMoved(int screenX, int screenY)
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
 	public boolean scrolled(int amount)
 	{
 		return false;
+	}
+	
+	public void activateSelectedSkill(Creature target)
+	{
+		if (selectedSkill != null)
+		{
+			if (selectedSkill.canCastOn(target) && isInCastRange(target))
+			{
+				if (selectedSkill.isStopMotion()) dest.setZero();
+				
+				setSkill(selectedSkill, target);
+			}
+			selectedSkill = null;
+		}
+	}
+	
+	public boolean isInCastRange(Creature target)
+	{
+		if (selectedSkill.getType() != SkillType.Targeted) return true;
+		
+		if (target == null) return false;
+		
+		float range = tmp.set(target.getX() + target.getWidth() / 2, target.getY() + target.getHeight() / 2).sub(getX() + getWidth() / 2, getY() + getHeight() / 2).len();
+		return range <= selectedSkill.getRange();
 	}
 }

@@ -1,4 +1,4 @@
-package de.dakror.burst.game.entity.enemy;
+package de.dakror.burst.game.entity.creature.enemy;
 
 import de.dakror.burst.Burst;
 
@@ -12,7 +12,7 @@ public class Monster00 extends Enemy
 	{
 		super(x, y);
 		maxHp = hp = 10;
-		name = "Monster 00";
+		setName("Monster 00");
 		spriteFg = Burst.img.createSprite("monster00_fg");
 		spriteBg = Burst.img.createSprite("monster00_bg");
 		speed = 90;
