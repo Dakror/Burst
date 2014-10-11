@@ -18,14 +18,29 @@ public class Actions
 		return new AttackAction(target);
 	}
 	
+	public static AttackAction attack(Creature target, float time)
+	{
+		return new AttackAction(target).setTime(time);
+	}
+	
 	public static AttackAction attack(int damage, Creature target)
 	{
 		return new AttackAction(damage, target);
 	}
 	
+	public static AttackAction attack(int damage, Creature target, float time)
+	{
+		return new AttackAction(damage, target).setTime(time);
+	}
+	
 	public static AttackAction attack(float ampl, Creature target)
 	{
 		return new AttackAction(ampl, target);
+	}
+	
+	public static AttackAction attack(float ampl, Creature target, float time)
+	{
+		return new AttackAction(ampl, target).setTime(time);
 	}
 	
 	public static ParticleAction particle(String name, float x, float y)

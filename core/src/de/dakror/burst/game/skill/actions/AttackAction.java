@@ -10,6 +10,7 @@ import de.dakror.burst.game.entity.creature.Creature;
 public class AttackAction extends Action
 {
 	float ampl;
+	float time;
 	int damage;
 	Creature target;
 	boolean queued;
@@ -35,13 +36,27 @@ public class AttackAction extends Action
 		queued = false;
 	}
 	
+	public AttackAction setTime(float time)
+	{
+		this.time = time;
+		return this;
+	}
+	
 	@Override
 	public boolean act(float delta)
 	{
 		if (!queued)
 		{
-			if (damage > 0) ((Creature) actor).attack(target, damage);
-			else if (ampl > 1) ((Creature) actor).attack(target, ampl);
+			if (damage > 0)
+			{
+				if (time > 0) ((Creature) actor).attack(target, damage, time);
+				else ((Creature) actor).attack(target, damage);
+			}
+			else if (ampl > 1)
+			{
+				if (time > 0) ((Creature) actor).attack(target, ampl, time);
+				else ((Creature) actor).attack(target, ampl);
+			}
 			else ((Creature) actor).attack(target);
 			queued = true;
 		}

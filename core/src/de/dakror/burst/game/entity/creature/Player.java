@@ -29,6 +29,7 @@ public class Player extends Creature implements InputProcessor
 	
 	public Skill selectedSkill;
 	
+	boolean autoAttackRequestedDirectionSet;
 	boolean autoAttackRequested;
 	Creature autoAttackRequestedTarget;
 	
@@ -60,6 +61,11 @@ public class Player extends Creature implements InputProcessor
 			{
 				attack(autoAttackRequestedTarget);
 				autoAttackRequested = false;
+			}
+			else if (!autoAttackRequestedDirectionSet)
+			{
+				dest.set(autoAttackRequestedTarget.getPos().add(autoAttackRequestedTarget.getWidth() / 2, autoAttackRequestedTarget.getHeight() / 2));
+				autoAttackRequestedDirectionSet = true;
 			}
 		}
 		
@@ -94,6 +100,7 @@ public class Player extends Creature implements InputProcessor
 	{
 		if (autoAttackRequested || autoAttackRequestedTarget != null) return false;
 		
+		autoAttackRequestedDirectionSet = false;
 		autoAttackRequested = true;
 		autoAttackRequestedTarget = target;
 		return true;
@@ -169,6 +176,10 @@ public class Player extends Creature implements InputProcessor
 		{
 			destProgress = 0;
 			dest.set(screenX, Gdx.graphics.getHeight() - screenY);
+			
+			autoAttackRequestedDirectionSet = true;
+			autoAttackRequested = false;
+			autoAttackRequestedTarget = null;
 			return true;
 		}
 		return false;

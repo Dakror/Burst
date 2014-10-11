@@ -21,7 +21,7 @@ import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
 /**
  * @author Dakror
  */
-public enum Skill implements Provider
+public enum Skill
 {
 	Shadow_Jump("You turn into fading shadows to jump behind your selected [enemy]target[] only to reappear and deal [scale]%3*ad%[] [GRAY](3 * [][ad]%1*ad%[][GRAY])[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
 	{
@@ -36,13 +36,13 @@ public enum Skill implements Provider
 			
 			Vector2 backSide = target.getPos().sub(sub);
 			
-			return sequence(visible(false), particle("shadow.p", 75, 75), moveTo(backSide.x, backSide.y), delay(0.3f), particle("shadow.p", 75, 75), delay(0.2f), visible(true), attack(3.0f, target));
+			return sequence(visible(false), particle("shadow.p", 75, 75), moveTo(backSide.x, backSide.y), delay(0.3f), particle("shadow.p", 75, 75), delay(0.2f), visible(true), attack(3.0f, target, 0.25f));
 		}
 		
 		@Override
 		public boolean canCastOn(Creature target)
 		{
-			return target instanceof Enemy;
+			return target instanceof Enemy && !target.isDead();
 		}
 	},
 	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location.\nThe projectile passes through every [enemy]enemy[] on the way to deal [flat]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
@@ -60,10 +60,15 @@ public enum Skill implements Provider
 		{
 			return true;
 		}
+		
+		@Override
+		public float getDefaultHitBoxRadius()
+		{
+			return 16;
+		}
 	},
 	
 	;
-	
 	
 	static
 	{
@@ -75,7 +80,6 @@ public enum Skill implements Provider
 		
 		Colors.put("enemy", Color.valueOf("c14949"));
 	}
-	
 	
 	String description, icon;
 	
@@ -152,5 +156,17 @@ public enum Skill implements Provider
 	public boolean isStopMotion()
 	{
 		return stopMotion;
+	}
+	
+	/**
+	 * @param target will be null when not a targeted skill
+	 */
+	public abstract SequenceAction getSequence(Creature source, Creature target);
+	
+	public abstract boolean canCastOn(Creature target);
+	
+	public float getDefaultHitBoxRadius()
+	{
+		return 0;
 	}
 }
