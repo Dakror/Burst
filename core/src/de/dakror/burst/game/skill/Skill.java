@@ -99,22 +99,22 @@ public enum Skill
 		this.range = range;
 	}
 	
-	public float getCooldown()
+	public final float getCooldown()
 	{
 		return cooldown;
 	}
 	
-	public float getRange()
+	public final float getRange()
 	{
 		return range;
 	}
 	
-	public String getDescription()
+	public final String getDescription()
 	{
 		return description;
 	}
 	
-	public String getParsedDescription(Creature source)
+	public final String getParsedDescription(Creature source)
 	{
 		Array<String> ps = new Array<String>(new String[] { "ad", "as", "ra", "sp", "hp", "hpm" });
 		Array<Float> ds = new Array<Float>(new Float[] { (float) source.getAttackDamage(), source.getAttackTime(), source.getAttackRange(), source.getSpeed(), (float) source.getHp(), (float) source.getMaxHp() });
@@ -143,20 +143,22 @@ public enum Skill
 		return sb.toString();
 	}
 	
-	public String getIcon()
+	public final String getIcon()
 	{
 		return icon;
 	}
 	
-	public SkillType getType()
+	public final SkillType getType()
 	{
 		return type;
 	}
 	
-	public boolean isStopMotion()
+	public final boolean isStopMotion()
 	{
 		return stopMotion;
 	}
+	
+	// -- abstracts & overridables -- //
 	
 	/**
 	 * @param target will be null when not a targeted skill

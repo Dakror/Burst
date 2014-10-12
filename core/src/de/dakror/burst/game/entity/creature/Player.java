@@ -27,7 +27,7 @@ public class Player extends Creature implements InputProcessor
 	
 	final Vector2 dest = new Vector2();
 	
-	public Skill selectedSkill;
+	Skill selectedSkill;
 	
 	boolean autoAttackRequestedDirectionSet;
 	boolean autoAttackRequested;
