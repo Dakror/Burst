@@ -1,6 +1,7 @@
 package de.dakror.burst.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ import de.dakror.burst.game.entity.projectile.Projectile;
 import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.layer.HudLayer;
 import de.dakror.burst.layer.Layer;
+import de.dakror.burst.util.D;
 import de.dakror.burst.util.MultiParticleEffectPool;
 
 /**
@@ -139,7 +141,7 @@ public class Game extends Layer
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		if (!anyCreatureTargeted && player.getSelectedSkill() != null && player.getSelectedSkill().getType() != SkillType.Targeted)
+		if (!anyCreatureTargeted && player.getSelectedSkill() != null && player.getSelectedSkill().getType() != SkillType.Targeted && (D.android() || button == Buttons.LEFT))
 		{
 			player.activateSelectedSkill(null);
 		}

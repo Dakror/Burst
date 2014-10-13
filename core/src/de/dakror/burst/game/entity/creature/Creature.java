@@ -1,5 +1,6 @@
 package de.dakror.burst.game.entity.creature;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,6 +14,7 @@ import de.dakror.burst.Burst;
 import de.dakror.burst.game.Game;
 import de.dakror.burst.game.entity.Entity;
 import de.dakror.burst.game.skill.Skill;
+import de.dakror.burst.util.D;
 
 /**
  * @author Dakror
@@ -65,7 +67,7 @@ public abstract class Creature extends Entity
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 			{
-				if (bump.contains(x, y))
+				if (bump.contains(x, y) && (D.android() || button == Buttons.LEFT))
 				{
 					if (Game.player.getSelectedSkill() != null)
 					{

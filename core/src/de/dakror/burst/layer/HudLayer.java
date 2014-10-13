@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -78,26 +79,21 @@ public class HudLayer extends Layer
 			{
 				float px = Game.player.getX() + Game.player.getWidth() / 2;
 				float py = Game.player.getY() + Game.player.getHeight() / 2;
-				float x = px - Game.player.getSelectedSkill().getRange();
-				float y = py - Game.player.getSelectedSkill().getRange();
 				
-				tmp.set(x, y);
+				tmp.set(px, py).sub(Gdx.input.getX(), Gdx.input.getY()).limit(Game.player.getSelectedSkill().getRange());
 				
 				float hbRadius = Game.player.getSelectedSkill().getDefaultHitBoxRadius();
 				AtlasRegion r = Burst.img.findRegion("arrow");
 				
-				stage.getBatch().draw(r, px, py, r.getRegionWidth(), hbRadius * 2);
+				float imgMalus = 76f / r.getRegionHeight();
 				
-				// float angle = (float) Math.toDegrees(Math.atan2(y, x));
-				// float range = Game.player.getSelectedSkill().getRange();
-				//
-				// float hbRadius = Game.player.getSelectedSkill().getDefaultHitBoxRadius();
-				//
-				//
-				//
-				// float imgMalus = 76f / r.getRegionHeight();
-				//
-				// stage.getBatch().draw(r, x, y, (r.getRegionWidth() / r.getRegionHeight()) * (hbRadius * (2 + imgMalus)), hbRadius * (2 + imgMalus));
+				float height = hbRadius * 2 * (1 + imgMalus);
+				
+				Affine2 a = new Affine2();
+				a.translate(px, py);
+				a.rotateRad((float) Math.atan2(tmp.y, -tmp.x));
+				a.translate(0, -height / 2);
+				stage.getBatch().draw(r, r.getRegionWidth(), height, a);
 			}
 			stage.getBatch().setColor(1, 1, 1, 1);
 		}
