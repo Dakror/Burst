@@ -31,6 +31,7 @@ public class Player extends Creature implements InputProcessor
 	
 	boolean autoAttackRequestedDirectionSet;
 	boolean autoAttackRequested;
+	
 	Creature autoAttackRequestedTarget;
 	
 	public Creature selectedTarget;
@@ -71,11 +72,30 @@ public class Player extends Creature implements InputProcessor
 		
 		if (attackDone && autoAttackRequestedTarget != null && !autoAttackRequested) autoAttackRequestedTarget = null;
 		
-		if (dest.len() > 0)
+		boolean w = Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP);
+		boolean a = Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT);
+		boolean s = Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN);
+		boolean d = Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
+		
+		if (dest.len() > 0 || w || a || s || d)
 		{
 			if (destProgress < destAnimTime) destProgress += delta;
 			
 			tmp.set(dest).sub(getPos()).sub(getWidth() / 2, getHeight() - (bump.y + bump.height));
+			
+			if (w || a || s || d)
+			{
+				dest.setZero();
+				tmp.setZero();
+				
+				if (w) tmp.y += speed;
+				if (a) tmp.x -= speed;
+				if (s) tmp.y -= speed;
+				if (d) tmp.x += speed;
+			}
+			
+			
+			
 			if (tmp.len() > speed * delta) tmp.limit(speed * delta);
 			else tmp.scl(delta);
 			
@@ -140,11 +160,11 @@ public class Player extends Creature implements InputProcessor
 	{
 		if (activeSkill == null)
 		{
-			if (keycode == Keys.Q)
+			if (keycode == Keys.NUM_1)
 			{
 				selectedSkill = Skill.Shadow_Jump;
 			}
-			if (keycode == Keys.W)
+			if (keycode == Keys.NUM_2)
 			{
 				selectedSkill = Skill.Shuriken_Throw;
 			}

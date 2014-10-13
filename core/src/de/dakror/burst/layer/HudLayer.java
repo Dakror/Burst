@@ -87,11 +87,11 @@ public class HudLayer extends Layer
 				
 				float imgMalus = 76f / r.getRegionHeight();
 				
-				float height = hbRadius * 2 * (1 + imgMalus);
+				float height = hbRadius * 2.0f * (1 + imgMalus);
 				
 				Affine2 a = new Affine2();
 				a.translate(px, py);
-				a.rotateRad((float) Math.atan2(tmp.y, -tmp.x));
+				a.rotateRad((float) Math.atan2(tmp.y, tmp.x));
 				a.translate(0, -height / 2);
 				stage.getBatch().draw(r, r.getRegionWidth(), height, a);
 			}
