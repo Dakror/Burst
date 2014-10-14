@@ -43,10 +43,10 @@ public class HudLayer extends Layer
 		skillGroup.row().center();
 		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
 		{
-			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 2 : 1)).spaceLeft(16).padBottom(D.android() ? 32 : 0);
+			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * D.d()).spaceLeft(16 * D.d());
 		}
 		
-		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);
+		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 65 * D.d());
 		stage.addActor(skillGroup);
 		
 		initDone = true;

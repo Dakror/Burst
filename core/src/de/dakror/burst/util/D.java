@@ -55,4 +55,9 @@ public class D
 	{
 		return Gdx.app.getType() == ApplicationType.Android;
 	}
+	
+	public static float d()
+	{
+		return Math.max(1, (float) Math.sqrt(Gdx.graphics.getDensity()));
+	}
 }
