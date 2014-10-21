@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 
 import de.dakror.burst.game.entity.creature.Creature;
+import de.dakror.burst.game.entity.creature.Player;
 import de.dakror.burst.game.entity.creature.enemy.Enemy;
 import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
 
@@ -58,7 +59,7 @@ public enum Skill
 		@Override
 		public boolean canCastOn(Creature target)
 		{
-			return true;
+			return !(target instanceof Player);
 		}
 		
 		@Override

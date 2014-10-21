@@ -192,7 +192,7 @@ public class Player extends Creature implements InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if (button == Buttons.RIGHT || (D.android() && selectedSkill == null))
+		if (button == Buttons.RIGHT || D.android())
 		{
 			destProgress = 0;
 			dest.set(screenX, Gdx.graphics.getHeight() - screenY);

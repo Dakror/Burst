@@ -80,7 +80,7 @@ public class HudLayer extends Layer
 				float px = Game.player.getX() + Game.player.getWidth() / 2;
 				float py = Game.player.getY() + Game.player.getHeight() / 2;
 				
-				tmp.set(px, py).sub(Gdx.input.getX(), Gdx.input.getY()).limit(Game.player.getSelectedSkill().getRange());
+				tmp.set(px, py).sub(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()).limit(Game.player.getSelectedSkill().getRange());
 				
 				float hbRadius = Game.player.getSelectedSkill().getDefaultHitBoxRadius();
 				AtlasRegion r = Burst.img.findRegion("arrow");
@@ -91,7 +91,7 @@ public class HudLayer extends Layer
 				
 				Affine2 a = new Affine2();
 				a.translate(px, py);
-				a.rotateRad((float) Math.atan2(tmp.y, tmp.x));
+				a.rotateRad((float) (Math.atan2(tmp.y, tmp.x) + Math.PI));
 				a.translate(0, -height / 2);
 				stage.getBatch().draw(r, r.getRegionWidth(), height, a);
 			}
