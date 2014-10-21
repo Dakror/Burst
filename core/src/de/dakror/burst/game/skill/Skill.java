@@ -15,13 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 
 import de.dakror.burst.game.entity.creature.Creature;
+import de.dakror.burst.game.entity.creature.Player;
 import de.dakror.burst.game.entity.creature.enemy.Enemy;
 import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
 
 /**
  * @author Dakror
  */
-public enum Skill implements Provider
+public enum Skill
 {
 	Shadow_Jump("You turn into fading shadows to jump behind your selected [enemy]target[] only to reappear and deal [scale]%3*ad%[] [GRAY](3 * [][ad]%1*ad%[][GRAY])[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
 	{
@@ -36,13 +37,13 @@ public enum Skill implements Provider
 			
 			Vector2 backSide = target.getPos().sub(sub);
 			
-			return sequence(visible(false), particle("shadow.p", 75, 75), moveTo(backSide.x, backSide.y), delay(0.3f), particle("shadow.p", 75, 75), delay(0.2f), visible(true), attack(3.0f, target));
+			return sequence(visible(false), particle("shadow.p", 75, 75), moveTo(backSide.x, backSide.y), delay(0.3f), particle("shadow.p", 75, 75), delay(0.2f), visible(true), attack(3.0f, target, 0.25f));
 		}
 		
 		@Override
 		public boolean canCastOn(Creature target)
 		{
-			return target instanceof Enemy;
+			return target instanceof Enemy && !target.isDead();
 		}
 	},
 	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location.\nThe projectile passes through every [enemy]enemy[] on the way to deal [flat]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
@@ -58,12 +59,17 @@ public enum Skill implements Provider
 		@Override
 		public boolean canCastOn(Creature target)
 		{
-			return true;
+			return !(target instanceof Player);
+		}
+		
+		@Override
+		public float getDefaultHitBoxRadius()
+		{
+			return 16;
 		}
 	},
 	
 	;
-	
 	
 	static
 	{
@@ -75,7 +81,6 @@ public enum Skill implements Provider
 		
 		Colors.put("enemy", Color.valueOf("c14949"));
 	}
-	
 	
 	String description, icon;
 	
@@ -95,22 +100,22 @@ public enum Skill implements Provider
 		this.range = range;
 	}
 	
-	public float getCooldown()
+	public final float getCooldown()
 	{
 		return cooldown;
 	}
 	
-	public float getRange()
+	public final float getRange()
 	{
 		return range;
 	}
 	
-	public String getDescription()
+	public final String getDescription()
 	{
 		return description;
 	}
 	
-	public String getParsedDescription(Creature source)
+	public final String getParsedDescription(Creature source)
 	{
 		Array<String> ps = new Array<String>(new String[] { "ad", "as", "ra", "sp", "hp", "hpm" });
 		Array<Float> ds = new Array<Float>(new Float[] { (float) source.getAttackDamage(), source.getAttackTime(), source.getAttackRange(), source.getSpeed(), (float) source.getHp(), (float) source.getMaxHp() });
@@ -139,18 +144,32 @@ public enum Skill implements Provider
 		return sb.toString();
 	}
 	
-	public String getIcon()
+	public final String getIcon()
 	{
 		return icon;
 	}
 	
-	public SkillType getType()
+	public final SkillType getType()
 	{
 		return type;
 	}
 	
-	public boolean isStopMotion()
+	public final boolean isStopMotion()
 	{
 		return stopMotion;
+	}
+	
+	// -- abstracts & overridables -- //
+	
+	/**
+	 * @param target will be null when not a targeted skill
+	 */
+	public abstract SequenceAction getSequence(Creature source, Creature target);
+	
+	public abstract boolean canCastOn(Creature target);
+	
+	public float getDefaultHitBoxRadius()
+	{
+		return 0;
 	}
 }

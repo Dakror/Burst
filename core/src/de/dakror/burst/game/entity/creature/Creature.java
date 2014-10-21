@@ -26,8 +26,11 @@ public abstract class Creature extends Entity
 	
 	final Vector2 attack = new Vector2();
 	float attackProgress;
+	
 	int nextAttackDamage;
 	float nextAttackAmpl;
+	float nextAttackTime;
+	
 	boolean attacked;
 	public boolean attackDone;
 	Creature target;
@@ -103,19 +106,20 @@ public abstract class Creature extends Entity
 		{
 			attackProgress += delta;
 			
-			if (attackProgress / attackTime >= 0.3f && !attacked)
+			if (attackProgress / nextAttackTime >= 0.3f && !attacked)
 			{
 				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage), attack.angle() + 180, this);
 				attacked = true;
 			}
 			
-			if (attackProgress / attackTime > 1)
+			if (attackProgress / nextAttackTime > 1)
 			{
 				attack.setZero();
 				attackProgress = 0;
 				attacked = false;
 				nextAttackDamage = 0;
 				nextAttackAmpl = 0;
+				nextAttackTime = 0;
 				attackDone = true;
 			}
 		}
@@ -267,6 +271,16 @@ public abstract class Creature extends Entity
 	
 	public void attack(Creature e, int damage)
 	{
+		attack(e, damage, attackTime);
+	}
+	
+	public void attack(Creature e, float ampl)
+	{
+		attack(e, ampl, attackTime);
+	}
+	
+	public void attack(Creature e, int damage, float time)
+	{
 		attackDone = false;
 		target = e;
 		attack.set(getPos().sub(e.getPos()).limit(attackRange));
@@ -274,9 +288,10 @@ public abstract class Creature extends Entity
 		attacked = false;
 		
 		nextAttackDamage = damage;
+		nextAttackTime = time;
 	}
 	
-	public void attack(Creature e, float ampl)
+	public void attack(Creature e, float ampl, float time)
 	{
 		attackDone = false;
 		target = e;
@@ -285,6 +300,7 @@ public abstract class Creature extends Entity
 		attacked = false;
 		
 		nextAttackAmpl = ampl;
+		nextAttackTime = time;
 	}
 	
 	public IntFloatMap getCooldowns()
