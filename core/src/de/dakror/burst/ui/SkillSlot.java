@@ -49,7 +49,7 @@ public class SkillSlot extends Button
 		
 		TextureRegion r = Burst.img.findRegion(skill.getIcon());
 		r.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		add(new Image(r)).size(48 * (D.android() ? 2 : 1)).expand();
+		add(new Image(r)).size(48 * (D.android() ? 1.5f : 1)).expand();
 		
 		font = new BitmapFont();
 		font.setMarkupEnabled(true);

@@ -43,7 +43,7 @@ public class Game extends Layer
 	{
 		instance = this;
 		
-		camera = new OrthographicCamera();
+		camera = new OrthographicCamera(1920, 1080);
 		stage = new Stage(new ScreenViewport(camera));
 		
 		particles = new MultiParticleEffectPool();
@@ -145,6 +145,8 @@ public class Game extends Layer
 		{
 			player.activateSelectedSkill(null);
 		}
+		
+		anyCreatureTargeted = false;
 		return false;
 	}
 	

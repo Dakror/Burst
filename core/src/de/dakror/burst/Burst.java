@@ -12,7 +12,6 @@ import com.badlogic.gdx.input.GestureDetector;
 import de.dakror.burst.layer.DebugLayer;
 import de.dakror.burst.layer.Layer;
 import de.dakror.burst.layer.LoadingLayer;
-import de.dakror.burst.util.D;
 import de.dakror.burst.util.InternalAssetManager;
 import de.dakror.burst.util.base.GameBase;
 
@@ -55,8 +54,6 @@ public class Burst extends GameBase
 		
 		for (Layer l : layers)
 			if (l.initDone) l.render(delta);
-		
-		D.p(Gdx.graphics.getDensity());
 	}
 	
 	@Override

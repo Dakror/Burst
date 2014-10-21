@@ -43,10 +43,10 @@ public class HudLayer extends Layer
 		skillGroup.row().center();
 		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
 		{
-			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * D.d()).spaceLeft(16 * D.d());
+			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 1.5f : 1)).spaceLeft(16);
 		}
 		
-		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 65 * D.d());
+		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 65 + (D.android() ? 30 : 0));
 		stage.addActor(skillGroup);
 		
 		initDone = true;
@@ -119,7 +119,7 @@ public class HudLayer extends Layer
 	public void resize(int width, int height)
 	{
 		super.resize(width, height);
-		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 70);
+		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 65 + (D.android() ? 30 : 0));
 	}
 	
 	public void showBloodFlash()
