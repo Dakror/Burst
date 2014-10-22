@@ -84,16 +84,32 @@ public class HudLayer extends Layer
 				
 				float hbRadius = Game.player.getSelectedSkill().getDefaultHitBoxRadius();
 				AtlasRegion r = Burst.img.findRegion("arrow");
+				AtlasRegion r2 = Burst.img.findRegion("arrowShaft");
+				AtlasRegion r3 = Burst.img.findRegion("arrowShaftMiddle");
 				
 				float imgMalus = 76f / r.getRegionHeight();
 				
 				float height = hbRadius * 2.0f * (1 + imgMalus);
 				
+				float scale = (height / r.getRegionHeight());
+				
+				float width = r.getRegionWidth() * scale;
+				
+				float scaleInArrow = 363f / 541f;
+				
 				Affine2 a = new Affine2();
 				a.translate(px, py);
 				a.rotateRad((float) (Math.atan2(tmp.y, tmp.x) + Math.PI));
-				a.translate(0, -height / 2);
-				stage.getBatch().draw(r, r.getRegionWidth(), height, a);
+				
+				a.translate(0, -r2.getRegionHeight() * scale);
+				stage.getBatch().draw(r2, r2.getRegionWidth() * scale * 2, r2.getRegionHeight() * scale * 2, a);
+				
+				a.translate(r2.getRegionWidth() * scale * 2 - 0.25f, 0);
+				stage.getBatch().draw(r3, Game.player.getSelectedSkill().getRange() - width * (1 - scaleInArrow), r3.getRegionHeight() * scale * 2, a);
+				a.translate(0, r2.getRegionHeight() * scale);
+				
+				a.translate(Game.player.getSelectedSkill().getRange() - width, -height / 2);
+				stage.getBatch().draw(r, width, height, a);
 			}
 			stage.getBatch().setColor(1, 1, 1, 1);
 		}

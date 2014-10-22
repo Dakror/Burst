@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -38,10 +40,15 @@ public class Game extends Layer
 	
 	public boolean anyCreatureTargeted;
 	
+	ShaderProgram plasma;
+	
 	@Override
 	public void show()
 	{
 		instance = this;
+		
+		plasma = new ShaderProgram(Gdx.files.internal("shader/plasma.vs"), Gdx.files.internal("shader/plasma.fs"));
+		if (!plasma.isCompiled()) throw new IllegalArgumentException("Error compiling shader: " + plasma.getLog());
 		
 		camera = new OrthographicCamera(1920, 1080);
 		stage = new Stage(new ScreenViewport(camera));
@@ -77,7 +84,14 @@ public class Game extends Layer
 	@Override
 	public void render(float delta)
 	{
+		stage.getBatch().setShader(plasma);
+		stage.getBatch().begin();
+		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage.getBatch().end();
+		stage.getBatch().setShader(null);
+		
 		stage.draw();
+		
 		stage.getBatch().begin();
 		
 		particles.draw((SpriteBatch) stage.getBatch(), delta);
