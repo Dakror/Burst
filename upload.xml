@@ -9,7 +9,7 @@
 	
 	<target name="upload">
 	    <copy file="desktop/build/libs/desktop-1.0.jar" tofile="${project.name}.jar" />
-	    <copy file="android/build/apk/android-release-unsigned.jar" tofile="${project.name}.apk" />
+	    <copy file="android/build/apk/android-release-unsigned.apk" tofile="${project.name}.apk" />
 	    
    		<signjar jar="${project.name}.jar" keystore="http://dakror.de/bin/dakrorKeystore.jks" alias="dakror"
 			storepass="dakrorKeystore" />
