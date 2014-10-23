@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -38,9 +39,13 @@ public class Game extends Layer
 	boolean noWave;
 	long time;
 	
+	float runTime;
+	
 	public boolean anyCreatureTargeted;
 	
 	ShaderProgram plasma;
+	
+	final Vector2 resCache = new Vector2();
 	
 	@Override
 	public void show()
@@ -84,10 +89,17 @@ public class Game extends Layer
 	@Override
 	public void render(float delta)
 	{
-		stage.getBatch().setShader(plasma);
 		stage.getBatch().begin();
+		
+		stage.getBatch().setShader(plasma);
+		plasma.setUniformf("u_time", runTime += delta);
+		plasma.setUniformf("u_resolution", resCache.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+		
+		
 		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
 		stage.getBatch().end();
+		
 		stage.getBatch().setShader(null);
 		
 		stage.draw();
