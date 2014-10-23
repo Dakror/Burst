@@ -2,6 +2,7 @@ package de.dakror.burst.layer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.ParticleEffectLoader.ParticleEffectParameter;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -28,7 +29,11 @@ public class LoadingLayer extends Layer
 		font = new BitmapFont();
 		stage = new Stage(new ScreenViewport());
 		
+		Burst.assets.load("img/blood.png", Texture.class);
+		Burst.assets.load("img/background.png", Texture.class);
+		
 		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
+		Burst.assets.load("font/tele.fnt", BitmapFont.class);
 		
 		ParticleEffectParameter pep = new ParticleEffectParameter();
 		pep.atlasFile = "img/pack.atlas";
@@ -45,6 +50,8 @@ public class LoadingLayer extends Layer
 			Burst.img = Burst.assets.get("img/pack.atlas", TextureAtlas.class);
 			Burst.instance.removeLayer(this);
 			Burst.instance.addLayer(new Game());
+			Burst.instance.addLayer(Game.hud = new HudLayer());
+			
 			return;
 		}
 		

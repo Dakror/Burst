@@ -2,6 +2,7 @@ package de.dakror.burst.util;
 
 import java.util.Arrays;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -48,5 +49,10 @@ public class D
 			s = " " + s;
 		
 		return s;
+	}
+	
+	public static boolean android()
+	{
+		return Gdx.app.getType() == ApplicationType.Android;
 	}
 }

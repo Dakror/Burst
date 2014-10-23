@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -325,7 +326,7 @@ public class InternalAssetManager
 	{
 		try
 		{
-			return new File(InternalAssetManager.class.getProtectionDomain().getCodeSource().getLocation().toURI()).isFile();
+			return Gdx.app.getType() != ApplicationType.Desktop || new File(InternalAssetManager.class.getProtectionDomain().getCodeSource().getLocation().toURI()).isFile();
 		}
 		catch (URISyntaxException e)
 		{
