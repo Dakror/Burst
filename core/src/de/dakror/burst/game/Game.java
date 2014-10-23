@@ -94,9 +94,9 @@ public class Game extends Layer
 		stage.getBatch().setShader(plasma);
 		plasma.setUniformf("u_time", runTime += delta);
 		plasma.setUniformf("u_resolution", resCache.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-		plasma.setUniformf("u_speed", 0.5f);
+		plasma.setUniformf("u_speed", 1);
 		
-		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), -1, -1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		stage.getBatch().end();
 		
