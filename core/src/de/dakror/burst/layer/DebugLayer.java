@@ -54,13 +54,13 @@ public class DebugLayer extends Layer
 		Burst.shapeRenderer.setProjectionMatrix(spriteBatch.getProjectionMatrix());
 		Burst.shapeRenderer.identity();
 		Burst.shapeRenderer.begin(ShapeType.Filled);
-		Burst.shapeRenderer.setColor(Color.BLACK);
+		Burst.shapeRenderer.setColor(Color.WHITE);
 		Burst.shapeRenderer.rect(0, 0, 5, full);
 		for (int i = 0; i < renderTimes.size; i++)
 		{
 			float rt = renderTimes.get(i) * fac;
-			Color c = new Color(rt, 0, 0, 0.5f);
-			Burst.shapeRenderer.rect(5 + i, 0, 1, rt * full, Color.BLACK, Color.BLACK, c, c);
+			Color c = new Color(rt, 0, 0, 1.0f);
+			Burst.shapeRenderer.rect(5 + i, 0, 1, rt * full, Color.WHITE, Color.WHITE, c, c);
 		}
 		
 		Burst.shapeRenderer.end();

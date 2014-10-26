@@ -39,6 +39,8 @@ public class Burst extends GameBase
 		getMultiplexer().addProcessor(0, this);
 		Gdx.input.setInputProcessor(getMultiplexer());
 		
+		if (InternalAssetManager.isRunningFromJarFile()) setFullscreen(true);
+		
 		setLayer(new LoadingLayer());
 	}
 	
@@ -49,7 +51,7 @@ public class Burst extends GameBase
 		for (Layer l : layers)
 			if (l.initDone) l.update(delta);
 		
-		Gdx.gl.glClearColor(0.05f, 0.05f, 0.05f, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		for (Layer l : layers)

@@ -36,8 +36,7 @@ public class Game extends Layer
 	public static HudLayer hud;
 	
 	int kills;
-	boolean noWave;
-	long time;
+	int enemiesAlive;
 	
 	float runTime;
 	
@@ -77,12 +76,6 @@ public class Game extends Layer
 		if (!paused)
 		{
 			stage.act(delta);
-			if (System.currentTimeMillis() - time > 3000 && noWave)
-			{
-				for (int i = 0; i < MathUtils.random(1, 3); i++)
-					spawnEnemy();
-				noWave = false;
-			}
 		}
 	}
 	
@@ -94,9 +87,11 @@ public class Game extends Layer
 		stage.getBatch().setShader(plasma);
 		plasma.setUniformf("u_time", runTime += delta);
 		plasma.setUniformf("u_resolution", resCache.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-		plasma.setUniformf("u_speed", 1);
+		plasma.setUniformf("u_speed", 0.4f);
+		plasma.setUniformf("u_brightness", 1);
+		plasma.setUniformf("u_intensity", 1);
 		
-		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), -1, -1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage.getBatch().draw(Burst.assets.get("img/background.png", Texture.class), -1, -1, Gdx.graphics.getWidth() + 2, Gdx.graphics.getHeight() + 2);
 		
 		stage.getBatch().end();
 		
@@ -141,6 +136,7 @@ public class Game extends Layer
 		}
 		
 		spawnEntity(new Monster00(x, y));
+		enemiesAlive++;
 	}
 	
 	public void spawnEntity(Entity e)
@@ -151,10 +147,13 @@ public class Game extends Layer
 	
 	public void addKill()
 	{
+		enemiesAlive--;
 		kills++;
-		int next = MathUtils.random(0, 2);
-		noWave = next == 0;
-		if (noWave) time = System.currentTimeMillis();
+		hud.effectTime = 1;
+		int next = MathUtils.random(1, Math.max(2, (int) (Math.sqrt(kills))));
+		
+		next = enemiesAlive + next > kills ? 1 : Math.max(1, kills - enemiesAlive);
+		
 		for (int i = 0; i < next; i++)
 			spawnEnemy();
 	}

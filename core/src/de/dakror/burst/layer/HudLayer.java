@@ -27,10 +27,13 @@ public class HudLayer extends Layer
 	float bloodFlashAlpha = 0;
 	
 	BitmapFont killDisplay;
+	BitmapFont killDisplayEffect;
 	
 	Table skillGroup;
 	
 	final Vector2 tmp = new Vector2();
+	
+	public float effectTime = 0;
 	
 	@Override
 	public void show()
@@ -38,6 +41,8 @@ public class HudLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
+		killDisplayEffect = new BitmapFont(Gdx.files.internal("font/tele.fnt"));
+		
 		skillGroup = new Table();
 		
 		skillGroup.row().center();
@@ -117,8 +122,22 @@ public class HudLayer extends Layer
 		int width = 400;
 		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 5, width, Game.player.getHpPercentage());
 		
-		TextBounds tb = killDisplay.getBounds(Game.instance.getKills() + "");
-		killDisplay.draw(stage.getBatch(), Game.instance.getKills() + "", (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
+		String text = Game.instance.getKills() + "";
+		
+		TextBounds tb = killDisplay.getBounds(text);
+		killDisplay.draw(stage.getBatch(), text, (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
+		
+		if (effectTime > 0)
+		{
+			killDisplayEffect.setColor(1, 0.75f, 0, Math.min(1, effectTime * 2));
+			
+			killDisplayEffect.setScale(2 - effectTime);
+			TextBounds tb2 = killDisplayEffect.getBounds(text);
+			killDisplayEffect.draw(stage.getBatch(), text, (Gdx.graphics.getWidth() - tb2.width) / 2, Gdx.graphics.getHeight() - tb2.height / 2);
+			
+			effectTime -= delta * 2;
+			if (effectTime < 0) effectTime = 0;
+		}
 		
 		if (bloodFlashAlpha > 0)
 		{

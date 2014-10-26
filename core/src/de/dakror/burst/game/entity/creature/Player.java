@@ -94,19 +94,21 @@ public class Player extends Creature implements InputProcessor
 				if (d) tmp.x += speed;
 			}
 			
-			
-			
 			if (tmp.len() > speed * delta) tmp.limit(speed * delta);
 			else tmp.scl(delta);
 			
 			float deltaX = tmp.x, deltaY = tmp.y;
 			
+			boolean isStuckAnyway = false;
+			
 			for (Actor e : Game.instance.getStage().getActors())
 			{
 				if (e instanceof Creature && !((Entity) e).isDead() && e != this)
 				{
-					if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
-					if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
+					if (intersects((Entity) e)) isStuckAnyway = true;
+					
+					if (intersects((Entity) e, tmp.set(-deltaX, 0)) && !isStuckAnyway) deltaX = 0;
+					if (intersects((Entity) e, tmp.set(0, -deltaY)) && !isStuckAnyway) deltaY = 0;
 					
 					if (deltaX == 0 && deltaY == 0) break;
 				}
