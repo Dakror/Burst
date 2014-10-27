@@ -48,14 +48,7 @@ f img/raw/shadowjump.png
 f img/raw/shuriken.png
 f img/raw/slot.png
 f img/raw/square.png
-f img/raw/target_0.png
-f img/raw/target_1.png
-f img/raw/target_2.png
-f img/raw/target_3.png
-f img/raw/target_4.png
-f img/raw/target_5.png
-f img/raw/target_6.png
-f img/raw/target_7.png
+f img/raw/target.png
 d shader
 f shader/plasma.fs
 f shader/plasma.vs
