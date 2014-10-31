@@ -1,19 +1,19 @@
 
 pack.png
-size: 1434,807
+size: 1347,807
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Bar-ff3232
   rotate: false
-  xy: 1308, 24
+  xy: 1316, 558
   size: 13, 23
   orig: 13, 23
   offset: 0, 0
   index: -1
 BarBase
   rotate: false
-  xy: 1411, 782
+  xy: 1230, 428
   size: 13, 23
   orig: 13, 23
   offset: 0, 0
@@ -34,28 +34,35 @@ arrow
   index: -1
 arrowShaft
   rotate: false
-  xy: 1347, 711
+  xy: 1056, 487
   size: 62, 94
   orig: 62, 94
   offset: 0, 0
   index: -1
+arrowShaftMiddle
+  rotate: false
+  xy: 804, 487
+  size: 250, 94
+  orig: 250, 94
+  offset: 0, 0
+  index: -1
 glowBg
   rotate: false
-  xy: 804, 5
+  xy: 1108, 331
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 glowBg_bg
   rotate: false
-  xy: 926, 5
+  xy: 1108, 209
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 glowBg_fg
   rotate: false
-  xy: 1308, 49
+  xy: 1108, 87
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
@@ -69,134 +76,85 @@ grey
   index: -1
 monster00
   rotate: false
-  xy: 804, 431
+  xy: 804, 335
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 monster00_bg
   rotate: false
-  xy: 804, 279
+  xy: 804, 183
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 monster00_fg
   rotate: false
-  xy: 956, 431
+  xy: 804, 31
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 particle
   rotate: false
-  xy: 1347, 611
+  xy: 1174, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 804, 127
+  xy: 956, 335
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 player_bg
   rotate: false
-  xy: 956, 279
+  xy: 956, 183
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 player_fg
   rotate: false
-  xy: 1108, 431
+  xy: 956, 31
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 shadowjump
   rotate: false
-  xy: 1347, 645
+  xy: 1250, 517
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 shuriken
   rotate: false
-  xy: 1346, 235
+  xy: 1250, 451
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 slot
   rotate: false
-  xy: 1368, 387
+  xy: 1108, 21
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 square
   rotate: false
-  xy: 1346, 201
+  xy: 1174, 19
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 target
   rotate: false
-  xy: 956, 149
+  xy: 1120, 453
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 0
-target
-  rotate: false
-  xy: 1108, 301
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-target
-  rotate: false
-  xy: 1260, 453
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-target
-  rotate: false
-  xy: 1086, 149
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-target
-  rotate: false
-  xy: 1048, 19
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-target
-  rotate: false
-  xy: 1178, 19
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-target
-  rotate: false
-  xy: 1238, 301
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-target
-  rotate: false
-  xy: 1216, 171
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
+  index: -1

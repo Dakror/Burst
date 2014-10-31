@@ -30,6 +30,7 @@ public class LoadingLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		Burst.assets.load("img/blood.png", Texture.class);
+		Burst.assets.load("img/background.png", Texture.class);
 		
 		Burst.assets.load("img/pack.atlas", TextureAtlas.class);
 		Burst.assets.load("font/tele.fnt", BitmapFont.class);

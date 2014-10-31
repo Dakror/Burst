@@ -27,10 +27,13 @@ public class HudLayer extends Layer
 	float bloodFlashAlpha = 0;
 	
 	BitmapFont killDisplay;
+	BitmapFont killDisplayEffect;
 	
 	Table skillGroup;
 	
 	final Vector2 tmp = new Vector2();
+	
+	public float effectTime = 0;
 	
 	@Override
 	public void show()
@@ -38,6 +41,8 @@ public class HudLayer extends Layer
 		stage = new Stage(new ScreenViewport());
 		
 		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
+		killDisplayEffect = new BitmapFont(Gdx.files.internal("font/tele.fnt"));
+		
 		skillGroup = new Table();
 		
 		skillGroup.row().center();
@@ -84,16 +89,32 @@ public class HudLayer extends Layer
 				
 				float hbRadius = Game.player.getSelectedSkill().getDefaultHitBoxRadius();
 				AtlasRegion r = Burst.img.findRegion("arrow");
+				AtlasRegion r2 = Burst.img.findRegion("arrowShaft");
+				AtlasRegion r3 = Burst.img.findRegion("arrowShaftMiddle");
 				
 				float imgMalus = 76f / r.getRegionHeight();
 				
 				float height = hbRadius * 2.0f * (1 + imgMalus);
 				
+				float scale = (height / r.getRegionHeight());
+				
+				float width = r.getRegionWidth() * scale;
+				
+				float scaleInArrow = 363f / 541f;
+				
 				Affine2 a = new Affine2();
 				a.translate(px, py);
 				a.rotateRad((float) (Math.atan2(tmp.y, tmp.x) + Math.PI));
-				a.translate(0, -height / 2);
-				stage.getBatch().draw(r, r.getRegionWidth(), height, a);
+				
+				a.translate(0, -r2.getRegionHeight() * scale);
+				stage.getBatch().draw(r2, r2.getRegionWidth() * scale * 2, r2.getRegionHeight() * scale * 2, a);
+				
+				a.translate(r2.getRegionWidth() * scale * 2 - 0.25f, 0);
+				stage.getBatch().draw(r3, Game.player.getSelectedSkill().getRange() - width * (1 - scaleInArrow), r3.getRegionHeight() * scale * 2, a);
+				a.translate(0, r2.getRegionHeight() * scale);
+				
+				a.translate(Game.player.getSelectedSkill().getRange() - width, -height / 2);
+				stage.getBatch().draw(r, width, height, a);
 			}
 			stage.getBatch().setColor(1, 1, 1, 1);
 		}
@@ -101,8 +122,22 @@ public class HudLayer extends Layer
 		int width = 400;
 		Creature.renderHpBar(stage.getBatch(), (Gdx.graphics.getWidth() - width) / 2, 5, width, Game.player.getHpPercentage());
 		
-		TextBounds tb = killDisplay.getBounds(Game.instance.getKills() + "");
-		killDisplay.draw(stage.getBatch(), Game.instance.getKills() + "", (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
+		String text = Game.instance.getKills() + "";
+		
+		TextBounds tb = killDisplay.getBounds(text);
+		killDisplay.draw(stage.getBatch(), text, (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
+		
+		if (effectTime > 0)
+		{
+			killDisplayEffect.setColor(1, 0.75f, 0, Math.min(1, effectTime * 2));
+			
+			killDisplayEffect.setScale(2 - effectTime);
+			TextBounds tb2 = killDisplayEffect.getBounds(text);
+			killDisplayEffect.draw(stage.getBatch(), text, (Gdx.graphics.getWidth() - tb2.width) / 2, Gdx.graphics.getHeight() - tb2.height / 2);
+			
+			effectTime -= delta * 2;
+			if (effectTime < 0) effectTime = 0;
+		}
 		
 		if (bloodFlashAlpha > 0)
 		{

@@ -9,6 +9,7 @@ f fx/blood.p
 f fx/death.p
 f fx/shadow.p
 d img
+f img/background.png
 f img/blood.png
 f img/logo.png
 f img/logo_16.png
@@ -18,6 +19,7 @@ f img/pack.atlas
 f img/pack.png
 d img/gimp
 f img/gimp/area.xcf
+f img/gimp/background.xcf
 f img/gimp/logo.xcf
 d img/inkscape
 f img/inkscape/arrow.svg
@@ -29,6 +31,7 @@ f img/raw/BarBase.png
 f img/raw/area.png
 f img/raw/arrow.png
 f img/raw/arrowShaft.png
+f img/raw/arrowShaftMiddle.png
 f img/raw/glowBg.png
 f img/raw/glowBg_bg.png
 f img/raw/glowBg_fg.png
@@ -45,11 +48,7 @@ f img/raw/shadowjump.png
 f img/raw/shuriken.png
 f img/raw/slot.png
 f img/raw/square.png
-f img/raw/target_0.png
-f img/raw/target_1.png
-f img/raw/target_2.png
-f img/raw/target_3.png
-f img/raw/target_4.png
-f img/raw/target_5.png
-f img/raw/target_6.png
-f img/raw/target_7.png
+f img/raw/target.png
+d shader
+f shader/plasma.fs
+f shader/plasma.vs

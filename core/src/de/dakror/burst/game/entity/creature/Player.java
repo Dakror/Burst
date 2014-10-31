@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,9 +16,6 @@ import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.util.D;
 
-/**
- * @author Dakror
- */
 public class Player extends Creature implements InputProcessor
 {
 	final Vector2 tmp = new Vector2();
@@ -94,19 +92,21 @@ public class Player extends Creature implements InputProcessor
 				if (d) tmp.x += speed;
 			}
 			
-			
-			
 			if (tmp.len() > speed * delta) tmp.limit(speed * delta);
 			else tmp.scl(delta);
 			
 			float deltaX = tmp.x, deltaY = tmp.y;
 			
+			boolean isStuckAnyway = false;
+			
 			for (Actor e : Game.instance.getStage().getActors())
 			{
 				if (e instanceof Creature && !((Entity) e).isDead() && e != this)
 				{
-					if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
-					if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
+					if (intersects((Entity) e)) isStuckAnyway = true;
+					
+					if (intersects((Entity) e, tmp.set(-deltaX, 0)) && !isStuckAnyway) deltaX = 0;
+					if (intersects((Entity) e, tmp.set(0, -deltaY)) && !isStuckAnyway) deltaY = 0;
 					
 					if (deltaX == 0 && deltaY == 0) break;
 				}
@@ -134,7 +134,13 @@ public class Player extends Creature implements InputProcessor
 		if (destProgress < destAnimTime && dest.len() > 0)
 		{
 			float size = 64;
-			batch.draw(Burst.img.findRegion("target", Math.abs(Math.round((destProgress % destAnimTime) / destAnimTime * 14) - 7)), dest.x - size / 2, dest.y - size / 2, size, size);
+			Color c = batch.getColor();
+			
+			batch.setColor(1, 1, 1, (float) Math.cos(destProgress * Math.PI / 2 / destAnimTime));
+			
+			batch.draw(Burst.img.findRegion("target"), dest.x - size / 2, dest.y - size / 2, size, size);
+			
+			batch.setColor(c);
 		}
 	}
 	
