@@ -153,12 +153,12 @@ public class Game extends Layer
 		enemiesAlive--;
 		kills++;
 		hud.effectTime = 1;
-		int next = MathUtils.random(1, Math.max(2, (int) (Math.sqrt(kills))));
-		
-		next = enemiesAlive + next > kills ? 1 : Math.max(1, kills - enemiesAlive);
-		
-		for (int i = 0; i < next; i++)
-			spawnEnemy();
+		// int next = MathUtils.random(1, Math.max(2, (int) (Math.sqrt(kills))));
+		//
+		// next = enemiesAlive + next > kills ? 1 : Math.max(1, kills - enemiesAlive);
+		//
+		// for (int i = 0; i < next; i++)
+		// spawnEnemy();
 	}
 	
 	public int getKills()
