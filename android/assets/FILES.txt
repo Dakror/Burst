@@ -23,6 +23,7 @@ f img/gimp/background.xcf
 f img/gimp/logo.xcf
 d img/inkscape
 f img/inkscape/arrow.svg
+f img/inkscape/arrowProjectile.svg
 f img/inkscape/shuriken.svg
 f img/inkscape/slot.svg
 d img/raw
@@ -30,6 +31,7 @@ f img/raw/Bar-ff3232.png
 f img/raw/BarBase.png
 f img/raw/area.png
 f img/raw/arrow.png
+f img/raw/arrowProjectile.png
 f img/raw/arrowShaft.png
 f img/raw/arrowShaftMiddle.png
 f img/raw/glowBg.png
@@ -39,6 +41,9 @@ f img/raw/grey.png
 f img/raw/monster00.png
 f img/raw/monster00_bg.png
 f img/raw/monster00_fg.png
+f img/raw/monster01.png
+f img/raw/monster01_bg.png
+f img/raw/monster01_fg.png
 f img/raw/pack.json
 f img/raw/particle.png
 f img/raw/player.png
