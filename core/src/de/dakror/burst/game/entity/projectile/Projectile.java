@@ -11,8 +11,7 @@ import de.dakror.burst.game.entity.creature.Creature;
 /**
  * @author Dakror
  */
-public class Projectile extends Entity
-{
+public class Projectile extends Entity {
 	protected Creature source;
 	protected final Vector2 direction = new Vector2();
 	protected float velocity;
@@ -23,8 +22,7 @@ public class Projectile extends Entity
 	
 	protected Array<Creature> appliedTargets;
 	
-	public Projectile(Creature source, float directionX, float directionY)
-	{
+	public Projectile(Creature source, float directionX, float directionY) {
 		super(source.getX() + source.getWidth() / 2, source.getY() + source.getHeight() / 2);
 		this.source = source;
 		
@@ -35,24 +33,18 @@ public class Projectile extends Entity
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
-		if (!frozen)
-		{
+		if (!frozen) {
 			moveBy(direction.x * velocity * delta, direction.y * velocity * delta);
 			
-			for (Actor e : Game.instance.getStage().getActors())
-			{
-				if (e instanceof Creature && !((Creature) e).isDead() && e != this && !appliedTargets.contains((Creature) e, true))
-				{
-					if (intersects((Creature) e) && (hitable == null || hitable.isAssignableFrom(e.getClass())))
-					{
+			for (Actor e : Game.instance.getStage().getActors()) {
+				if (e instanceof Creature && !((Creature) e).isDead() && e != this && !appliedTargets.contains((Creature) e, true)) {
+					if (intersects((Creature) e) && (hitable == null || hitable.isAssignableFrom(e.getClass()))) {
 						((Creature) e).dealDamage(damage, direction.angle(), source);
 						appliedTargets.add((Creature) e);
-						if (dieOnHit)
-						{
+						if (dieOnHit) {
 							dead = true;
 							break;
 						}
@@ -62,38 +54,31 @@ public class Projectile extends Entity
 		}
 	}
 	
-	public void setDirection(float vx, float vy)
-	{
+	public void setDirection(float vx, float vy) {
 		direction.set(vx, vy);
 	}
 	
-	public Vector2 getDirection()
-	{
+	public Vector2 getDirection() {
 		return direction;
 	}
 	
-	public float getVelocity()
-	{
+	public float getVelocity() {
 		return velocity;
 	}
 	
-	public void setVelocity(float velocity)
-	{
+	public void setVelocity(float velocity) {
 		this.velocity = velocity;
 	}
 	
-	public boolean isFrozen()
-	{
+	public boolean isFrozen() {
 		return frozen;
 	}
 	
-	public void setFrozen(boolean frozen)
-	{
+	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;
 	}
 	
-	public Creature getSource()
-	{
+	public Creature getSource() {
 		return source;
 	}
 }

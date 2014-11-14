@@ -8,18 +8,15 @@ import de.dakror.burst.game.entity.Entity;
 /**
  * @author Dakror
  */
-public class EntityAction extends Action
-{
+public class EntityAction extends Action {
 	Entity entity;
 	
-	public EntityAction(Entity entity)
-	{
+	public EntityAction(Entity entity) {
 		this.entity = entity;
 	}
 	
 	@Override
-	public boolean act(float delta)
-	{
+	public boolean act(float delta) {
 		Game.instance.spawnEntity(entity);
 		return true;
 	}

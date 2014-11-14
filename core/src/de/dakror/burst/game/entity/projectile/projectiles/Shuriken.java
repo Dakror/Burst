@@ -8,10 +8,8 @@ import de.dakror.burst.game.entity.projectile.RangedProjectile;
 /**
  * @author Dakror
  */
-public class Shuriken extends RangedProjectile
-{
-	public Shuriken(Creature source, float directionX, float directionY)
-	{
+public class Shuriken extends RangedProjectile {
+	public Shuriken(Creature source, float directionX, float directionY) {
 		super(source, directionX, directionY);
 		
 		spriteFg = Burst.img.createSprite("shuriken");
@@ -28,8 +26,7 @@ public class Shuriken extends RangedProjectile
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
 		if (!frozen) spriteFg.rotate(360 * delta);

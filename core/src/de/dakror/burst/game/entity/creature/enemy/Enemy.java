@@ -11,42 +11,33 @@ import de.dakror.burst.game.entity.creature.Creature;
 /**
  * @author Dakror
  */
-public class Enemy extends Creature
-{
+public class Enemy extends Creature {
 	final Vector2 tmp = new Vector2();
 	
 	protected long touchStart;
 	
-	public Enemy(float x, float y)
-	{
+	public Enemy(float x, float y) {
 		super(x, y);
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
-		if (Game.player.isVisible())
-		{
+		if (Game.player.isVisible()) {
 			tmp.set(Game.player.getPos()).sub(getPos());
 			
 			if (tmp.len() > speed * delta) tmp.limit(speed * delta);
 			else tmp.scl(delta);
 			
-			if (Game.player.isInAttackRange(this, tmp) && !Game.player.isDead())
-			{
+			if (Game.player.isInAttackRange(this, tmp) && !Game.player.isDead()) {
 				if (touchStart == 0) touchStart = System.currentTimeMillis();
 				onPlayerTouch(delta);
-			}
-			else
-			{
+			} else {
 				float deltaX = tmp.x, deltaY = tmp.y;
 				
-				for (Actor e : Game.instance.getStage().getActors())
-				{
-					if (e instanceof Creature && !((Entity) e).isDead() && e != this)
-					{
+				for (Actor e : Game.instance.getStage().getActors()) {
+					if (e instanceof Creature && !((Entity) e).isDead() && e != this) {
 						if (intersects((Entity) e, tmp.set(-deltaX, 0))) deltaX = 0;
 						if (intersects((Entity) e, tmp.set(0, -deltaY))) deltaY = 0;
 						
@@ -61,8 +52,7 @@ public class Enemy extends Creature
 	}
 	
 	@Override
-	public void dealDamage(int dmg, float angleDegrees, Entity source)
-	{
+	public void dealDamage(int dmg, float angleDegrees, Entity source) {
 		super.dealDamage(dmg, angleDegrees, source);
 		
 		PooledEffect e = Game.particles.create("blood.p", getX() + 75, getY() + 75);
@@ -71,10 +61,8 @@ public class Enemy extends Creature
 		Game.particles.add("blood.p", e);
 	}
 	
-	public void onPlayerTouch(float delta)
-	{
-		if (Math.round((System.currentTimeMillis() - touchStart) / 1000f) >= attackTime)
-		{
+	public void onPlayerTouch(float delta) {
+		if (Math.round((System.currentTimeMillis() - touchStart) / 1000f) >= attackTime) {
 			attack(Game.player);
 			touchStart = System.currentTimeMillis() + Math.round(attackTime * 1000);
 		}

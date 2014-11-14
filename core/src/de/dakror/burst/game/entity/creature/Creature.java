@@ -17,8 +17,7 @@ import de.dakror.burst.game.skill.Skill;
 /**
  * @author Dakror
  */
-public abstract class Creature extends Entity
-{
+public abstract class Creature extends Entity {
 	public static final float lifeBarWidth = 100;
 	
 	protected int hp, maxHp, level, attackDamage;
@@ -40,8 +39,7 @@ public abstract class Creature extends Entity
 	
 	IntFloatMap cooldowns;
 	
-	public Creature(float x, float y)
-	{
+	public Creature(float x, float y) {
 		super(x, y);
 		level = 0;
 		maxHp = hp = 10;
@@ -53,29 +51,22 @@ public abstract class Creature extends Entity
 		
 		cooldowns = new IntFloatMap();
 		
-		addListener(new InputListener()
-		{
+		addListener(new InputListener() {
 			@Override
-			public boolean mouseMoved(InputEvent event, float x, float y)
-			{
+			public boolean mouseMoved(InputEvent event, float x, float y) {
 				if (Burst.smartCast && bump.contains(x, getHeight() - y)) Game.player.selectedTarget = Creature.this;
 				return false;
 			}
 			
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
-			{
-				if (bump.contains(x, y))
-				{
-					if (Game.player.getSelectedSkill() != null)
-					{
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (bump.contains(x, y)) {
+					if (Game.player.getSelectedSkill() != null) {
 						Game.player.activateSelectedSkill(Creature.this);
 						
 						Game.instance.anyCreatureTargeted = true;
 						return true;
-					}
-					else if (Game.player != Creature.this)
-					{
+					} else if (Game.player != Creature.this) {
 						Game.player.requestAutoAttack(Creature.this);
 						return true;
 					}
@@ -87,33 +78,28 @@ public abstract class Creature extends Entity
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		dead = hp <= 0;
 		
 		super.act(delta);
 		
 		if (getActions().size == 0) activeSkill = null;
 		
-		for (Keys k = cooldowns.keys(); k.hasNext();)
-		{
+		for (Keys k = cooldowns.keys(); k.hasNext();) {
 			int i = k.next();
 			cooldowns.getAndIncrement(i, 0, -delta);
 			if (cooldowns.get(i, 0) <= 0) k.remove();
 		}
 		
-		if (attack.len() > 0)
-		{
+		if (attack.len() > 0) {
 			attackProgress += delta;
 			
-			if (attackProgress / nextAttackTime >= 0.3f && !attacked)
-			{
+			if (attackProgress / nextAttackTime >= 0.3f && !attacked) {
 				target.dealDamage(nextAttackDamage > 0 ? nextAttackDamage : Math.round(nextAttackAmpl * attackDamage), attack.angle() + 180, this);
 				attacked = true;
 			}
 			
-			if (attackProgress / nextAttackTime > 1)
-			{
+			if (attackProgress / nextAttackTime > 1) {
 				attack.setZero();
 				attackProgress = 0;
 				attacked = false;
@@ -125,25 +111,21 @@ public abstract class Creature extends Entity
 		}
 	}
 	
-	public float getHpPercentage()
-	{
+	public float getHpPercentage() {
 		return hp / (float) maxHp;
 	}
 	
-	public void dealDamage(int dmg, float angleDegrees, Entity source)
-	{
+	public void dealDamage(int dmg, float angleDegrees, Entity source) {
 		hp = Math.max(0, hp - dmg);
 		
 		if (hp <= 0 && source instanceof Player) Game.instance.addKill();
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha)
-	{
+	public void draw(Batch batch, float parentAlpha) {
 		if (spriteFg == null || !isVisible()) return;
 		
-		if (bump.width == 0)
-		{
+		if (bump.width == 0) {
 			bump.width = spriteFg.getWidth();
 			bump.height = spriteFg.getHeight();
 		}
@@ -151,8 +133,7 @@ public abstract class Creature extends Entity
 		float x = getX();
 		float y = getY();
 		
-		if (attack.len() != 0)
-		{
+		if (attack.len() != 0) {
 			float percentage = attackProgress / attackTime;
 			float limit = percentage < 0.5f ? percentage * -5 : (float) Math.sin(attackProgress * -Math.PI / attackTime);
 			tmp.set(attack).limit(Math.max(-attack.len() + 0.00001f, limit * attackRange));
@@ -160,8 +141,7 @@ public abstract class Creature extends Entity
 			y += tmp.y;
 		}
 		
-		if (spriteBg != null)
-		{
+		if (spriteBg != null) {
 			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
 			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
@@ -178,8 +158,7 @@ public abstract class Creature extends Entity
 		spriteFg.setY(y);
 		spriteFg.draw(batch);
 		
-		if (maxHp > 0 && showHpBar)
-		{
+		if (maxHp > 0 && showHpBar) {
 			float x1 = x + bump.x + (bump.width - lifeBarWidth) / 2;
 			float y1 = y + bump.y + bump.height + 10;
 			
@@ -192,8 +171,7 @@ public abstract class Creature extends Entity
 	 * 
 	 * @return
 	 */
-	public Rectangle getAbsoluteAttackSpace()
-	{
+	public Rectangle getAbsoluteAttackSpace() {
 		bmp.set(bump);
 		bmp.x += getX() - attackRange;
 		bmp.y += getY() - attackRange;
@@ -208,8 +186,7 @@ public abstract class Creature extends Entity
 	 * @param tr
 	 * @return true if o is in this entity's attack range
 	 */
-	public boolean isInAttackRange(Entity o, Vector2 tr)
-	{
+	public boolean isInAttackRange(Entity o, Vector2 tr) {
 		Rectangle obmp = o.getAbsoluteBump();
 		obmp.x += tr.x;
 		obmp.y += tr.y;
@@ -217,13 +194,11 @@ public abstract class Creature extends Entity
 	}
 	
 	@Override
-	public void onRemoval()
-	{
+	public void onRemoval() {
 		Game.particles.add("death.p", getX() + 75, getY() + 75);
 	}
 	
-	protected boolean setSkill(Skill skill, Creature target)
-	{
+	protected boolean setSkill(Skill skill, Creature target) {
 		if (cooldowns.containsKey(skill.ordinal())) return false;
 		
 		activeSkill = skill;
@@ -234,53 +209,43 @@ public abstract class Creature extends Entity
 		return true;
 	}
 	
-	public float getAttackRange()
-	{
+	public float getAttackRange() {
 		return attackRange;
 	}
 	
-	public int getAttackDamage()
-	{
+	public int getAttackDamage() {
 		return attackDamage;
 	}
 	
-	public float getAttackTime()
-	{
+	public float getAttackTime() {
 		return attackTime;
 	}
 	
-	public float getSpeed()
-	{
+	public float getSpeed() {
 		return speed;
 	}
 	
-	public int getHp()
-	{
+	public int getHp() {
 		return hp;
 	}
 	
-	public int getMaxHp()
-	{
+	public int getMaxHp() {
 		return maxHp;
 	}
 	
-	public void attack(Creature e)
-	{
+	public void attack(Creature e) {
 		attack(e, attackDamage);
 	}
 	
-	public void attack(Creature e, int damage)
-	{
+	public void attack(Creature e, int damage) {
 		attack(e, damage, attackTime);
 	}
 	
-	public void attack(Creature e, float ampl)
-	{
+	public void attack(Creature e, float ampl) {
 		attack(e, ampl, attackTime);
 	}
 	
-	public void attack(Creature e, int damage, float time)
-	{
+	public void attack(Creature e, int damage, float time) {
 		attackDone = false;
 		target = e;
 		attack.set(getPos().sub(e.getPos()).limit(attackRange));
@@ -291,8 +256,7 @@ public abstract class Creature extends Entity
 		nextAttackTime = time;
 	}
 	
-	public void attack(Creature e, float ampl, float time)
-	{
+	public void attack(Creature e, float ampl, float time) {
 		attackDone = false;
 		target = e;
 		attack.set(getPos().sub(e.getPos()).limit(attackRange));
@@ -303,13 +267,11 @@ public abstract class Creature extends Entity
 		nextAttackTime = time;
 	}
 	
-	public IntFloatMap getCooldowns()
-	{
+	public IntFloatMap getCooldowns() {
 		return cooldowns;
 	}
 	
-	public float getCooldown(int key)
-	{
+	public float getCooldown(int key) {
 		return cooldowns.get(key, 0);
 	}
 	
@@ -317,11 +279,9 @@ public abstract class Creature extends Entity
 	
 	static final String[] regs = { "BarBase", "Bar-ff3232" };
 	
-	public static void renderHpBar(Batch batch, float x, float y, float width, float percentage)
-	{
+	public static void renderHpBar(Batch batch, float x, float y, float width, float percentage) {
 		if (percentage == 0) return;
-		for (int i = 0; i < regs.length; i++)
-		{
+		for (int i = 0; i < regs.length; i++) {
 			float percent = i == 0 ? 1 : percentage;
 			AtlasRegion ar = Burst.img.findRegion(regs[i]);
 			ar.setRegionWidth(6);

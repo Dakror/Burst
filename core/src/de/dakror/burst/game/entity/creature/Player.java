@@ -16,8 +16,7 @@ import de.dakror.burst.game.skill.Skill;
 import de.dakror.burst.game.skill.SkillType;
 import de.dakror.burst.util.D;
 
-public class Player extends Creature implements InputProcessor
-{
+public class Player extends Creature implements InputProcessor {
 	final Vector2 tmp = new Vector2();
 	
 	float destAnimTime = 0.35f;
@@ -34,8 +33,7 @@ public class Player extends Creature implements InputProcessor
 	
 	public Creature selectedTarget;
 	
-	public Player(float x, float y)
-	{
+	public Player(float x, float y) {
 		super(x, y);
 		maxHp = hp = 20;
 		setName("Player");
@@ -50,19 +48,14 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
-		if (autoAttackRequested)
-		{
-			if (isInAttackRange(autoAttackRequestedTarget, Vector2.Zero))
-			{
+		if (autoAttackRequested) {
+			if (isInAttackRange(autoAttackRequestedTarget, Vector2.Zero)) {
 				attack(autoAttackRequestedTarget);
 				autoAttackRequested = false;
-			}
-			else if (!autoAttackRequestedDirectionSet)
-			{
+			} else if (!autoAttackRequestedDirectionSet) {
 				dest.set(autoAttackRequestedTarget.getPos().add(autoAttackRequestedTarget.getWidth() / 2, autoAttackRequestedTarget.getHeight() / 2));
 				autoAttackRequestedDirectionSet = true;
 			}
@@ -75,14 +68,12 @@ public class Player extends Creature implements InputProcessor
 		boolean s = Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN);
 		boolean d = Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
 		
-		if (dest.len() > 0 || w || a || s || d)
-		{
+		if (dest.len() > 0 || w || a || s || d) {
 			if (destProgress < destAnimTime) destProgress += delta;
 			
 			tmp.set(dest).sub(getPos()).sub(getWidth() / 2, getHeight() - (bump.y + bump.height));
 			
-			if (w || a || s || d)
-			{
+			if (w || a || s || d) {
 				dest.setZero();
 				tmp.setZero();
 				
@@ -99,10 +90,8 @@ public class Player extends Creature implements InputProcessor
 			
 			boolean isStuckAnyway = false;
 			
-			for (Actor e : Game.instance.getStage().getActors())
-			{
-				if (e instanceof Creature && !((Entity) e).isDead() && e != this)
-				{
+			for (Actor e : Game.instance.getStage().getActors()) {
+				if (e instanceof Creature && !((Entity) e).isDead() && e != this) {
 					if (intersects((Entity) e)) isStuckAnyway = true;
 					
 					if (intersects((Entity) e, tmp.set(-deltaX, 0)) && !isStuckAnyway) deltaX = 0;
@@ -116,8 +105,7 @@ public class Player extends Creature implements InputProcessor
 		}
 	}
 	
-	public boolean requestAutoAttack(Creature target)
-	{
+	public boolean requestAutoAttack(Creature target) {
 		if (autoAttackRequested || autoAttackRequestedTarget != null) return false;
 		
 		autoAttackRequestedDirectionSet = false;
@@ -127,12 +115,10 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha)
-	{
+	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 		
-		if (destProgress < destAnimTime && dest.len() > 0)
-		{
+		if (destProgress < destAnimTime && dest.len() > 0) {
 			float size = 64;
 			Color c = batch.getColor();
 			
@@ -145,33 +131,26 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public void dealDamage(int dmg, float angleDegrees, Entity source)
-	{
+	public void dealDamage(int dmg, float angleDegrees, Entity source) {
 		super.dealDamage(dmg, angleDegrees, source);
 		if (dmg > 0 && hp >= 0) Game.hud.showBloodFlash();
 	}
 	
-	public Skill getSelectedSkill()
-	{
+	public Skill getSelectedSkill() {
 		return selectedSkill;
 	}
 	
-	public void setSelectedSkill(Skill skill)
-	{
+	public void setSelectedSkill(Skill skill) {
 		selectedSkill = skill;
 	}
 	
 	@Override
-	public boolean keyDown(int keycode)
-	{
-		if (activeSkill == null)
-		{
-			if (keycode == Keys.NUM_1)
-			{
+	public boolean keyDown(int keycode) {
+		if (activeSkill == null) {
+			if (keycode == Keys.NUM_1) {
 				selectedSkill = Skill.Shadow_Jump;
 			}
-			if (keycode == Keys.NUM_2)
-			{
+			if (keycode == Keys.NUM_2) {
 				selectedSkill = Skill.Shuriken_Throw;
 			}
 		}
@@ -179,10 +158,8 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public boolean keyUp(int keycode)
-	{
-		if (selectedSkill != null)
-		{
+	public boolean keyUp(int keycode) {
+		if (selectedSkill != null) {
 			activateSelectedSkill(selectedTarget);
 			return true;
 		}
@@ -190,16 +167,13 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public boolean keyTyped(char character)
-	{
+	public boolean keyTyped(char character) {
 		return false;
 	}
 	
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button)
-	{
-		if (button == Buttons.RIGHT || D.android())
-		{
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (button == Buttons.RIGHT || D.android()) {
 			destProgress = 0;
 			dest.set(screenX, Gdx.graphics.getHeight() - screenY);
 			
@@ -212,35 +186,28 @@ public class Player extends Creature implements InputProcessor
 	}
 	
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button)
-	{
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 	
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer)
-	{
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		return false;
 	}
 	
 	@Override
-	public boolean mouseMoved(int screenX, int screenY)
-	{
+	public boolean mouseMoved(int screenX, int screenY) {
 		return true;
 	}
 	
 	@Override
-	public boolean scrolled(int amount)
-	{
+	public boolean scrolled(int amount) {
 		return false;
 	}
 	
-	public void activateSelectedSkill(Creature target)
-	{
-		if (selectedSkill != null)
-		{
-			if (selectedSkill.canCastOn(target) && isInCastRange(target))
-			{
+	public void activateSelectedSkill(Creature target) {
+		if (selectedSkill != null) {
+			if (selectedSkill.canCastOn(target) && isInCastRange(target)) {
 				if (selectedSkill.isStopMotion()) dest.setZero();
 				
 				setSkill(selectedSkill, target);
@@ -249,8 +216,7 @@ public class Player extends Creature implements InputProcessor
 		}
 	}
 	
-	public boolean isInCastRange(Creature target)
-	{
+	public boolean isInCastRange(Creature target) {
 		if (selectedSkill.getType() != SkillType.Targeted) return true;
 		
 		if (target == null) return false;

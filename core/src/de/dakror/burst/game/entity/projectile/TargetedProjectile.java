@@ -7,22 +7,19 @@ import de.dakror.burst.game.entity.creature.Creature;
 /**
  * @author Dakror
  */
-public class TargetedProjectile extends Projectile
-{
+public class TargetedProjectile extends Projectile {
 	Creature target;
 	
 	final Vector2 tmp = new Vector2();
 	
-	public TargetedProjectile(Creature source, Creature target, float velocityX, float velocityY)
-	{
+	public TargetedProjectile(Creature source, Creature target, float velocityX, float velocityY) {
 		super(source, velocityX, velocityY);
 		
 		this.target = target;
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
 		tmp.set(target.getPos()).sub(getPos());
@@ -31,8 +28,7 @@ public class TargetedProjectile extends Projectile
 		
 		float speed = direction.len();
 		if (tmp.len() > speed * delta) tmp.limit(speed * delta);
-		else
-		{
+		else {
 			tmp.scl(delta);
 			reachedEnd = true;
 		}
@@ -42,8 +38,7 @@ public class TargetedProjectile extends Projectile
 		if (reachedEnd) dead = true;
 	}
 	
-	public Creature getTarget()
-	{
+	public Creature getTarget() {
 		return target;
 	}
 }

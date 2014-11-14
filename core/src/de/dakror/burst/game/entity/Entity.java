@@ -9,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * @author Dakror
  */
-public abstract class Entity extends Actor
-{
+public abstract class Entity extends Actor {
 	protected Sprite spriteFg, spriteBg;
 	
 	protected float pulseTime = 0.5f; // * 1 second
@@ -24,50 +23,42 @@ public abstract class Entity extends Actor
 	
 	protected boolean dead;
 	
-	public Entity(float x, float y)
-	{
+	public Entity(float x, float y) {
 		setPosition(x, y);
 		bump = new Rectangle();
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
 		this.delta += delta;
 		
 		if (spriteFg != null) setSize(spriteFg.getWidth(), spriteFg.getHeight());
 		
-		if (dead)
-		{
+		if (dead) {
 			onRemoval();
 			remove();
 		}
 	}
 	
-	public Sprite getSpriteFg()
-	{
+	public Sprite getSpriteFg() {
 		return spriteFg;
 	}
 	
-	public Sprite getSpriteBg()
-	{
+	public Sprite getSpriteBg() {
 		return spriteBg;
 	}
 	
-	public Vector2 getPos()
-	{
+	public Vector2 getPos() {
 		return tmp.set(getX(), getY());
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha)
-	{
+	public void draw(Batch batch, float parentAlpha) {
 		if (spriteFg == null || !isVisible()) return;
 		
-		if (bump.width == 0)
-		{
+		if (bump.width == 0) {
 			bump.width = spriteFg.getWidth();
 			bump.height = spriteFg.getHeight();
 		}
@@ -75,8 +66,7 @@ public abstract class Entity extends Actor
 		float x = getX();
 		float y = getY();
 		
-		if (spriteBg != null)
-		{
+		if (spriteBg != null) {
 			float fac = (float) Math.sin(delta * Math.PI / pulseTime);
 			float fac2 = (float) Math.cos(delta * Math.PI / pulseTime);
 			float glowAdd = fac * glowSize;
@@ -99,8 +89,7 @@ public abstract class Entity extends Actor
 	 * 
 	 * @return
 	 */
-	public Rectangle getAbsoluteBump()
-	{
+	public Rectangle getAbsoluteBump() {
 		bmp.set(bump);
 		bmp.x += getX();
 		bmp.y += getY();
@@ -108,34 +97,28 @@ public abstract class Entity extends Actor
 		return bmp;
 	}
 	
-	public Rectangle getBump()
-	{
+	public Rectangle getBump() {
 		return bump;
 	}
 	
-	public boolean intersects(Entity o)
-	{
+	public boolean intersects(Entity o) {
 		return getAbsoluteBump().overlaps(o.getAbsoluteBump());
 	}
 	
-	public boolean intersects(Entity o, Vector2 tr)
-	{
+	public boolean intersects(Entity o, Vector2 tr) {
 		Rectangle obmp = o.getAbsoluteBump();
 		obmp.x += tr.x;
 		obmp.y += tr.y;
 		return getAbsoluteBump().overlaps(obmp);
 	}
 	
-	public final boolean isDead()
-	{
+	public final boolean isDead() {
 		return dead;
 	}
 	
-	public void setDead(boolean dead)
-	{
+	public void setDead(boolean dead) {
 		this.dead = dead;
 	}
 	
-	public void onRemoval()
-	{}
+	public void onRemoval() {}
 }

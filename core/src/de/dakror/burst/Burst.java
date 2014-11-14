@@ -15,8 +15,7 @@ import de.dakror.burst.layer.LoadingLayer;
 import de.dakror.burst.util.InternalAssetManager;
 import de.dakror.burst.util.base.GameBase;
 
-public class Burst extends GameBase
-{
+public class Burst extends GameBase {
 	public static Burst instance;
 	public static AssetManager assets;
 	public static TextureAtlas img;
@@ -26,8 +25,7 @@ public class Burst extends GameBase
 	public static boolean smartCast = true;
 	
 	@Override
-	public void create()
-	{
+	public void create() {
 		instance = this;
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
@@ -45,8 +43,7 @@ public class Burst extends GameBase
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		float delta = Gdx.graphics.getDeltaTime();
 		for (Layer l : layers)
 			if (l.initDone) l.update(delta);
@@ -59,16 +56,13 @@ public class Burst extends GameBase
 	}
 	
 	@Override
-	public boolean keyUp(int keycode)
-	{
-		if (keycode == Keys.F1)
-		{
+	public boolean keyUp(int keycode) {
+		if (keycode == Keys.F1) {
 			debug = !debug;
 			toggleLayer(new DebugLayer());
 			return true;
 		}
-		if (keycode == Keys.F11)
-		{
+		if (keycode == Keys.F11) {
 			setFullscreen(!Gdx.graphics.isFullscreen());
 			
 			return true;
@@ -76,8 +70,7 @@ public class Burst extends GameBase
 		return false;
 	}
 	
-	public void setFullscreen(boolean fullscreen)
-	{
+	public void setFullscreen(boolean fullscreen) {
 		if (!fullscreen) Gdx.graphics.setDisplayMode(1280, 720, false);
 		else Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
 	}

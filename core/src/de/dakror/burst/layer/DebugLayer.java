@@ -13,8 +13,7 @@ import de.dakror.burst.game.Game;
 /**
  * @author Dakror
  */
-public class DebugLayer extends Layer
-{
+public class DebugLayer extends Layer {
 	SpriteBatch spriteBatch;
 	BitmapFont font;
 	
@@ -23,8 +22,7 @@ public class DebugLayer extends Layer
 	int max = 500;
 	
 	@Override
-	public void show()
-	{
+	public void show() {
 		spriteBatch = new SpriteBatch();
 		font = new BitmapFont();
 		
@@ -32,8 +30,7 @@ public class DebugLayer extends Layer
 	}
 	
 	@Override
-	public void render(float delta)
-	{
+	public void render(float delta) {
 		renderTimes.add(delta);
 		while (renderTimes.size > max)
 			renderTimes.removeIndex(0);
@@ -56,8 +53,7 @@ public class DebugLayer extends Layer
 		Burst.shapeRenderer.begin(ShapeType.Filled);
 		Burst.shapeRenderer.setColor(Color.WHITE);
 		Burst.shapeRenderer.rect(0, 0, 5, full);
-		for (int i = 0; i < renderTimes.size; i++)
-		{
+		for (int i = 0; i < renderTimes.size; i++) {
 			float rt = renderTimes.get(i) * fac;
 			Color c = new Color(rt, 0, 0, 1.0f);
 			Burst.shapeRenderer.rect(5 + i, 0, 1, rt * full, Color.WHITE, Color.WHITE, c, c);
@@ -66,16 +62,14 @@ public class DebugLayer extends Layer
 		Burst.shapeRenderer.end();
 	}
 	
-	public void drawString(String s, int x, int y)
-	{
+	public void drawString(String s, int x, int y) {
 		// TextBounds tb = font.getBounds(s);
 		// Vloxlands.skin.getDrawable("shadow_mm").draw(spriteBatch, x, y - tb.height - 1, tb.width, tb.height);
 		font.draw(spriteBatch, s, x, y);
 	}
 	
 	@Override
-	public void resize(int width, int height)
-	{
+	public void resize(int width, int height) {
 		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 	}
 }

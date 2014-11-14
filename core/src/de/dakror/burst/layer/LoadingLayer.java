@@ -17,13 +17,11 @@ import de.dakror.burst.util.InternalAssetManager;
 /**
  * @author Dakror
  */
-public class LoadingLayer extends Layer
-{
+public class LoadingLayer extends Layer {
 	BitmapFont font;
 	
 	@Override
-	public void show()
-	{
+	public void show() {
 		modal = true;
 		
 		font = new BitmapFont();
@@ -43,10 +41,8 @@ public class LoadingLayer extends Layer
 	}
 	
 	@Override
-	public void render(float delta)
-	{
-		if (Burst.assets.update())
-		{
+	public void render(float delta) {
+		if (Burst.assets.update()) {
 			Burst.img = Burst.assets.get("img/pack.atlas", TextureAtlas.class);
 			Burst.instance.removeLayer(this);
 			Burst.instance.addLayer(new Game());

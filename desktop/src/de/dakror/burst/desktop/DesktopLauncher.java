@@ -6,10 +6,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.dakror.burst.Burst;
 
-public class DesktopLauncher
-{
-	public static void main(String[] arg)
-	{
+public class DesktopLauncher {
+	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.foregroundFPS = 1000;
 		config.vSyncEnabled = false;

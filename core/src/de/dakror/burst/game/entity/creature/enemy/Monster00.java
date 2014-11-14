@@ -6,10 +6,8 @@ import de.dakror.burst.Burst;
  * @author Dakror
  */
 // FIXME: find name
-public class Monster00 extends Enemy
-{
-	public Monster00(float x, float y)
-	{
+public class Monster00 extends Enemy {
+	public Monster00(float x, float y) {
 		super(x, y);
 		maxHp = hp = 10;
 		setName("Monster 00");

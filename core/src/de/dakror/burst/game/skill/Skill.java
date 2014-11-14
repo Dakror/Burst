@@ -22,13 +22,10 @@ import de.dakror.burst.game.entity.projectile.projectiles.Shuriken;
 /**
  * @author Dakror
  */
-public enum Skill
-{
-	Shadow_Jump("You turn into fading shadows to jump behind your selected [enemy]target[] only to reappear and deal [scale]%3*ad%[] [GRAY](3 * [][ad]%1*ad%[][GRAY])[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f)
-	{
+public enum Skill {
+	Shadow_Jump("You turn into fading shadows to jump behind your selected [enemy]target[] only to reappear and deal [scale]%3*ad%[] [GRAY](3 * [][ad]%1*ad%[][GRAY])[] damage.", "shadowjump", SkillType.Targeted, true, 11.0f, 325.0f) {
 		@Override
-		public SequenceAction getSequence(Creature source, Creature target)
-		{
+		public SequenceAction getSequence(Creature source, Creature target) {
 			float deltaX = Math.min(target.getBump().width + source.getAttackRange(), Math.abs(source.getX() - target.getX())) * (source.getX() > target.getX() ? 1 : -1);
 			
 			Vector2 sub = source.getPos().sub(target.getPos());
@@ -41,38 +38,32 @@ public enum Skill
 		}
 		
 		@Override
-		public boolean canCastOn(Creature target)
-		{
+		public boolean canCastOn(Creature target) {
 			return target instanceof Enemy && !target.isDead();
 		}
 	},
-	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location.\nThe projectile passes through every [enemy]enemy[] on the way to deal [flat]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f)
-	{
+	Shuriken_Throw("You throw a sharp and rotating shuriken towards a target location.\nThe projectile passes through every [enemy]enemy[] on the way to deal [flat]8[] damage.", "shuriken", SkillType.Skillshot, false, 3.2f, 300.0f) {
 		@Override
-		public SequenceAction getSequence(Creature source, Creature target)
-		{
+		public SequenceAction getSequence(Creature source, Creature target) {
 			Vector2 dir = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()).sub(source.getX() + source.getWidth() / 2, source.getY() + source.getHeight() / 2).nor();
 			
 			return sequence(entity(new Shuriken(source, dir.x, dir.y)));
 		}
 		
 		@Override
-		public boolean canCastOn(Creature target)
-		{
+		public boolean canCastOn(Creature target) {
 			return !(target instanceof Player);
 		}
 		
 		@Override
-		public float getDefaultHitBoxRadius()
-		{
+		public float getDefaultHitBoxRadius() {
 			return 16;
 		}
 	},
 	
 	;
 	
-	static
-	{
+	static {
 		Colors.put("add", Color.valueOf("f88b2a"));
 		Colors.put("scale", Color.valueOf("afdc15"));
 		Colors.put("flat", Color.valueOf("24de84"));
@@ -90,8 +81,7 @@ public enum Skill
 	
 	SkillType type;
 	
-	private Skill(String description, String icon, SkillType type, boolean stopMotion, float cooldown, float range)
-	{
+	private Skill(String description, String icon, SkillType type, boolean stopMotion, float cooldown, float range) {
 		this.description = description;
 		this.icon = icon;
 		this.type = type;
@@ -100,23 +90,19 @@ public enum Skill
 		this.range = range;
 	}
 	
-	public final float getCooldown()
-	{
+	public final float getCooldown() {
 		return cooldown;
 	}
 	
-	public final float getRange()
-	{
+	public final float getRange() {
 		return range;
 	}
 	
-	public final String getDescription()
-	{
+	public final String getDescription() {
 		return description;
 	}
 	
-	public final String getParsedDescription(Creature source)
-	{
+	public final String getParsedDescription(Creature source) {
 		Array<String> ps = new Array<String>(new String[] { "ad", "as", "ra", "sp", "hp", "hpm" });
 		Array<Float> ds = new Array<Float>(new Float[] { (float) source.getAttackDamage(), source.getAttackTime(), source.getAttackRange(), source.getSpeed(), (float) source.getHp(), (float) source.getMaxHp() });
 		
@@ -124,8 +110,7 @@ public enum Skill
 		Matcher m = p.matcher(description);
 		StringBuffer sb = new StringBuffer();
 		
-		while (m.find())
-		{
+		while (m.find()) {
 			float number = (float) Double.parseDouble(m.group(1));
 			
 			float value = ds.get(ps.indexOf(m.group(3), false));
@@ -144,18 +129,15 @@ public enum Skill
 		return sb.toString();
 	}
 	
-	public final String getIcon()
-	{
+	public final String getIcon() {
 		return icon;
 	}
 	
-	public final SkillType getType()
-	{
+	public final SkillType getType() {
 		return type;
 	}
 	
-	public final boolean isStopMotion()
-	{
+	public final boolean isStopMotion() {
 		return stopMotion;
 	}
 	
@@ -168,8 +150,7 @@ public enum Skill
 	
 	public abstract boolean canCastOn(Creature target);
 	
-	public float getDefaultHitBoxRadius()
-	{
+	public float getDefaultHitBoxRadius() {
 		return 0;
 	}
 }

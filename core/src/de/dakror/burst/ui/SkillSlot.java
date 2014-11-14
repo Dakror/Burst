@@ -21,8 +21,7 @@ import de.dakror.burst.util.D;
 /**
  * @author Dakror
  */
-public class SkillSlot extends Button
-{
+public class SkillSlot extends Button {
 	Skill skill;
 	BitmapFont font;
 	
@@ -34,8 +33,7 @@ public class SkillSlot extends Button
 	
 	static NinePatch bg_fg, bg_bg;
 	
-	public SkillSlot(Skill skill)
-	{
+	public SkillSlot(Skill skill) {
 		this.skill = skill;
 		
 		ButtonStyle style = new ButtonStyle();
@@ -54,18 +52,15 @@ public class SkillSlot extends Button
 		font = new BitmapFont();
 		font.setMarkupEnabled(true);
 		
-		if (bg_fg == null)
-		{
+		if (bg_fg == null) {
 			int s = 40;
 			bg_fg = new NinePatch(Burst.img.findRegion("glowBg_fg"), s, s, s, s);
 			bg_bg = new NinePatch(Burst.img.findRegion("glowBg_bg"), s, s, s, s);
 		}
 		
-		addListener(new InputListener()
-		{
+		addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
-			{
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (Game.player.getSelectedSkill() == null) Game.player.setSelectedSkill(SkillSlot.this.skill);
 				return false;
 			}
@@ -73,12 +68,10 @@ public class SkillSlot extends Button
 	}
 	
 	@Override
-	public void act(float delta)
-	{
+	public void act(float delta) {
 		super.act(delta);
 		
-		if (showAnim)
-		{
+		if (showAnim) {
 			alpha += delta * 20;
 			if (alpha > 9) showAnim = false;
 		}
@@ -88,11 +81,9 @@ public class SkillSlot extends Button
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha)
-	{
+	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		if (isOver() && !D.android())
-		{
+		if (isOver() && !D.android()) {
 			String str = skill.getParsedDescription(Game.player);
 			int width = 200;
 			TextBounds tb = font.getWrappedBounds(str, width);
@@ -107,24 +98,19 @@ public class SkillSlot extends Button
 		}
 		
 		float cooldown = Game.player.getCooldown(skill.ordinal());
-		if (cooldown > 0)
-		{
+		if (cooldown > 0) {
 			TextureRegion r = Burst.img.findRegion("grey");
 			batch.draw(r, getX(), getY(), getWidth(), getHeight() * (cooldown / skill.getCooldown()));
 			
 			wasntZeroBefore = true;
-		}
-		else
-		{
-			if (wasntZeroBefore && !showAnim)
-			{
+		} else {
+			if (wasntZeroBefore && !showAnim) {
 				showAnim = true;
 				wasntZeroBefore = false;
 				alpha = 0;
 			}
 			
-			if (showAnim)
-			{
+			if (showAnim) {
 				TextureRegion r = Burst.img.findRegion("square");
 				batch.setColor(1, 1, 1, (float) Math.cos(alpha) * 0.5f + 0.5f);
 				batch.draw(r, getX(), getY(), getWidth(), getHeight());

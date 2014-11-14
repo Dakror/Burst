@@ -22,8 +22,7 @@ import de.dakror.burst.util.D;
 /**
  * @author Dakror
  */
-public class HudLayer extends Layer
-{
+public class HudLayer extends Layer {
 	float bloodFlashAlpha = 0;
 	
 	BitmapFont killDisplay;
@@ -36,8 +35,7 @@ public class HudLayer extends Layer
 	public float effectTime = 0;
 	
 	@Override
-	public void show()
-	{
+	public void show() {
 		stage = new Stage(new ScreenViewport());
 		
 		killDisplay = Burst.assets.get("font/tele.fnt", BitmapFont.class);
@@ -46,8 +44,7 @@ public class HudLayer extends Layer
 		skillGroup = new Table();
 		
 		skillGroup.row().center();
-		for (int i = 0; i < Math.min(6, Skill.values().length); i++)
-		{
+		for (int i = 0; i < Math.min(6, Skill.values().length); i++) {
 			skillGroup.add(new SkillSlot(Skill.values()[i])).size(64 * (D.android() ? 1.5f : 1)).spaceLeft(16);
 		}
 		
@@ -58,30 +55,24 @@ public class HudLayer extends Layer
 	}
 	
 	@Override
-	public void update(float delta)
-	{
+	public void update(float delta) {
 		stage.act(delta);
 	}
 	
 	@Override
-	public void render(float delta)
-	{
+	public void render(float delta) {
 		stage.draw();
 		stage.getBatch().begin();
 		
-		if (Game.player.getSelectedSkill() != null && Game.player.getCooldown(Game.player.getSelectedSkill().ordinal()) == 0)
-		{
+		if (Game.player.getSelectedSkill() != null && Game.player.getCooldown(Game.player.getSelectedSkill().ordinal()) == 0) {
 			stage.getBatch().setColor(1, 1, 1, 0.75f);
-			if (Game.player.getSelectedSkill().getType() == SkillType.Targeted || Game.player.getSelectedSkill().getType() == SkillType.Aura)
-			{
+			if (Game.player.getSelectedSkill().getType() == SkillType.Targeted || Game.player.getSelectedSkill().getType() == SkillType.Aura) {
 				float x = Game.player.getX() + Game.player.getWidth() / 2 - Game.player.getSelectedSkill().getRange();
 				float y = Game.player.getY() + Game.player.getHeight() / 2 - Game.player.getSelectedSkill().getRange();
 				float size = Game.player.getSelectedSkill().getRange() * 2;
 				
 				stage.getBatch().draw(Burst.img.findRegion("area"), x, y, size, size);
-			}
-			else if (Game.player.getSelectedSkill().getType() == SkillType.Skillshot)
-			{
+			} else if (Game.player.getSelectedSkill().getType() == SkillType.Skillshot) {
 				float px = Game.player.getX() + Game.player.getWidth() / 2;
 				float py = Game.player.getY() + Game.player.getHeight() / 2;
 				
@@ -127,8 +118,7 @@ public class HudLayer extends Layer
 		TextBounds tb = killDisplay.getBounds(text);
 		killDisplay.draw(stage.getBatch(), text, (Gdx.graphics.getWidth() - tb.width) / 2, Gdx.graphics.getHeight() - tb.height / 2);
 		
-		if (effectTime > 0)
-		{
+		if (effectTime > 0) {
 			killDisplayEffect.setColor(1, 0.75f, 0, Math.min(1, effectTime * 2));
 			
 			killDisplayEffect.setScale(2 - effectTime);
@@ -139,8 +129,7 @@ public class HudLayer extends Layer
 			if (effectTime < 0) effectTime = 0;
 		}
 		
-		if (bloodFlashAlpha > 0)
-		{
+		if (bloodFlashAlpha > 0) {
 			stage.getBatch().setColor(1, 1, 1, bloodFlashAlpha);
 			stage.getBatch().draw(Burst.assets.get("img/blood.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			stage.getBatch().setColor(1, 1, 1, 1);
@@ -151,14 +140,12 @@ public class HudLayer extends Layer
 	}
 	
 	@Override
-	public void resize(int width, int height)
-	{
+	public void resize(int width, int height) {
 		super.resize(width, height);
 		skillGroup.setPosition((Gdx.graphics.getWidth() - skillGroup.getWidth()) / 2, 65 + (D.android() ? 30 : 0));
 	}
 	
-	public void showBloodFlash()
-	{
+	public void showBloodFlash() {
 		bloodFlashAlpha = 1f;
 	}
 }

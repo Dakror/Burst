@@ -26,8 +26,7 @@ import de.dakror.burst.util.MultiParticleEffectPool;
 /**
  * @author Dakror
  */
-public class Game extends Layer
-{
+public class Game extends Layer {
 	public static Game instance;
 	public static Player player;
 	public static OrthographicCamera camera;
@@ -47,8 +46,7 @@ public class Game extends Layer
 	final Vector2 resCache = new Vector2();
 	
 	@Override
-	public void show()
-	{
+	public void show() {
 		instance = this;
 		
 		plasma = new ShaderProgram(Gdx.files.internal("shader/plasma.vs"), Gdx.files.internal("shader/plasma.fs"));
@@ -71,17 +69,14 @@ public class Game extends Layer
 	}
 	
 	@Override
-	public void update(float delta)
-	{
-		if (!paused)
-		{
+	public void update(float delta) {
+		if (!paused) {
 			stage.act(delta);
 		}
 	}
 	
 	@Override
-	public void render(float delta)
-	{
+	public void render(float delta) {
 		stage.getBatch().begin();
 		
 		stage.getBatch().setShader(plasma);
@@ -109,8 +104,7 @@ public class Game extends Layer
 		stage.getBatch().end();
 	}
 	
-	public void spawnEnemy()
-	{
+	public void spawnEnemy() {
 		int side = MathUtils.random(0, 3);
 		float ranX = MathUtils.random(0, Gdx.graphics.getWidth() - 150);
 		float ranY = MathUtils.random(0, Gdx.graphics.getHeight() - 150);
@@ -142,14 +136,12 @@ public class Game extends Layer
 		enemiesAlive++;
 	}
 	
-	public void spawnEntity(Entity e)
-	{
+	public void spawnEntity(Entity e) {
 		if (e instanceof Projectile) e.moveBy(-e.getSpriteFg().getWidth() / 2, -e.getSpriteFg().getHeight() / 2);
 		getStage().addActor(e);
 	}
 	
-	public void addKill()
-	{
+	public void addKill() {
 		enemiesAlive--;
 		kills++;
 		hud.effectTime = 1;
@@ -161,16 +153,13 @@ public class Game extends Layer
 			spawnEnemy();
 	}
 	
-	public int getKills()
-	{
+	public int getKills() {
 		return kills;
 	}
 	
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button)
-	{
-		if (!anyCreatureTargeted && player.getSelectedSkill() != null && player.getSelectedSkill().getType() != SkillType.Targeted && (D.android() || button == Buttons.LEFT))
-		{
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if (!anyCreatureTargeted && player.getSelectedSkill() != null && player.getSelectedSkill().getType() != SkillType.Targeted && (D.android() || button == Buttons.LEFT)) {
 			player.activateSelectedSkill(null);
 		}
 		
@@ -179,8 +168,7 @@ public class Game extends Layer
 	}
 	
 	@Override
-	public boolean keyDown(int keycode)
-	{
+	public boolean keyDown(int keycode) {
 		if (keycode == Keys.SPACE) paused = !paused;
 		return false;
 	}

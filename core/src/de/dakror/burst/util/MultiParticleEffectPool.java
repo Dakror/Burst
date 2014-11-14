@@ -14,85 +14,70 @@ import com.badlogic.gdx.utils.ObjectMap;
 /**
  * @author Dakror
  */
-public class MultiParticleEffectPool
-{
+public class MultiParticleEffectPool {
 	public static final int MAX_POOL_SIZE = 2;
 	public static String assetDir;
 	
 	ObjectMap<String, ParticleEffectPool> pools;
 	ObjectMap<String, Array<PooledEffect>> effects;
 	
-	public MultiParticleEffectPool()
-	{
+	public MultiParticleEffectPool() {
 		this("fx");
 	}
 	
-	public MultiParticleEffectPool(String assetDir)
-	{
+	public MultiParticleEffectPool(String assetDir) {
 		MultiParticleEffectPool.assetDir = assetDir;
 		pools = new ObjectMap<>();
 		effects = new ObjectMap<>();
 	}
 	
-	public void addPrototype(String name, AssetManager assets)
-	{
+	public void addPrototype(String name, AssetManager assets) {
 		if (pools.containsKey(name)) throw new InvalidParameterException("This effect is already loaded in: " + assetDir + "/" + name);
 		
 		pools.put(name, new ParticleEffectPool(assets.get(assetDir + "/" + name, ParticleEffect.class), 1, MAX_POOL_SIZE));
 		effects.put(name, new Array<PooledEffect>());
 	}
 	
-	public PooledEffect add(String name, float x, float y)
-	{
+	public PooledEffect add(String name, float x, float y) {
 		return add(name, x, y, 0);
 	}
 	
-	public PooledEffect add(String name, float x, float y, int duration)
-	{
+	public PooledEffect add(String name, float x, float y, int duration) {
 		PooledEffect e = create(name, x, y, duration);
 		effects.get(name).add(e);
 		return e;
 	}
 	
-	public void add(String name, PooledEffect effect)
-	{
+	public void add(String name, PooledEffect effect) {
 		effects.get(name).add(effect);
 	}
 	
-	public PooledEffect create(String name, float x, float y)
-	{
+	public PooledEffect create(String name, float x, float y) {
 		return create(name, x, y, 0);
 	}
 	
-	public PooledEffect create(String name, float x, float y, int duration)
-	{
+	public PooledEffect create(String name, float x, float y, int duration) {
 		PooledEffect e = obtain(name);
 		e.setPosition(x, y);
 		if (duration != 0) e.setDuration(duration);
 		return e;
 	}
 	
-	public ParticleEffectPool pool(String name)
-	{
+	public ParticleEffectPool pool(String name) {
 		if (!pools.containsKey(name)) throw new InvalidParameterException("This effect is not loaded in yet: " + assetDir + "/" + name);
 		
 		return pools.get(name);
 	}
 	
-	public PooledEffect obtain(String name)
-	{
+	public PooledEffect obtain(String name) {
 		return pool(name).obtain();
 	}
 	
-	public void draw(SpriteBatch batch, float delta)
-	{
-		for (Array<PooledEffect> arr : effects.values())
-		{
-			for (PooledEffect e : arr)
-			{
+	public void draw(SpriteBatch batch, float delta) {
+		for (Array<PooledEffect> arr : effects.values()) {
+			for (PooledEffect e : arr) {
 				e.draw(batch, delta);
-				if (e.isComplete())
-				{
+				if (e.isComplete()) {
 					e.free();
 					arr.removeValue(e, true);
 				}
